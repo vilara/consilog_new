@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Consilog',
     'title_prefix' => '',
-    'title_postfix' => '',
+    'title_postfix' => ' - CMSE',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,12 +45,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>Consilog</b> 2.0',
+    'logo_img' => 'vendor/adminlte/dist/img/cmse.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'AdminLTE',
+    'logo_img_alt' => 'CMSE',
 
     /*
     |--------------------------------------------------------------------------
@@ -232,7 +232,7 @@ return [
 
     'menu' => [
         [
-            'text' => 'search',
+            'text' => 'Procurar',
             'search' => true,
             'topnav' => true,
         ],
@@ -241,78 +241,89 @@ return [
             'url'  => 'admin/blog',
             'can'  => 'manage-blog',
         ],
+        // [
+        //     'text'        => 'pages',
+        //     'url'         => 'admin/pages',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'label'       => 4,
+        //     'label_color' => 'success',
+        // ],
+        ['header' => 'Administração'],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
+            'text' => 'Perfil usuário',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',
         ],
         [
-            'text' => 'change_password',
+            'text' => 'Trocar senha',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
         [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
+            'text'    => 'Admin Sistema',
+            'icon'    => 'fas fa-tools',
             'submenu' => [
+                // [
+                //     'text' => 'level_one',
+                //     'url'  => '#',
+                // ],
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'level_one',
+                    'text'    => 'Usuários cadastrados',
+                    'icon'    => 'fas fa-user-friends',
                     'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    // 'submenu' => [
+                    //     [
+                    //         'text' => 'level_two',
+                    //         'url'  => '#',
+                    //     ],
+                    //     [
+                    //         'text'    => 'level_two',
+                    //         'url'     => '#',
+                    //         'submenu' => [
+                    //             [
+                    //                 'text' => 'level_three',
+                    //                 'url'  => '#',
+                    //             ],
+                    //             [
+                    //                 'text' => 'level_three',
+                    //                 'url'  => '#',
+                    //             ],
+                    //         ],
+                    //     ],
+                    // ],
                 ],
                 [
-                    'text' => 'level_one',
-                    'url'  => '#',
+                    'text'    => 'OM cadastradas',
+                    'icon'    => 'fas fa-industry',
+                    'url'     => '#',
                 ],
+                [
+                    'text'    => 'Funções',
+                    'icon'    => 'fas fa-street-view',
+                    'url'     => '#',
+                ],
+                // [
+                //     'text' => 'level_one',
+                //     'url'  => '#',
+                // ],
             ],
         ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],
+        // ['header' => 'labels'],
+        // [
+        //     'text'       => 'important',
+        //     'icon_color' => 'red',
+        //     'url'        => '#',
+        // ],
+        // [
+        //     'text'       => 'warning',
+        //     'icon_color' => 'yellow',
+        //     'url'        => '#',
+        // ],
+        // [
+        //     'text'       => 'information',
+        //     'icon_color' => 'cyan',
+        //     'url'        => '#',
+        // ],
     ],
 
     /*
