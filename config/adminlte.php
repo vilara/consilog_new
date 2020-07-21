@@ -262,6 +262,7 @@ return [
         [
             'text'    => 'Admin Sistema',
             'icon'    => 'fas fa-tools',
+            'can'     => 'delete',
             'submenu' => [
                 // [
                 //     'text' => 'level_one',
