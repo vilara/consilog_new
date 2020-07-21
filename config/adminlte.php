@@ -269,14 +269,14 @@ return [
                 //     'url'  => '#',
                 // ],
                 [
-                    'text'    => 'Usuários cadastrados',
+                    'text'    => 'Usuários',
                     'icon'    => 'fas fa-user-friends',
                     'url'     => '#',
-                    // 'submenu' => [
-                    //     [
-                    //         'text' => 'level_two',
-                    //         'url'  => '#',
-                    //     ],
+                    'submenu' => [
+                        [
+                            'text' => 'Usuários cadastrados',
+                            'url'  => 'usuarios',
+                        ],
                     //     [
                     //         'text'    => 'level_two',
                     //         'url'     => '#',
@@ -291,7 +291,7 @@ return [
                     //             ],
                     //         ],
                     //     ],
-                    // ],
+                    ],
                 ],
                 [
                     'text'    => 'OM cadastradas',
