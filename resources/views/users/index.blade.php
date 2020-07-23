@@ -33,8 +33,9 @@
                 <th>ID</th>
                 <th>Nome completo</th>
                 <th>Email</th>
-                <th>created_at'</th>
-                <th>updated_at'</th>
+                <th>Perfil</th>
+                <th>Cadastrado</th>
+                <th>Modificado</th>
               </tr>
               </thead>
 
@@ -43,8 +44,9 @@
                 <th>ID</th>
                 <th>Nome completo</th>
                 <th>Email</th>
-                <th>created_at'</th>
-                <th>updated_at'</th>
+                <th>Perfil</th>
+                <th>Cadastrado</th>
+                <th>Modificado</th>
               </tr>
               </tr>
               </tfoot>
@@ -80,6 +82,7 @@
     	            { data: 'id', name: 'id' },
     	            { data: 'name', name: 'name' },
     	            { data: 'email', name: 'email' },
+    	            { data: 'roler', name: 'roler' },
     	            { data: 'created_at', name: 'created_at' },
     	            { data: 'updated_at', name: 'updated_at' }
     	        ],

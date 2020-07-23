@@ -21,7 +21,16 @@ class UserController extends Controller
         $data = User::all();
         if ($request->ajax()) {
             
-            return Datatables::of($data)->make(true);
+            return Datatables::of($data)->setRowClass(function ($user) {
+                return $user->id % 2 == 0 ? 'text-success' : 'text-primary';
+            })
+            ->editColumn('roler', function(User $user) {
+                return $user->rolers->first()->name;
+            })
+            ->editColumn('created_at', function(User $user) {
+                return $user->created_at->diffForHumans();
+            })
+            ->make(true);
         }
         return view ( 'users.index');
     }
