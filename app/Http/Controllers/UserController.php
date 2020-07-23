@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -12,12 +12,18 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
 //         return DataTable::of(User::query()->make(true));
-        $usuarios = User::all();
-        return view ( 'users.index', compact ( 'usuarios' ) );
+//         $usuarios = User::all();
+//        
+        $data = User::all();
+        if ($request->ajax()) {
+            
+            return Datatables::of($data)->make(true);
+        }
+        return view ( 'users.index');
     }
 
     /**

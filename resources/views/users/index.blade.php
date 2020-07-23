@@ -33,6 +33,8 @@
                 <th>ID</th>
                 <th>Nome completo</th>
                 <th>Email</th>
+                <th>created_at'</th>
+                <th>updated_at'</th>
               </tr>
               </thead>
 
@@ -41,6 +43,8 @@
                 <th>ID</th>
                 <th>Nome completo</th>
                 <th>Email</th>
+                <th>created_at'</th>
+                <th>updated_at'</th>
               </tr>
               </tr>
               </tfoot>
@@ -68,7 +72,35 @@
     <script>
      $(document).ready(function () {
 
-    console.log('Hi!');
+    	 $('#example2').DataTable({
+    	        processing: true,
+    	        serverSide: false,
+    	        ajax: "{{ route('usuarios.index') }}",
+    	        columns: [
+    	            { data: 'id', name: 'id' },
+    	            { data: 'name', name: 'name' },
+    	            { data: 'email', name: 'email' },
+    	            { data: 'created_at', name: 'created_at' },
+    	            { data: 'updated_at', name: 'updated_at' }
+    	        ],
+
+       		 language: {
+       		        processing:     "Carregando dados...",
+       		        search:         "Procurar&nbsp;:",
+       		        loadingRecords: "Carregando dados...",
+       		        info:           "Mostrando _START_ a _END_ de _TOTAL_ totais de dados",
+       		        infoEmpty:      "Mostrando 0 a 0 de 0 totais de dados",
+       		        zeroRecords:    "Nenhum resultado encontrado",
+       		        emptyTable:     "Nenhum resultado encontrado",
+       		        infoFiltered:   "(filtrado de _MAX_ totais de dados)",
+       		        paginate: {
+       		            first:      "Primeira",
+       		            previous:   "Anterior",
+       		            next:       "Pr&oacute;xima",
+       		            last:       "&Uacuteltima"
+       		        },
+       		        },
+    	    });
 
      });
     </script>
