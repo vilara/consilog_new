@@ -66,7 +66,11 @@
         <meta name="msapplication-TileColor" content="#ffffff">
         <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
-
+<style type="text/css">
+ a[disabled="disabled"] {
+    pointer-events: none;
+}
+</style>
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data')>

@@ -36,6 +36,7 @@
                 <th>Perfil</th>
                 <th>Cadastrado</th>
                 <th>Modificado</th>
+                <th>Ação</th>
               </tr>
               </thead>
 
@@ -47,6 +48,7 @@
                 <th>Perfil</th>
                 <th>Cadastrado</th>
                 <th>Modificado</th>
+                <th>Ação</th>
               </tr>
               </tr>
               </tfoot>
@@ -79,13 +81,76 @@
     	        serverSide: false,
     	        ajax: "{{ route('usuarios.index') }}",
     	        columns: [
-    	            { data: 'id', name: 'id' },
-    	            { data: 'name', name: 'name' },
-    	            { data: 'email', name: 'email' },
-    	            { data: 'roler', name: 'roler' },
-    	            { data: 'created_at', name: 'created_at' },
-    	            { data: 'updated_at', name: 'updated_at' }
-    	        ],
+           	        
+    	        		{ data: 'id', name: 'id'},
+        	            { data: 'name', name: 'name' },
+        	            { data: 'email', name: 'email' },
+        	            { data: 'roler', name: 'roler' },
+        	            { data: 'created_at', name: 'created_at' },
+        	            { data: 'updated_at', name : 'updated_at'},
+        	            { data: 'action', name: 'action'},
+                	    
+        	            ],
+        	            "columnDefs": [ {
+            	            "targets": 5,
+            	            "orderable": false,
+            	            "searchable": false,
+//             	            "render" : $.fn.dataTable.render.moment( 'Do MMM YYYYY' )
+            	           
+            	          } ],
+//         	            "columnDefs": [
+//         	            { targets: 5, "width": "16%", render: $.fn.dataTable.render.moment( 'Do MMM YYYYY' ) },
+// 						],
+//         	            "columnDefs": [ {
+//         	            	 "targets": 6,
+//             	            "orderable": false,
+//             	            "searchable": false,
+//             	            "visible": true,
+//             	            "render" : function(data, row, type){
+            	          
+//                 	            return data; 
+                	         
+//                 	            }
+//         	            }
+//                 	      ], 
+
+//         	            { data: 'id', name: 'id' },
+//         	            { "render" : function(data){
+//         	            	@can('update')
+//             	            return '<input type="checkbox">1'+data; 
+//             	            @elsecan('read')
+//             	            return '<input  type="checkbox" disabled>'; 
+//             	            @endcan
+//             	            }},
+        	            
+//         	        ],
+//         	        "columnDefs": [ {
+//         	            "targets": 0,
+//         	            "orderable": false,
+//         	            "searchable": false,
+//         	            "render": function (type, row ) {
+
+//         	            }
+//         	          } ],
+//         	        columnDefs: [
+//             	        {
+//         	            targets: 1,
+//         	            data: id,
+//         	            render: function ( data, type, row ) {
+//         	              if(row.id=="0"){
+//         	                return '<a class="btn btn-primary" href="'+base_url+'/patient/show/'+data+'">'+user.id+'</a>'+
+//         	                       '<a class="btn btn-success respatient" data-id="'+data+'" href="#" >'+user.id+'</a>';
+//         	              }else{
+//         	                return '<a class="btn btn-primary" href="'+base_url+'/patient/show/'+data+'">'+user.id+'</a>'+
+//         	                       '<a class="btn btn-danger delpatient" data-id="'+data+'" href="#" >'+user.id+'</a>';
+//         	              }
+//         	            }
+
+//         	          },
+//         	          { "orderable": false, "targets": [ 4 ] },
+//         	          { "bSearchable": false, "aTargets": [ 5 ] },
+//         	          { "visible": true,  "targets": [6] }
+//         	          ],
 
        		 language: {
        		        processing:     "Carregando dados...",
