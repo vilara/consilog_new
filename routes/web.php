@@ -9,11 +9,11 @@ Auth::routes();
 
 
 Route::get('/', function(){
-    return view('vendor.adminlte.auth.login');
+    return view('auth.login');
 });
 
 Route::group(['middleware' => ['auth']], function(){
-    
+
     Route::get('/home', 'HomeController@index')->name('home');
     Route::resource('usuarios', 'UserController');
 });
