@@ -9,7 +9,7 @@ Auth::routes();
 
 
 Route::get('/', function(){
-    return view('auth.login');
+    return view('vendor.adminlte.auth.login');
 });
 
 Route::group(['middleware' => ['auth']], function(){
