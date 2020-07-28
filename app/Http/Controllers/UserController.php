@@ -16,16 +16,13 @@ class UserController extends Controller
     public function index(Request $request)
     {
 
-//         return DataTable::of(User::query()->make(true));
-//         $usuarios = User::all();
-//       
         $data = User::all();
         if ($request->ajax()) {
-            
+
             return Datatables::of($data)
             ->setRowClass(function ($user) {
                 return $user->id % 2 == 0 ? 'text-success' : 'text-primary';
-            }) 
+            })
             ->addColumn('action', function ($user) {
                 $user->id % 2 == 0 ? $d = 'text-success' :  $d = 'text-primary';
                 if(Auth::user()->can('update')){
@@ -33,8 +30,8 @@ class UserController extends Controller
                 }else{
                 return '<a disabled="disabled" href="/usuario/'.$user->id.'" class="'.$d.'" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
                 }
-                    
-            })            
+
+            })
             ->editColumn('roler', function(User $user) {
                 return $user->rolers->first()->name;
             })

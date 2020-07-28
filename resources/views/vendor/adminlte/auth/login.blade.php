@@ -35,7 +35,7 @@
             </div>
             @if($errors->has('email'))
                 <div class="invalid-feedback">
-                    <strong>{{ $errors->first('email') }}</strong>
+                    <strong>Senha ou usuário inválido...</strong>
                 </div>
             @endif
         </div>
