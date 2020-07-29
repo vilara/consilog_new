@@ -67,7 +67,6 @@
   </div>
   <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
-
 @section('css')
 
 @stop
@@ -75,101 +74,40 @@
 @section('js')
     <script>
      $(document).ready(function () {
-
     	 $('#example2').DataTable({
-    	        processing: true,
-    	        serverSide: false,
-    	        ajax: "{{ route('usuarios.index') }}",
-    	        columns: [
-           	        
-    	        		{ data: 'id', name: 'id'},
-        	            { data: 'name', name: 'name' },
-        	            { data: 'email', name: 'email' },
-        	            { data: 'roler', name: 'roler' },
-        	            { data: 'created_at', name: 'created_at' },
-        	            { data: 'updated_at', name : 'updated_at'},
-        	            { data: 'action', name: 'action'},
-                	    
-        	            ],
-        	            "columnDefs": [ {
-            	            "targets": 5,
-            	            "orderable": false,
-            	            "searchable": false,
-//             	            "render" : $.fn.dataTable.render.moment( 'Do MMM YYYYY' )
-            	           
-            	          } ],
-//         	            "columnDefs": [
-//         	            { targets: 5, "width": "16%", render: $.fn.dataTable.render.moment( 'Do MMM YYYYY' ) },
-// 						],
-//         	            "columnDefs": [ {
-//         	            	 "targets": 6,
-//             	            "orderable": false,
-//             	            "searchable": false,
-//             	            "visible": true,
-//             	            "render" : function(data, row, type){
-            	          
-//                 	            return data; 
-                	         
-//                 	            }
-//         	            }
-//                 	      ], 
-
-//         	            { data: 'id', name: 'id' },
-//         	            { "render" : function(data){
-//         	            	@can('update')
-//             	            return '<input type="checkbox">1'+data; 
-//             	            @elsecan('read')
-//             	            return '<input  type="checkbox" disabled>'; 
-//             	            @endcan
-//             	            }},
-        	            
-//         	        ],
-//         	        "columnDefs": [ {
-//         	            "targets": 0,
-//         	            "orderable": false,
-//         	            "searchable": false,
-//         	            "render": function (type, row ) {
-
-//         	            }
-//         	          } ],
-//         	        columnDefs: [
-//             	        {
-//         	            targets: 1,
-//         	            data: id,
-//         	            render: function ( data, type, row ) {
-//         	              if(row.id=="0"){
-//         	                return '<a class="btn btn-primary" href="'+base_url+'/patient/show/'+data+'">'+user.id+'</a>'+
-//         	                       '<a class="btn btn-success respatient" data-id="'+data+'" href="#" >'+user.id+'</a>';
-//         	              }else{
-//         	                return '<a class="btn btn-primary" href="'+base_url+'/patient/show/'+data+'">'+user.id+'</a>'+
-//         	                       '<a class="btn btn-danger delpatient" data-id="'+data+'" href="#" >'+user.id+'</a>';
-//         	              }
-//         	            }
-
-//         	          },
-//         	          { "orderable": false, "targets": [ 4 ] },
-//         	          { "bSearchable": false, "aTargets": [ 5 ] },
-//         	          { "visible": true,  "targets": [6] }
-//         	          ],
-
-       		 language: {
-       		        processing:     "Carregando dados...",
-       		        search:         "Procurar&nbsp;:",
-       		        loadingRecords: "Carregando dados...",
-       		        info:           "Mostrando _START_ a _END_ de _TOTAL_ totais de dados",
-       		        infoEmpty:      "Mostrando 0 a 0 de 0 totais de dados",
-       		        zeroRecords:    "Nenhum resultado encontrado",
-       		        emptyTable:     "Nenhum resultado encontrado",
-       		        infoFiltered:   "(filtrado de _MAX_ totais de dados)",
-       		        paginate: {
-       		            first:      "Primeira",
-       		            previous:   "Anterior",
-       		            next:       "Pr&oacute;xima",
-       		            last:       "&Uacuteltima"
-       		        },
-       		        },
-    	    });
-
+            processing: true,
+            serverSide: false,
+            ajax: "{{ route('usuarios.index') }}",
+            columns: [
+                { data: 'id', name: 'id'},
+                { data: 'name', name: 'name' },
+                { data: 'email', name: 'email' },
+                { data: 'roler', name: 'roler' },
+                { data: 'created_at', name: 'created_at' },
+                { data: 'updated_at', name : 'updated_at'},
+                { data: 'action', name: 'action'},
+            ],
+            columnDefs: [
+                {"targets": 4,"orderable": false,"searchable": false},
+                {"targets": 5, "render": $.fn.dataTable.render.moment( 'YYYY' ) },
+            ],
+       		language: {
+       		    processing:     "Carregando dados...",
+       		    search:         "Procurar&nbsp;:",
+       		    loadingRecords: "Carregando dados...",
+       		    info:           "Mostrando _START_ a _END_ de _TOTAL_ totais de dados",
+       		    infoEmpty:      "Mostrando 0 a 0 de 0 totais de dados",
+       		    zeroRecords:    "Nenhum resultado encontrado",
+       		    emptyTable:     "Nenhum resultado encontrado",
+       		    infoFiltered:   "(filtrado de _MAX_ totais de dados)",
+       		    paginate: {
+       		        first:      "Primeira",
+       		        previous:   "Anterior",
+       		        next:       "Pr&oacute;xima",
+       		        last:       "&Uacuteltima"
+       		    },
+       		},
+    	});
      });
     </script>
 @stop

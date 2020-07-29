@@ -39,25 +39,43 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Get the phone record associated with the user.
+     */
+    public function detail()
+    {
+        return $this->hasOne('App\Detail', 'user_id', );
+    }
+
+    public function om()
+    {
+    	return $this->belongsTo('App\Om');
+    }
+
+    public function cargo()
+    {
+    	return $this->belongsTo('App\Cargp');
+    }
+
     public function rolers()
     {
         return $this->belongsToMany('App\Roler', 'roler_user', 'user_id', 'roler_id');
     }
 
     public function hasPermission(Permission $permission){
-        
+
         return $this->hasAnyRolers($permission->rolers);
     }
-    
+
     public function hasAnyRolers($rols){
-        
+
             foreach ($rols as $rol){
                 if($this->rolers->contains('name', $rol->name)){
                     return true;
                 }
             }
-        
-      
+
+
     }
 
 }

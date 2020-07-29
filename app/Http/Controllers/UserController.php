@@ -67,12 +67,13 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     *  @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(User $user, $id)
     {
-        //
+        $user = User::find($id);
+        return view ( 'users.show', compact ('user'));
     }
 
     /**
