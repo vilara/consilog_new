@@ -27,6 +27,8 @@ class CreateCargosTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('cargos');
+        Schema::enableForeignKeyConstraints();
     }
 }

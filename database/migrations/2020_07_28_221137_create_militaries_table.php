@@ -29,6 +29,8 @@ class CreateMilitariesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('militaries');
+        Schema::enableForeignKeyConstraints();
     }
 }

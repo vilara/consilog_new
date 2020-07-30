@@ -19,7 +19,7 @@ class CreatePermissionsTable extends Migration
             $table->string('label', 200);
             $table->timestamps();
         });
-        
+
         Schema::create('permission_roler', function (Blueprint $table) {
             $table->id();
                 $table->unsignedBigInteger('permission_id');
@@ -37,7 +37,9 @@ class CreatePermissionsTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('permissions');
         Schema::dropIfExists('permission_roler');
+        Schema::enableForeignKeyConstraints();
     }
 }
