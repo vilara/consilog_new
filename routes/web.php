@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RolerController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,8 @@ Auth::routes();
 Route::get('/', function(){
     return view('auth.login');
 });
+
+Route::resource('rolers', 'RolerController');
 
 Route::group(['middleware' => ['auth']], function(){
 

@@ -85,7 +85,7 @@ class RegisterController extends Controller
         $usu->password = Hash::make($data['password']);
 
         $usu->save();
-        $usu->rolers()->attach(1);
+        // $usu->rolers()->attach(1);
         return $usu;
 
     }

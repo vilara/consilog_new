@@ -35,7 +35,12 @@ class RolerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->validateRequest();
+
+        Roler::create([
+            'name' => request('name'),
+            'label' => request('label')
+        ]);
     }
 
     /**
@@ -69,7 +74,8 @@ class RolerController extends Controller
      */
     public function update(Request $request, Roler $roler)
     {
-        //
+        $data = $this->validateRequest();
+        $roler->update($data);
     }
 
     /**
@@ -81,5 +87,17 @@ class RolerController extends Controller
     public function destroy(Roler $roler)
     {
         //
+    }
+
+    /**
+     * @return array
+     */
+    protected function validateRequest(): array
+    {
+        return request()->validate([
+            'name' => 'required',
+            'label' => 'required',
+
+        ]);
     }
 }
