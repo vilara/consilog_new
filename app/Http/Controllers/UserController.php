@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Postograd;
 use App\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -32,6 +34,10 @@ class UserController extends Controller
                 }
 
             })
+            ->editColumn('name', function(User $user) {
+                return '<a href="/usuarios/'.$user->id.'"  >'.$user->name.'</a>';
+            })
+            ->rawColumns(['name','action'])
             ->editColumn('roler', function(User $user) {
                 return $user->rolers->first()->name;
             })
@@ -73,7 +79,8 @@ class UserController extends Controller
     public function show(User $user, $id)
     {
         $user = User::find($id);
-        return view ( 'users.show', compact ('user'));
+        $pg = Postograd::all();
+        return view ( 'users.show', compact ('user', 'pg'));
     }
 
     /**
