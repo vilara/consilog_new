@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=lang="pt">
+<html lang="pt">
 
 <head>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Om;
 use App\Postograd;
 use App\User;
 use Illuminate\Http\Request;
@@ -80,7 +81,9 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $pg = Postograd::all();
-        return view ( 'users.show', compact ('user', 'pg'));
+        $om = Om::all();
+        // dd($om);
+        return view ( 'users.show', compact ('user', 'pg', 'om'));
     }
 
     /**
