@@ -200,7 +200,7 @@ return [
 
     'password_email_url' => 'password/email',
 
-    'profile_url' => false,
+    'profile_url' => 'details',
 
     /*
     |--------------------------------------------------------------------------
@@ -231,43 +231,15 @@ return [
     */
 
     'menu' => [
-        [
-            'text' => 'Procurar',
-            'search' => true,
-            'topnav' => true,
-        ],
-        [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
-        // [
-        //     'text'        => 'pages',
-        //     'url'         => 'admin/pages',
-        //     'icon'        => 'far fa-fw fa-file',
-        //     'label'       => 4,
-        //     'label_color' => 'success',
-        // ],
-        ['header' => 'Administração'],
-        [
-            'text' => 'Perfil usuário',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'Trocar senha',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
+
+
+
         [
             'text'    => 'Admin Sistema',
             'icon'    => 'fas fa-tools',
             'can'     => 'delete',
             'submenu' => [
-                // [
-                //     'text' => 'level_one',
-                //     'url'  => '#',
-                // ],
+
                 [
                     'text'    => 'Usuários',
                     'icon'    => 'fas fa-user-friends',
@@ -277,20 +249,6 @@ return [
                             'text' => 'Usuários cadastrados',
                             'url'  => 'usuarios',
                         ],
-                    //     [
-                    //         'text'    => 'level_two',
-                    //         'url'     => '#',
-                    //         'submenu' => [
-                    //             [
-                    //                 'text' => 'level_three',
-                    //                 'url'  => '#',
-                    //             ],
-                    //             [
-                    //                 'text' => 'level_three',
-                    //                 'url'  => '#',
-                    //             ],
-                    //         ],
-                    //     ],
                     ],
                 ],
                 [
@@ -303,28 +261,8 @@ return [
                     'icon'    => 'fas fa-street-view',
                     'url'     => '#',
                 ],
-                // [
-                //     'text' => 'level_one',
-                //     'url'  => '#',
-                // ],
             ],
         ],
-        // ['header' => 'labels'],
-        // [
-        //     'text'       => 'important',
-        //     'icon_color' => 'red',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'warning',
-        //     'icon_color' => 'yellow',
-        //     'url'        => '#',
-        // ],
-        // [
-        //     'text'       => 'information',
-        //     'icon_color' => 'cyan',
-        //     'url'        => '#',
-        // ],
     ],
 
     /*

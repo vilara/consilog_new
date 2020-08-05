@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Cargo;
 use App\Om;
 use App\Postograd;
+use App\Roler;
 use App\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -29,7 +31,7 @@ class UserController extends Controller
             ->addColumn('action', function ($user) {
                 $user->id % 2 == 0 ? $d = 'text-success' :  $d = 'text-primary';
                 if(Auth::user()->can('update')){
-                return '<a href="/usuario/'.$user->id.'" class="'.$d.'" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
+                return '<a href="/usuario/'.$user.'" class="'.$d.'" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
                 }else{
                 return '<a disabled="disabled" href="/usuario/'.$user->id.'" class="'.$d.'" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
                 }
@@ -57,7 +59,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -68,7 +70,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
@@ -77,13 +79,14 @@ class UserController extends Controller
      *  @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user, $id)
+    public function show(User $user)
     {
-        $user = User::find($id);
         $pg = Postograd::all();
         $om = Om::all();
+        $funcao = Cargo::all();
+        $perfi = Roler::all();
         // dd($om);
-        return view ( 'users.show', compact ('user', 'pg', 'om'));
+        return view ( 'users.show', compact ('user', 'pg', 'om', 'funcao', 'perfi'));
     }
 
     /**

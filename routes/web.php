@@ -13,10 +13,10 @@ Route::get('/', function(){
     return view('auth.login');
 });
 
-Route::resource('/rolers', 'RolerController');
 
-Route::resource('/usuarios', 'UserController');
 Route::group(['middleware' => ['auth']], function(){
-
+    Route::resource('usuarios', 'UserController')->parameters(['usuarios' => 'user']);
+    Route::resource('rolers', 'RolerController');
+    Route::resource('details', 'DetailController');
     Route::get('/home', 'HomeController@index')->name('home');
 });
