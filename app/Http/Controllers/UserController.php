@@ -70,6 +70,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        
         dd($request);
     }
 
@@ -85,8 +86,19 @@ class UserController extends Controller
         $om = Om::all();
         $funcao = Cargo::all();
         $perfi = Roler::all();
-        // dd($om);
+                if (empty($user['detail'])) {
+                    $user = Auth::user();
+        return view ( 'users.create', compact ('user', 'pg', 'om', 'funcao', 'perfi'));
+                }
         return view ( 'users.show', compact ('user', 'pg', 'om', 'funcao', 'perfi'));
+    }
+
+    public function profileUser(){
+        $user = Auth::user()->with('detail')->get();
+
+        dd($user);
+
+        $this->show($user);
     }
 
     /**

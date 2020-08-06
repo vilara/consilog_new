@@ -24,25 +24,25 @@ class StoreDetails extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'username' => 'required|unique:users|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed|min:8',
+            'postograd_id' => 'required',
+            'cpf' => 'required|unique:detaisl|max:11|min:11',
+            // 'email' => 'required|email|unique:users',
+            // 'password' => 'required|confirmed|min:8',
         ];
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'Campo obrigatório!',
-            'username.required' => 'Campo obrigatório!',
-            'username.unique' => 'Este nome usuário já existe, favor escolher um diferente!',
-            'email.required' => 'Campo obrigatório!',
-            'email.email' => 'E-mail inválido!',
-            'email.unique' => 'Este email já foi cadastrado anteriormente!',
-            'password.required' => 'Campo obrigatório!',
-            'password.min' => 'A Senha deve conter no mínimo 8 caracteres!',
-            'password.confirmed' => 'A confirmação deve ser idêntica a senha!',
+            'postograd_id.required' => 'Campo obrigatório!',
+            'cpf.required' => 'Campo obrigatório!',
+            // 'username.unique' => 'Este nome usuário já existe, favor escolher um diferente!',
+            // 'email.required' => 'Campo obrigatório!',
+            // 'email.email' => 'E-mail inválido!',
+            // 'email.unique' => 'Este email já foi cadastrado anteriormente!',
+            // 'password.required' => 'Campo obrigatório!',
+            // 'password.min' => 'A Senha deve conter no mínimo 8 caracteres!',
+            // 'password.confirmed' => 'A confirmação deve ser idêntica a senha!',
         ];
     }
 }

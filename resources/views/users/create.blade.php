@@ -10,63 +10,10 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <form action="{{route('usuarios.store', $user->id) }}" method="post">
+            <form action="{{route('details.store', $user->id) }}" method="post">
                     @method('POST')
                     {{ csrf_field() }}
-           {{--  <div class="card card-success"> --}}
-             {{--    <div class="card-header">
-                    <h4 class="card-title">Informações obrigatórias</h4>
-
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button type="button" class="btn btn-tool" data-card-widget="remove">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div> --}}
-
-                <!-- /.card-header -->
-                {{-- <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>E-mail</label>
-                                <input type="email" class="form-control form-control-sm" id="exampleInputEmail1" value="{{ $user->email }}" disabled>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Nova senha</label>
-                                <input type="email" class="form-control form-control-sm" id="exampleInputEmail1"
-                                    form-control form-control-sm=" @error('password') is-invalid @enderror" name="password">
-
-                                @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                                <small id="emailHelp" class="form-text text-danger">Preencha somente se desejar alterar a
-                                    senha!</small>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Repetir nova senha</label>
-                                <input type="email" class="form-control form-control-sm" id="exampleInputEmail1"
-                                    name="password_confirmation">
-                            </div>
-                        </div>
-
-                    </div>
-                    <!-- /.row -->
-
-                </div>
-            </div>--}}
-
+            <input type="hidden" name="user_id" value="{{ $user->id }}">    
             <div class="card card-success">
                 <div class="card-header">
                     <h4 class="card-title">Informaçẽs complementares para acesso ao sistema</h4>
@@ -97,31 +44,36 @@
                             <!-- select posto grad-->
                             <div class="form-group">
                                 <label>Posto / Grad</label>
-                                <select class="form-control form-control-sm" id="postograd_id" name="postograd_id">
+                                <select class="form-control form-control-sm @error('postograd_id') is-invalid @enderror id="postograd_id" name="postograd_id">
                                     <option value="">Selecione...</option>
                                     @foreach ($pg as $pg)
-                                        @if ($user->id == $pg->id)
-                                            <option value="{{ $pg->id }}" selected="selected">{{ $pg->siglaPg }}</option>
-                                        @else
-                                            <option value="{{ $pg->id }}">{{ $pg->siglaPg }}</option>
-                                        @endif
+                                    @if(old('postograd_id')== $pg->id )
+									<option value="{{ $pg->id }}" selected="selected">{{$pg->siglaPg}}</option>
+									@else
+									<option value="{{ $pg->id }} ">{{$pg->siglaPg}}</option>
+									@endif
                                     @endforeach
                                 </select>
+                                @error('postograd_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-2">
                             {{-- input cpf--}}
                             <div class="form-group">
                                 <label>CPF</label>
-                                <input type="cpf" class="form-control form-control-sm" id="cpf"
-                                    form-control form-control-sm=" @error('cpf') is-invalid @enderror" name="cpf">
+                                <input type="cpf" class="form-control form-control-sm @error('cpf') is-invalid @enderror" id="cpf" value="{{ old('cpf') }}" name="cpf"  >
 
                                 @error('cpf')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
+                                @else
+                                <small id="cpf" class="form-text text-danger">Apenas com números!</small>
                                 @enderror
-                                <small id="cpfHelp" class="form-text text-danger">Preencha apenas com números!</small>
                             </div>
                         </div>
                         <div class="col-md-2">

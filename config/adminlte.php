@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+
 return [
 
     /*
@@ -64,7 +66,7 @@ return [
     |
     */
 
-    'usermenu_enabled' => true,
+    'usermenu_enabled' => false,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
@@ -232,7 +234,19 @@ return [
 
     'menu' => [
 
+        'CONFIGURAÇÕES',
+        [
+            'text' => 'Perfil',
+            'route' => 'profile',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
+            'text' => 'Trocar Senha',
+            'url' => 'usuarios',
+            'icon' => 'fas fa-fw fa-lock',
+        ],
 
+        'MENU PRINCIPAL',
 
         [
             'text'    => 'Admin Sistema',
