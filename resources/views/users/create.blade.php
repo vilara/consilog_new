@@ -6,7 +6,6 @@
 @section('content_header')
     <h1>Perfil de {{ $user->name }}</h1>
 @stop
-
 @section('content')
     <div class="row">
         <div class="col-md-12">
@@ -44,14 +43,10 @@
                             <!-- select posto grad-->
                             <div class="form-group">
                                 <label>Posto / Grad</label>
-                                <select class="form-control form-control-sm @error('postograd_id') is-invalid @enderror id="postograd_id" name="postograd_id">
+                                <select class="form-control form-control-sm @error('postograd_id') is-invalid @elseif('') @else is-valid @enderror" id="postograd_id" name="postograd_id">
                                     <option value="">Selecione...</option>
                                     @foreach ($pg as $pg)
-                                    @if(old('postograd_id')== $pg->id )
-									<option value="{{ $pg->id }}" selected="selected">{{$pg->siglaPg}}</option>
-									@else
-									<option value="{{ $pg->id }} ">{{$pg->siglaPg}}</option>
-									@endif
+									<option value="{{ $pg->id }}"  @if(old('postograd_id')== $pg->id ) selected @endif>{{$pg->siglaPg}}</option>
                                     @endforeach
                                 </select>
                                 @error('postograd_id')
@@ -65,14 +60,11 @@
                             {{-- input cpf--}}
                             <div class="form-group">
                                 <label>CPF</label>
-                                <input type="cpf" class="form-control form-control-sm @error('cpf') is-invalid @enderror" id="cpf" value="{{ old('cpf') }}" name="cpf"  >
-
+                                <input type="cpf" class="form-control form-control-sm @error('cpf') is-invalid @else is-valid @enderror" id="cpf" value="{{ old('cpf') }}" name="cpf"  >
                                 @error('cpf')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
-                                @else
-                                <small id="cpf" class="form-text text-danger">Apenas com números!</small>
                                 @enderror
                             </div>
                         </div>
@@ -80,23 +72,25 @@
                             {{-- input idt--}}
                             <div class="form-group">
                                 <label>Identidade Militar</label>
-                                <input type="idt" class="form-control form-control-sm" id="idt"
-                                    form-control form-control-sm=" @error('idt') is-invalid @enderror" name="idt">
+                                <input type="text" value="{{ old('idt') }}" class="form-control form-control-sm @error('idt') is-invalid @else is-valid @enderror " id="idt" name="idt">
 
                                 @error('idt')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
-                                <small id="idthelp" class="form-text text-danger">Preencha apenas com números!</small>
                             </div>
                         </div>
-                        {{-- input nome de guerra --}}
                         <div class="col-md-6">
+                            {{-- input nome de guerra --}}
                             <div class="form-group">
                                 <label>Nome de Guerra</label>
-                                <input type="nome_guerra" class="form-control form-control-sm" id="nome_guerra"
-                                    value="{{ $user->nome_guerra }}">
+                                <input type="text" class="form-control form-control-sm @error('nome_guerra') is-invalid @else is-valid @enderror" id="nome_guerra" name="nome_guerra" value="{{ old('nome_guerra') }}">
+                                @error('nome_guerra')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -105,30 +99,28 @@
                             <!-- select om -->
                             <div class="form-group">
                                 <label>OM</label>
-                                <select class="form-control form-control-sm" name="om" id="om">
+                                <select class="form-control form-control-sm @error('om_id') is-invalid @else is-valid @enderror" name="om_id" id="om_id">
+                                    <option value="">Selecione...</option>
                                     @foreach ($om as $om)
-                                        @if ($user->id == $om->id)
-                                            <option value="{{ $om->id }}" selected="selected">{{ $om->siglaOM }}</option>
-                                        @else
-                                            <option value="{{ $om->id }}">{{ $om->siglaOM }}</option>
-                                        @endif
+									<option value="{{ $om->id }}"  @if(old('om_id')== $om->id ) selected @endif>{{$om->siglaOM}}</option>
                                     @endforeach
                                 </select>
+                                @error('om_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
 
                         <div class="col-md-2">
                             <!-- select função-->
                             <div class="form-group">
-                                <label>Select</label>
-                                <select class="form-control form-control-sm">
+                                <label>Função</label>
+                                <select class="form-control form-control-sm" name="funcao_id">
+                                    <option value="">Selecione...</option>
                                     @foreach ($funcao as $funcao)
-                                        @if ($user->id == $funcao->id)
-                                            <option value="{{ $funcao->id }}" selected="selected">{{ $funcao->siglaCg }}
-                                            </option>
-                                        @else
-                                            <option value="{{ $funcao->id }}">{{ $funcao->siglaCg }}</option>
-                                        @endif
+									<option value="{{ $funcao->id }}"  @if(old('funcao_id')== $funcao->id ) selected @endif>{{$funcao->siglaCg}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -139,15 +131,19 @@
                             <!-- radio sexo-->
                             <div class="form-group">
                                 <label for="sexo">Sexo</label>
-                                <div class="border pt-1 pl-3 mb-0 ">
+                                <div class="border pt-1 pl-3 mb-0" >
                                     <label class="radio-inline mr-3"><input type="radio" class="form-radio-input"
-                                            name="sexo" id="sexo1" value="1" @if ($user->sexo == 1) {{ 'checked="checked"' }} @endif
-                                        > Masculino</label>
+                                            name="sexo" id="sexo1" value="1" @if(old('sexo') == 1 ) checked @endif> Masculino</label>
                                     <label class="radio-inline"><input type="radio" class="form-radio-input" name="sexo"
-                                            id="sexo2" value="2" @if ($user->sexo == 2)
-                                        {{ 'checked="checked"' }} @endif> Feminino</label>
+                                            id="sexo2" value="2" @if(old('sexo') == 2 ) checked @endif> Feminino</label>
                                 </div>
+                                @error('sexo')
+                                <span class="invalid-feedback" style="display: block;" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
+                            
                         </div>
 
                         <div class="col-md-3">
@@ -156,18 +152,21 @@
                                 <label for="sit">Situação</label>
                                 <div class="border pt-1 pl-3 mb-0 ">
                                     <label class="radio-inline mr-3"><input type="radio" class="form-radio-input" name="sit"
-                                            id="sit1" value="1" @if ($user->sit == 1)
-                                        {{ 'checked="checked"' }} @endif> Ativa</label>
+                                            id="sit1" value="1" @if(old('sit') == 1 ) checked @endif> Ativa</label>
                                     <label class="radio-inline"><input type="radio" class="form-radio-input" name="sit"
-                                            id="sit2" value="2" @if ($user->sit == 2)
-                                        {{ 'checked="checked"' }} @endif> Reserva</label>
+                                            id="sit2" value="2" @if(old('sit') == 2 ) checked @endif> Reserva</label>
                                 </div>
+                                @error('sit')
+                                <span class="invalid-feedback" style="display: block;" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
 
                         @foreach ($user->rolers as $per)
                             <div class="form-group col-md-2">
-                                <label for="perfil">Perfil</label> <select class="form-control form-control-sm" id="perfil" name="perfil">
+                                <label for="perfil">Perfil</label> <select class="form-control form-control-sm" id="perfil" disabled name="perfil">
                                     @foreach ($perfi as $perfil)
 
                                         <option value="{{ $perfil->id }}">{{ $perfil->name }}</option>

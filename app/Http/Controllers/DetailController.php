@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Detail;
 use App\Http\Requests\StoreDetails;
+use App\Military;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class DetailController extends Controller
@@ -27,7 +29,8 @@ class DetailController extends Controller
      */
     public function create()
     {
-        //
+        $user = Auth::user();
+        return view ( 'users.create', compact ( 'user') );
     }
 
     /**
@@ -38,20 +41,28 @@ class DetailController extends Controller
      */
     public function store(StoreDetails $request)
     {
+       
+        $mil = new Military;
+        $mil->postograd_id = $request['postograd_id'];
+        $mil->situacao = $request['sit'];
+        $mil->save();
+
         $usu = User::find($request['user_id']);
         $detail = new Detail;
-
+        $detail->user_id = $request['user_id'];
         $detail->nome_guerra = $request['nome_guerra'];
+       // $detail->postograd_id =$request['postograd_id'];
         $detail->cpf = $request['cpf'];
         $detail->idt =$request['idt'];
         $detail->sexo = $request['sexo'];
         $detail->om_id = $request['om_id'];
-        $detail->cargo_id =$request['cargo_id'];
-        $detail->detailable_type = 'militar';
-        $detail->detailable_id =$request['user_id'];
-        dd($usu);
+        $detail->cargo_id =$request['funcao_id'];
+        //$detail->detailable_type = 'militar';
+        //$detail->detailable_id =$request['user_id'];
+       // $usu->detail()->save($detail);
+        $detail->detailable()->associate($mil)->save();
         //$usu->save();
-        $usu->details()->attach($detail);
+        
         return redirect('home');
     }
 

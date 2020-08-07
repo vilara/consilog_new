@@ -25,9 +25,13 @@ class StoreDetails extends FormRequest
     {
         return [
             'postograd_id' => 'required',
-            'cpf' => 'required|unique:detaisl|max:11|min:11',
-            // 'email' => 'required|email|unique:users',
-            // 'password' => 'required|confirmed|min:8',
+            'cpf' => 'required|unique:details|digits:11|numeric',
+            'idt' => 'required|unique:details|numeric',
+            'nome_guerra' => 'required',
+            'om_id' => 'required',
+            'sexo' => 'required',
+            'sit' => 'required',
+            
         ];
     }
 
@@ -36,13 +40,16 @@ class StoreDetails extends FormRequest
         return [
             'postograd_id.required' => 'Campo obrigatório!',
             'cpf.required' => 'Campo obrigatório!',
-            // 'username.unique' => 'Este nome usuário já existe, favor escolher um diferente!',
-            // 'email.required' => 'Campo obrigatório!',
-            // 'email.email' => 'E-mail inválido!',
-            // 'email.unique' => 'Este email já foi cadastrado anteriormente!',
-            // 'password.required' => 'Campo obrigatório!',
-            // 'password.min' => 'A Senha deve conter no mínimo 8 caracteres!',
-            // 'password.confirmed' => 'A confirmação deve ser idêntica a senha!',
-        ];
+            'cpf.unique' => 'Este cpf já possui cadastro!',
+            'cpf.digits' => 'o CPF precisa conter 11 dígitos',
+            'cpf.numeric' => 'Apenas números',
+            'idt.required' => 'Campo obrigatório!',
+            'idt.numeric' => 'Apenas números',
+            'idt.unique' => 'Esta idt já possui cadastro!',
+            'nome_guerra.required' => 'Campo obrigatório!',
+            'om_id.required' => 'Campo obrigatório!',
+            'sexo.required' => 'Campo obrigatório!',
+            'sit.required' => 'Campo obrigatório!',
+                ];
     }
 }

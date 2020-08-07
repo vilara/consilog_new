@@ -25,31 +25,30 @@ class UserController extends Controller
         if ($request->ajax()) {
 
             return Datatables::of($data)
-            ->setRowClass(function ($user) {
-                return $user->id % 2 == 0 ? 'text-success' : 'text-primary';
-            })
-            ->addColumn('action', function ($user) {
-                $user->id % 2 == 0 ? $d = 'text-success' :  $d = 'text-primary';
-                if(Auth::user()->can('update')){
-                return '<a href="/usuario/'.$user.'" class="'.$d.'" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
-                }else{
-                return '<a disabled="disabled" href="/usuario/'.$user->id.'" class="'.$d.'" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
-                }
-
-            })
-            ->editColumn('name', function(User $user) {
-                return '<a href="/usuarios/'.$user->id.'"  >'.$user->name.'</a>';
-            })
-            ->rawColumns(['name','action'])
-            ->editColumn('roler', function(User $user) {
-                return $user->rolers->first()->name;
-            })
-            ->editColumn('created_at', function(User $user) {
-                return $user->created_at->diffForHumans();
-            })
-            ->make(true);
+                ->setRowClass(function ($user) {
+                    return $user->id % 2 == 0 ? 'text-success' : 'text-primary';
+                })
+                ->addColumn('action', function ($user) {
+                    $user->id % 2 == 0 ? $d = 'text-success' :  $d = 'text-primary';
+                    if (Auth::user()->can('update')) {
+                        return '<a href="/usuario/' . $user . '" class="' . $d . '" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
+                    } else {
+                        return '<a disabled="disabled" href="/usuario/' . $user->id . '" class="' . $d . '" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
+                    }
+                })
+                ->editColumn('name', function (User $user) {
+                    return '<a href="/usuarios/' . $user->id . '"  >' . $user->name . '</a>';
+                })
+                ->rawColumns(['name', 'action'])
+                ->editColumn('roler', function (User $user) {
+                    return $user->rolers->first()->name;
+                })
+                ->editColumn('created_at', function (User $user) {
+                    return $user->created_at->diffForHumans();
+                })
+                ->make(true);
         }
-        return view ( 'users.index');
+        return view('users.index');
     }
 
     /**
@@ -59,7 +58,6 @@ class UserController extends Controller
      */
     public function create()
     {
-
     }
 
     /**
@@ -70,7 +68,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         dd($request);
     }
 
@@ -82,23 +80,22 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+
         $pg = Postograd::all();
         $om = Om::all();
         $funcao = Cargo::all();
         $perfi = Roler::all();
-                if (empty($user['detail'])) {
-                    $user = Auth::user();
-        return view ( 'users.create', compact ('user', 'pg', 'om', 'funcao', 'perfi'));
-                }
-        return view ( 'users.show', compact ('user', 'pg', 'om', 'funcao', 'perfi'));
+        if (empty($user['detail'])) {
+        return view('users.create', compact('user', 'pg', 'om', 'funcao', 'perfi'));
+        }else{
+        return view('users.show', compact('user', 'pg', 'om', 'funcao', 'perfi'));
+        }
     }
 
-    public function profileUser(){
-        $user = Auth::user()->with('detail')->get();
-
-        dd($user);
-
-        $this->show($user);
+    public function profileUser()
+    {
+        $user = Auth::user();
+       return $this->show($user);
     }
 
     /**
