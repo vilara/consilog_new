@@ -43,7 +43,7 @@
                             <!-- select posto grad-->
                             <div class="form-group">
                                 <label>Posto / Grad</label>
-                                <select class="form-control form-control-sm @error('postograd_id') is-invalid @elseif('') @else is-valid @enderror" id="postograd_id" name="postograd_id">
+                                <select class="form-control form-control-sm @error('postograd_id') is-invalid  @enderror" id="postograd_id" name="postograd_id">
                                     <option value="">Selecione...</option>
                                     @foreach ($pg as $pg)
 									<option value="{{ $pg->id }}"  @if(old('postograd_id')== $pg->id ) selected @endif>{{$pg->siglaPg}}</option>
@@ -60,7 +60,7 @@
                             {{-- input cpf--}}
                             <div class="form-group">
                                 <label>CPF</label>
-                                <input type="cpf" class="form-control form-control-sm @error('cpf') is-invalid @else is-valid @enderror" id="cpf" value="{{ old('cpf') }}" name="cpf"  >
+                                <input type="cpf" class="form-control form-control-sm @error('cpf') is-invalid @enderror" id="cpf" value="{{ old('cpf') }}" name="cpf"  >
                                 @error('cpf')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -72,7 +72,7 @@
                             {{-- input idt--}}
                             <div class="form-group">
                                 <label>Identidade Militar</label>
-                                <input type="text" value="{{ old('idt') }}" class="form-control form-control-sm @error('idt') is-invalid @else is-valid @enderror " id="idt" name="idt">
+                                <input type="text" value="{{ old('idt') }}" class="form-control form-control-sm @error('idt') is-invalid @enderror " id="idt" name="idt">
 
                                 @error('idt')
                                 <span class="invalid-feedback" role="alert">
@@ -85,7 +85,7 @@
                             {{-- input nome de guerra --}}
                             <div class="form-group">
                                 <label>Nome de Guerra</label>
-                                <input type="text" class="form-control form-control-sm @error('nome_guerra') is-invalid @else is-valid @enderror" id="nome_guerra" name="nome_guerra" value="{{ old('nome_guerra') }}">
+                                <input type="text" class="form-control form-control-sm @error('nome_guerra') is-invalid @enderror" id="nome_guerra" name="nome_guerra" value="{{ old('nome_guerra') }}">
                                 @error('nome_guerra')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -99,7 +99,7 @@
                             <!-- select om -->
                             <div class="form-group">
                                 <label>OM</label>
-                                <select class="form-control form-control-sm @error('om_id') is-invalid @else is-valid @enderror" name="om_id" id="om_id">
+                                <select class="form-control form-control-sm @error('om_id') is-invalid @enderror" name="om_id" id="om_id">
                                     <option value="">Selecione...</option>
                                     @foreach ($om as $om)
 									<option value="{{ $om->id }}"  @if(old('om_id')== $om->id ) selected @endif>{{$om->siglaOM}}</option>

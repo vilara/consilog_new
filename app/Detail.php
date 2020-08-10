@@ -19,4 +19,6 @@ class Detail extends Model
         return $this->morphTo();
     }
 
+   
+
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Cargo;
+use App\Detail;
 use App\Om;
 use App\Postograd;
 use App\Roler;
@@ -85,10 +86,12 @@ class UserController extends Controller
         $om = Om::all();
         $funcao = Cargo::all();
         $perfi = Roler::all();
-        if (empty($user['detail'])) {
-        return view('users.create', compact('user', 'pg', 'om', 'funcao', 'perfi'));
+        $detail = Detail::where('user_id', $user->id)->first();
+       // dd($detail);
+        if (empty($user->detail)) {
+        return view('users.create', compact('user', 'pg', 'om', 'funcao', 'perfi', 'detail'));
         }else{
-        return view('users.show', compact('user', 'pg', 'om', 'funcao', 'perfi'));
+        return view('users.show', compact('user', 'pg', 'om', 'funcao', 'perfi', 'detail'));
         }
     }
 

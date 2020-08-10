@@ -13,4 +13,9 @@ class Military extends Model
     {
         return $this->morphOne('App\Detail', 'detailable');
     }
+
+    public function postograd()
+	{
+		return $this->belongsTo('App\Postograd', 'postograd_id', 'id');
+	}
 }
