@@ -4,38 +4,27 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Perfil de Usuário</h1>
+    <h1>Perfil de {{ $user->name }}</h1>
 @stop
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <form action="{{route('details.store', $user->id) }}" method="post">
-                    @method('POST')
+            <form action="{{route('details.update', $detail) }}" method="post">
+                    @method('PUT')
                     {{ csrf_field() }}
             <input type="hidden" name="user_id" value="{{ $user->id }}">    
             <div class="card card-success">
                 <div class="card-header">
-                    @if(session()->get('success'))
-                        <h4 class="card-title">{{ session()->get('success') }}</h4>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div> 
-                    @else  
-                        <h4 class="card-title">Informaçẽs complementares para acesso ao sistema</h4>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    @endif
+                    <h4 class="card-title">Edição das informações complementares para acesso ao sistema</h4>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -44,17 +33,15 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nome completo</label>
-                                <input type="name" class="form-control form-control-sm" id="exampleInputEmail1" value="{{ $user->name }}"
-                                    disabled="disabled">
+                                <input type="text" id="name" class="form-control form-control-sm" name="name" id="name" value="{{ $user->name }}">
                             </div>
                         </div>
 
-                        {{-- input email --}}
-                        <div class="col-md-6">
+                           {{-- input email --}}
+                           <div class="col-md-6">
                             <div class="form-group">
                                 <label>Email</label>
-                                <input type="name" class="form-control form-control-sm" id="email" value="{{ $user->email }}"
-                                    disabled="disabled">
+                                <input type="text" id="email" class="form-control form-control-sm" name="email" id="email" value="{{ $user->email }}">
                             </div>
                         </div>
                     </div>
@@ -63,32 +50,54 @@
                             <!-- select posto grad-->
                             <div class="form-group">
                                 <label>Posto / Grad</label>
-                                <select class="form-control form-control-sm" id="postograd_id" name="postograd_id" disabled>
-                                    @foreach($pg as $pg)
-									<option value="{{ $pg->id }}"  @if($detail->detailable->postograd_id == $pg->id ) selected @endif>{{$pg->siglaPg}}</option>
+                                <select class="form-control form-control-sm @error('postograd_id') is-invalid  @enderror" id="postograd_id" name="postograd_id">
+                                    <option value="">Selecione...</option>
+                                    @foreach ($pg as $pg)
+									<option value="{{ $pg->id }}"  @if($detail->detailable->postograd_id == $pg->id) selected @endif>{{$pg->siglaPg}}</option>
                                     @endforeach
                                 </select>
+                                @error('postograd_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-2">
                             {{-- input cpf--}}
                             <div class="form-group">
                                 <label>CPF</label>
-                                <input type="cpf" class="form-control form-control-sm " id="cpf" value="{{ $user->detail->cpf }}" name="cpf" disabled >
+                                <input type="cpf" class="form-control form-control-sm @error('cpf') is-invalid @enderror" id="cpf" value="{{ $detail->cpf }}" name="cpf"  >
+                                @error('cpf')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-2">
                             {{-- input idt--}}
                             <div class="form-group">
                                 <label>Identidade Militar</label>
-                                <input type="text" value="{{ $user->detail->idt }}" class="form-control form-control-sm" id="idt" name="idt" disabled>
+                                <input type="text" value="{{ $detail->idt }}" class="form-control form-control-sm @error('idt') is-invalid @enderror " id="idt" name="idt">
+
+                                @error('idt')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-md-6">
                             {{-- input nome de guerra --}}
                             <div class="form-group">
                                 <label>Nome de Guerra</label>
-                                <input type="text" class="form-control form-control-sm " id="nome_guerra" name="nome_guerra" value="{{ $user->detail->nome_guerra }}" disabled>
+                                <input type="text" class="form-control form-control-sm @error('nome_guerra') is-invalid @enderror" id="nome_guerra" name="nome_guerra" value="{{ $detail->nome_guerra }}">
+                                @error('nome_guerra')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -97,11 +106,17 @@
                             <!-- select om -->
                             <div class="form-group">
                                 <label>OM</label>
-                                <select class="form-control form-control-sm" name="om_id" id="om_id" disabled>
+                                <select class="form-control form-control-sm @error('om_id') is-invalid @enderror" name="om_id" id="om_id">
+                                    <option value="">Selecione...</option>
                                     @foreach ($om as $om)
-									<option value="{{ $om->id }}"  @if($user->detail->om_id == $om->id ) selected @endif>{{$om->siglaOM}}</option>
+									<option value="{{ $om->id }}"  @if($detail->om_id == $om->id ) selected @endif>{{$om->siglaOM}}</option>
                                     @endforeach
                                 </select>
+                                @error('om_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -109,9 +124,10 @@
                             <!-- select função-->
                             <div class="form-group">
                                 <label>Função</label>
-                                <select class="form-control form-control-sm" name="funcao_id" disabled>
+                                <select class="form-control form-control-sm" name="funcao_id">
+                                    <option value="">Selecione...</option>
                                     @foreach ($funcao as $funcao)
-									<option value="{{ $funcao->id }}"  @if($user->detail->cargo_id == $funcao->id ) selected @endif>{{$funcao->siglaCg}}</option>
+									<option value="{{ $funcao->id }}"  @if($detail->cargo_id == $funcao->id ) selected @endif>{{$funcao->siglaCg}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -124,10 +140,15 @@
                                 <label for="sexo">Sexo</label>
                                 <div class="border pt-1 pl-3 mb-0" >
                                     <label class="radio-inline mr-3"><input type="radio" class="form-radio-input"
-                                            name="sexo" id="sexo1" value="1" @if($user->detail->sexo == "m" ) checked @else disabled @endif> Masculino</label>
+                                            name="sexo" id="sexo1" value="1" @if($detail->sexo == "m" ) checked @endif> Masculino</label>
                                     <label class="radio-inline"><input type="radio" class="form-radio-input" name="sexo"
-                                            id="sexo2" value="2" @if($user->detail->sexo == "f" ) checked  @else disabled  @endif> Feminino</label>
+                                            id="sexo2" value="2" @if($detail->sexo == "f") checked @endif> Feminino</label>
                                 </div>
+                                @error('sexo')
+                                <span class="invalid-feedback" style="display: block;" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                             
                         </div>
@@ -138,10 +159,15 @@
                                 <label for="sit">Situação</label>
                                 <div class="border pt-1 pl-3 mb-0 ">
                                     <label class="radio-inline mr-3"><input type="radio" class="form-radio-input" name="sit"
-                                            id="sit1" value="1" @if($detail->detailable->situacao == "a" ) checked  @else disabled @endif> Ativa</label>
+                                            id="sit1" value="1" @if($detail->detailable->situacao == "a") checked @endif> Ativa</label>
                                     <label class="radio-inline"><input type="radio" class="form-radio-input" name="sit"
-                                            id="sit2" value="2" @if($detail->detailable->situacao == "r") checked  @else disabled @endif> Reserva</label>
+                                            id="sit2" value="2" @if($detail->detailable->situacao == "r") checked @endif> Reserva</label>
                                 </div>
+                                @error('sit')
+                                <span class="invalid-feedback" style="display: block;" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -149,7 +175,9 @@
                             <div class="form-group col-md-2">
                                 <label for="perfil">Perfil</label> <select class="form-control form-control-sm" id="perfil" disabled name="perfil">
                                     @foreach ($perfi as $perfil)
-                                        <option value="{{ $perfil->id }}" @if($user->rolers->first()->id == $perfil->id) selected @endif>{{ $perfil->name }}</option>
+
+                                        <option value="{{ $perfil->id }}">{{ $perfil->name }}</option>
+
                                     @endforeach
                                 </select>
                             </div>
@@ -159,8 +187,8 @@
                 </div>
                 <!-- /.row -->
                 <div class="card-footer">
-                    <a href="{{ route('usuarios.edit',$user->id) }}" type="submit" class="btn btn-success">  {{ __('Editar') }}   </a>
-                    <button type="submit" class="btn btn-success float-right">Voltar</button>
+                    <button type="submit" class="btn btn-success">Atualizar</button>
+                    <button type="submit" class="btn btn-success float-right">Cancelar</button>
                 </div>
             </form>
             </div>

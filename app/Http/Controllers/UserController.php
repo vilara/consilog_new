@@ -109,7 +109,13 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $pg = Postograd::all();
+        $om = Om::all();
+        $funcao = Cargo::all();
+        $perfi = Roler::all();
+        $detail = Detail::where('user_id', $user->id)->first();
+        // dd($funcao);
+        return view('users.edit', compact('user', 'pg', 'om', 'funcao', 'perfi', 'detail'));
     }
 
     /**

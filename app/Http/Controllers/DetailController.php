@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Detail;
 use App\Http\Requests\StoreDetails;
+use App\Http\Requests\UpdateDetails;
 use App\Military;
 use App\User;
 use Illuminate\Http\Request;
@@ -95,9 +96,30 @@ class DetailController extends Controller
      * @param  \App\Detail  $detail
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Detail $detail)
+    public function update(UpdateDetails $request, Detail $detail)
     {
-        //
+        $usuario = User::find($detail->user_id);
+        $usuario->name = $request->name;
+        $usuario->email = $request->email;
+        $usuario->save();
+        
+        $mil = Military::find($detail->detailable_id);
+        $mil->postograd_id = $request['postograd_id'];
+        $mil->situacao = $request['sit'];
+        $mil->save();
+
+        $detail->nome_guerra = $request['nome_guerra'];
+        $detail->cpf = $request['cpf'];
+        $detail->idt =$request['idt'];
+        $detail->sexo = $request['sexo'];
+        $detail->om_id = $request['om_id'];
+        $detail->cargo_id =$request['funcao_id'];
+        $detail->save();
+
+        return redirect ( '/profile' )->with ( 'success', 'Usuário Editado com sucesso!' );
+        //dd($detail);
+
+
     }
 
     /**
