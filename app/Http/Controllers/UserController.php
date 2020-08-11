@@ -101,6 +101,13 @@ class UserController extends Controller
        return $this->show($user);
     }
 
+    public function editSenha()
+    {
+        $user = Auth::user();
+        return view('users.senha', compact('user'));
+    }
+
+   
     /**
      * Show the form for editing the specified resource.
      *

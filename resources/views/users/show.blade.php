@@ -160,7 +160,8 @@
                 <!-- /.row -->
                 <div class="card-footer">
                     <a href="{{ route('usuarios.edit',$user->id) }}" type="submit" class="btn btn-success">  {{ __('Editar') }}   </a>
-                    <button type="submit" class="btn btn-success float-right">Voltar</button>
+                    <a href="{{ route('home') }}" type="submit" class="btn btn-success float-right">  {{ __('Cancelar') }}   </a>
+
                 </div>
             </form>
             </div>

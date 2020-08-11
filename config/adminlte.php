@@ -242,7 +242,7 @@ return [
         ],
         [
             'text' => 'Trocar Senha',
-            'url' => 'usuarios',
+            'route' => 'profile_edit_senha',
             'icon' => 'fas fa-fw fa-lock',
         ],
 
