@@ -20,6 +20,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('profile', 'UserController@profileUser')->name('profile');
     Route::get('profile/senhaEdit', 'UserController@editSenha')->name('profile_edit_senha');
     Route::put('profile/senha/{user}', 'HomeController@updateSenha')->name('profile_update_senha');
+    Route::post('profile/delete/{user}', 'HomeController@deleteUser')->name('profile_delete');
     Route::resource('rolers', 'RolerController');
     Route::resource('details', 'DetailController');
     Route::get('/home', 'HomeController@index')->name('home');

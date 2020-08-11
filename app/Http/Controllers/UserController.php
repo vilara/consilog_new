@@ -27,18 +27,33 @@ class UserController extends Controller
 
             return Datatables::of($data)
                 ->setRowClass(function ($user) {
-                    return $user->id % 2 == 0 ? 'text-success' : 'text-primary';
+                    return $user->id % 2 == 0 ? '' : '';
                 })
                 ->addColumn('action', function ($user) {
-                    $user->id % 2 == 0 ? $d = 'text-success' :  $d = 'text-primary';
+                    $c = "'Confirma exclusão de usuário?'";
+                    $r = "profile/delete/".$user->id;
+                    $d = "@csrf @method('DELETE')";
                     if (Auth::user()->can('update')) {
-                        return '<a href="/usuario/' . $user . '" class="' . $d . '" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
+                        return '
+                        <div class="row">
+                            <div class="col-md-6 pt-0 h-auto d-inline-block">
+                                <a href="/usuarios/' . $user->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>            
+                            </div>
+                            <div class="col-md-6 pt-0 h-auto d-inline-block">
+                                <form class="form-group" action="'.$r.'" method="post">
+                                <button class="btn form-control pt-0 " type="submit" onclick="return confirm('.$c.')"><i class="far fa-trash-alt"></i></button>            
+                                </form>
+                            </div>
+                        </div>
+                        ';
                     } else {
-                        return '<a disabled="disabled" href="/usuario/' . $user->id . '" class="' . $d . '" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
+                        return '<a disabled="disabled" href="/usuario/' . $user->id . '" class="' . $d . '" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
                     }
+                //    <a href="/usuarios/' . $user->id . '/edit" class="' . $d . '" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>
+                //    <a href="/usuarios/' . $user->id . '/edit" class="' . $d . ' float-right" onclick="return confirm('.$c.')"><i class="fas fa-trash-alt"	title="Excluir usu&aacute;rio"></i></a>
                 })
                 ->editColumn('name', function (User $user) {
-                    return '<a href="/usuarios/' . $user->id . '"  >' . $user->name . '</a>';
+                    return '<a href="/usuarios/' . $user->id . '" style="color: inherit;" >' . $user->name . '</a>';
                 })
                 ->rawColumns(['name', 'action'])
                 ->editColumn('roler', function (User $user) {
@@ -145,6 +160,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return redirect ( '/usuarios/' )->with ( 'success', 'Usuário excluído com sucesso!' );
     }
 }

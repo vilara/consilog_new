@@ -35,7 +35,6 @@
                 <th>Email</th>
                 <th>Perfil</th>
                 <th>Cadastrado</th>
-                <th>Modificado</th>
                 <th>Ação</th>
               </tr>
               </thead>
@@ -47,7 +46,6 @@
                 <th>Email</th>
                 <th>Perfil</th>
                 <th>Cadastrado</th>
-                <th>Modificado</th>
                 <th>Ação</th>
               </tr>
               </tr>
@@ -84,12 +82,11 @@
                 { data: 'email', name: 'email' },
                 { data: 'roler', name: 'roler' },
                 { data: 'created_at', name: 'created_at' },
-                { data: 'updated_at', name : 'updated_at'},
                 { data: 'action', name: 'action'},
             ],
             columnDefs: [
                 {"targets": 4,"orderable": false,"searchable": false},
-                {"targets": 5, "render": $.fn.dataTable.render.moment( 'YYYY' ) },
+                // {"targets": 5, "render": $.fn.dataTable.render.moment( 'YYYY' ) },
             ],
        		language: {
        		    processing:     "Carregando dados...",

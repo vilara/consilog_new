@@ -47,4 +47,10 @@ class HomeController extends Controller
         // dd($request);
         return redirect ( '/profile' )->with ( 'success', 'Senha alterada com sucesso!' );
     }
+
+    public function deleteUser(User $user)
+    {
+        $user->delete();
+        return redirect ( '/usuarios/' )->with ( 'success', 'Usuário excluído com sucesso!' );
+    }
 }

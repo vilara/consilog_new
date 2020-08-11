@@ -115,8 +115,11 @@ class DetailController extends Controller
         $detail->om_id = $request['om_id'];
         $detail->cargo_id =$request['funcao_id'];
         $detail->save();
-
-        return redirect ( '/profile' )->with ( 'success', 'Usuário Editado com sucesso!' );
+        if (Auth::user()->id == $detail->user_id) {
+            return redirect ( '/profile' )->with ( 'success', 'Usuário Editado com sucesso!' );
+        }else{
+            return redirect ( '/usuarios/'.$detail->user_id )->with ( 'success', 'Usuário Editado com sucesso!' );
+        }
         //dd($detail);
 
 
