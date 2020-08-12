@@ -266,9 +266,15 @@ return [
                     ],
                 ],
                 [
-                    'text'    => 'OM cadastradas',
+                    'text'    => 'OM',
                     'icon'    => 'fas fa-industry',
                     'url'     => '#',
+                    'submenu' => [
+                        [
+                            'text' => 'OM cadastrados',
+                            'url'  => 'oms',
+                        ],
+                    ],
                 ],
                 [
                     'text'    => 'Funções',

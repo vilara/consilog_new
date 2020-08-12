@@ -26,10 +26,10 @@ class UserController extends Controller
         if ($request->ajax()) {
 
             return Datatables::of($data)
-                ->setRowClass(function ($user) {
+                ->setRowClass(function (User $user) {
                     return $user->id % 2 == 0 ? '' : '';
                 })
-                ->addColumn('action', function ($user) {
+                ->addColumn('action', function (User $user) {
                     $c = "'Confirma exclusão de usuário?'";
                     $r = "profile/delete/".$user->id;
                     $d = "@csrf @method('DELETE')";

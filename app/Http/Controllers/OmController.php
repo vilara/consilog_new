@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Om;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
+use Yajra\DataTables\DataTables;
 
 class OmController extends Controller
 {
@@ -12,9 +15,35 @@ class OmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $om = Om::all();
+        if ($request->ajax()) {
+            return DataTables::of($om)
+            ->addColumn('action', function (Om $om) {
+                if (Auth::user()->can('update')) {
+                    $c = "'Confirma exclusão da OM?'";
+                    $r = "om/delete/".$om->id;
+                    $d = "@csrf @method('DELETE')";
+                    return '
+                    <div class="row">
+                        <div class="col-md-6 pt-0 h-auto d-inline-block">
+                            <a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>            
+                        </div>
+                        <div class="col-md-6 pt-0 h-auto d-inline-block">
+                            <form class="form-group" action="'.$r.'" method="post">
+                            <button class="btn form-control pt-0 " type="submit" onclick="return confirm('.$c.')"><i class="far fa-trash-alt"></i></button>            
+                            </form>
+                        </div>
+                    </div>
+                    ';
+                } else {
+                    return '<a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>';
+                }
+            })
+            ->make(true);
+        }
+        return view('oms.index');
     }
 
     /**
@@ -57,7 +86,7 @@ class OmController extends Controller
      */
     public function edit(Om $om)
     {
-        //
+        return view('oms.edit', compact('om'));
     }
 
     /**
@@ -69,7 +98,8 @@ class OmController extends Controller
      */
     public function update(Request $request, Om $om)
     {
-        //
+        return redirect ( '/oms/' )->with ( 'success', 'OM editada com sucesso!' );
+        dd($request);
     }
 
     /**
