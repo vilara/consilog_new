@@ -29,7 +29,7 @@
           <div class="card-body">
             <table id="example2" class="table table-bordered table-hover">
               <thead>
-              <tr>
+              <tr style="text-align: center;">
                 <th>ID</th>
                 <th>Nome completo</th>
                 <th>Email</th>
@@ -40,7 +40,7 @@
               </thead>
 
               <tfoot>
-              <tr>
+              <tr style="text-align: center;">
                 <th>ID</th>
                 <th>Nome completo</th>
                 <th>Email</th>

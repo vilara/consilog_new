@@ -26,9 +26,9 @@ class OmController extends Controller
                     $r = "om/delete/".$om->id;
                     $d = "@csrf @method('DELETE')";
                     return '
-                    <div class="row">
+                    <div class="row" style="height: 25px;">
                         <div class="col-md-6 pt-0 h-auto d-inline-block">
-                            <a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>            
+                            <a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><center><i class="fas fa-edit"	title="Alterar OM"></i></center></a>            
                         </div>
                         <div class="col-md-6 pt-0 h-auto d-inline-block">
                             <form class="form-group" action="'.$r.'" method="post">
@@ -98,8 +98,14 @@ class OmController extends Controller
      */
     public function update(Request $request, Om $om)
     {
+        $om->nomeOm = $request->nomeOm;
+        $om->siglaOM= $request->siglaOM;
+        $om->codom  = $request->codom;
+        $om->codug  = $request->codug;
+        $om->save();
+        
         return redirect ( '/oms/' )->with ( 'success', 'OM editada com sucesso!' );
-        dd($request);
+       // return back()->with('message', 'Record Successfully Updated!');
     }
 
     /**

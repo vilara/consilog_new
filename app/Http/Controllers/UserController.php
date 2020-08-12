@@ -35,11 +35,11 @@ class UserController extends Controller
                     $d = "@csrf @method('DELETE')";
                     if (Auth::user()->can('update')) {
                         return '
-                        <div class="row">
-                            <div class="col-md-6 pt-0 h-auto d-inline-block">
-                                <a href="/usuarios/' . $user->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>            
+                        <div class="row"  style="height: 25px;">
+                            <div class="col-md-6 mx-auto" style="height: 25px;">
+                                <a href="/usuarios/' . $user->id . '/edit" style="color: inherit;" ><center><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></center></a>            
                             </div>
-                            <div class="col-md-6 pt-0 h-auto d-inline-block">
+                            <div class="col-md-6">
                                 <form class="form-group" action="'.$r.'" method="post">
                                 <button class="btn form-control pt-0 " type="submit" onclick="return confirm('.$c.')"><i class="far fa-trash-alt"></i></button>            
                                 </form>

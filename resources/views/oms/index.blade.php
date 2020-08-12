@@ -33,7 +33,7 @@
           <div class="card-body">
             <table id="oms" class="table table-bordered table-hover">
               <thead>
-              <tr>
+              <tr style="text-align: center;">
                 <th>ID</th>
                 <th>Nome da OM</th>
                 <th>Sigla da OM</th>
@@ -44,7 +44,7 @@
               </thead>
 
               <tfoot>
-              <tr>
+              <tr style="text-align: center;">
                 <th>ID</th>
                 <th>Nome da OM</th>
                 <th>Sigla da OM</th>
