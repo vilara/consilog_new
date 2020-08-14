@@ -23,7 +23,16 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('profile/delete/{user}', 'HomeController@deleteUser')->name('profile_delete');
     Route::resource('rolers', 'RolerController');
     Route::resource('details', 'DetailController');
+
     Route::resource('oms', 'OmController')->except(['destroy']);
-    Route::get('oms/delete/{om}', 'OmController@destroy')->name('om_delete');;
+    Route::get('oms/delete/{om}', 'OmController@destroy')->name('om_delete');
+    Route::get('/oms/subordinacao/create/{id}','OmController@CreateSubordinacaoOm');
+    Route::post('/oms/subordinacao/store','OmController@StoreSubordinacaoOm');
+
+
+    Route::resource('comandos', 'ComandoController')->except(['destroy']);
+    Route::get('cmdo/delete/{comando}', 'ComandoController@destroy')->name('cmdo_delete');
+
     Route::get('/home', 'HomeController@index')->name('home');
+
 });

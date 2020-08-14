@@ -277,6 +277,17 @@ return [
                     ],
                 ],
                 [
+                    'text'    => 'G Cmdo',
+                    'icon'    => 'fas fa-industry',
+                    'url'     => '#',
+                    'submenu' => [
+                        [
+                            'text' => 'G Cmdo cadastrados',
+                            'url'  => 'comandos',
+                        ],
+                    ],
+                ],
+                [
                     'text'    => 'Funções',
                     'icon'    => 'fas fa-street-view',
                     'url'     => '#',

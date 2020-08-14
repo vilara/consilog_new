@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comando;
 use App\Http\Requests\UpdateOms;
 use App\Om;
 use Illuminate\Http\Request;
@@ -42,6 +43,10 @@ class OmController extends Controller
                     return '<a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>';
                 }
             })
+            ->editColumn('nomeOm', function(Om $om) {
+                return '<a href="'.route('oms.show',$om->id).'" style="color: inherit;">'. $om->nomeOm .'</a>';
+            })
+            ->rawColumns(['nomeOm', 'action'])
             ->make(true);
         }
         return view('oms.index');
@@ -55,6 +60,24 @@ class OmController extends Controller
     public function create()
     {
         return view('oms.create');
+    }
+
+    public function CreateSubordinacaoOm($id)
+    {
+    	$om = Om::find($id);
+    	$cmdo = Comando::all();
+    	return view ( 'oms.createSubordinacao', compact ( 'om','cmdo') );
+    }
+
+    public function storeSubordinacaoOm(Request $request)
+    {
+    	
+    	$om = Om::find($request->id);
+    	$cmdo = Comando::find($request->cmdo);
+    	//dd($request);
+    	$om->comandos()->attach([$cmdo->id => ['omds' => $request->omds]]);
+    	
+    	return redirect ( '/oms' )->with ( 'success', 'Subordinação inserida com sucesso!' );
     }
 
     /**
@@ -84,7 +107,7 @@ class OmController extends Controller
      */
     public function show(Om $om)
     {
-       return "show";
+        return view('oms.show', compact('om'));
     }
 
     /**

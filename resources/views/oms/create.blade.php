@@ -83,7 +83,7 @@
                 <!-- /.row -->
                 <div class="card-footer">
                     <button type="submit" class="btn btn-success">Cadastrar</button>
-                    <button type="submit" class="btn btn-success float-right">Cancelar</button>
+                    <a href="{{ route('oms.index') }}" type="submit" class="btn btn-success float-right">  {{ __('Cancelar') }}   </a>
                 </div>
             </form>
             </div>

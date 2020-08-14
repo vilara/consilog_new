@@ -24,5 +24,13 @@ class Om extends Model
         return $this->hasMany('App\User', 'user_id');
     }
 
+       /**
+     * Many to Many
+     */
+    public function comandos()
+    {
+    	return $this->belongsToMany('App\Comando', 'comando_om', 'om_id', 'comando_id' )->withPivot('omds');
+    }
+
     public $timestamps = false;
 }
