@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateOms;
 use App\Om;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,15 +24,15 @@ class OmController extends Controller
             ->addColumn('action', function (Om $om) {
                 if (Auth::user()->can('update')) {
                     $c = "'Confirma exclusão da OM?'";
-                    $r = "om/delete/".$om->id;
-                    $d = "@csrf @method('DELETE')";
+                    $d = "'DELETE'";
                     return '
                     <div class="row" style="height: 25px;">
                         <div class="col-md-6 pt-0 h-auto d-inline-block">
                             <a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><center><i class="fas fa-edit"	title="Alterar OM"></i></center></a>            
                         </div>
                         <div class="col-md-6 pt-0 h-auto d-inline-block">
-                            <form class="form-group" action="'.$r.'" method="post">
+                            <form class="form-group" method="delete" action="'. route('om_delete', $om->id) .'" >
+                            
                             <button class="btn form-control pt-0 " type="submit" onclick="return confirm('.$c.')"><i class="far fa-trash-alt"></i></button>            
                             </form>
                         </div>
@@ -53,7 +54,7 @@ class OmController extends Controller
      */
     public function create()
     {
-        //
+        return view('oms.create');
     }
 
     /**
@@ -62,9 +63,17 @@ class OmController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UpdateOms $request)
     {
-        //
+        $om = new Om;
+        $om->nomeOm = $request->nomeOm;
+        $om->siglaOM = $request->siglaOM;
+        $om->codom = $request->codom;
+        $om->codug = $request->codug;
+       
+       $om->save();
+       return redirect ( '/oms/' )->with ( 'success', 'OM incluída com sucesso!' );
+
     }
 
     /**
@@ -75,7 +84,7 @@ class OmController extends Controller
      */
     public function show(Om $om)
     {
-        //
+       return "show";
     }
 
     /**
@@ -116,6 +125,7 @@ class OmController extends Controller
      */
     public function destroy(Om $om)
     {
-        //
+        $om->delete();
+        return redirect ( '/oms' )->with ( 'success', 'OM excluída com sucesso!' );
     }
 }

@@ -32,15 +32,24 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nome da OM</label>
-                                <input type="text" id="nomeOm" class="form-control form-control-sm" name="nomeOm" id="name" value="{{ $om->nomeOm }}">
+                                <input type="text" class="form-control form-control-sm @error('nomeOm') is-invalid @enderror" name="nomeOm" id="name" value="{{ $om->nomeOm }}">
+                                @error('nomeOm')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
-
                            {{-- input sigla da OM --}}
                            <div class="col-md-6">
                             <div class="form-group">
                                 <label>sigla da OM</label>
-                                <input type="text" id="siglaOM" class="form-control form-control-sm" name="siglaOM" id="siglaOM" value="{{ $om->siglaOM }}">
+                                <input type="text"class="form-control form-control-sm @error('siglaOM') is-invalid @enderror" name="siglaOM" id="siglaOM" value="{{ $om->siglaOM }}">
+                                @error('siglaOM')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -49,15 +58,24 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>CODOM</label>
-                                <input type="text" id="codom" class="form-control form-control-sm" name="codom" id="codom" value="{{ $om->codom }}">
+                                <input type="text" class="form-control form-control-sm @error('codom') is-invalid @enderror" name="codom" id="codom" value="{{ $om->codom }}">
+                                @error('codom')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
-
                            {{-- input codug --}}
                            <div class="col-md-6">
                             <div class="form-group">
                                 <label>CODUG</label>
-                                <input type="text" id="codug" class="form-control form-control-sm" name="codug" id="codug" value="{{ $om->codug }}">
+                                <input type="text" class="form-control form-control-sm @error('codug') is-invalid @enderror" name="codug" id="codug" value="{{ $om->codug }}">
+                                @error('codug')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
                             </div>
                         </div>
                     </div>

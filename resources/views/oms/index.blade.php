@@ -29,6 +29,11 @@
         @else 
             <h3 class="card-title">Controle de OM</h3>
         @endif
+        <div class="card-tools">
+          <a href="{{ route('oms.create') }}" type="submit" class="btn btn-success">  {{ __('Incluir nova OM') }}
+          
+          </a>
+      </div>
           </div><!-- /.card-header -->
           <div class="card-body">
             <table id="oms" class="table table-bordered table-hover">

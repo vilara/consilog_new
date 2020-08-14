@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('profile/delete/{user}', 'HomeController@deleteUser')->name('profile_delete');
     Route::resource('rolers', 'RolerController');
     Route::resource('details', 'DetailController');
-    Route::resource('oms', 'OmController');
+    Route::resource('oms', 'OmController')->except(['destroy']);
+    Route::get('oms/delete/{om}', 'OmController@destroy')->name('om_delete');;
     Route::get('/home', 'HomeController@index')->name('home');
 });
