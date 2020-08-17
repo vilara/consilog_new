@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comando;
+use App\Http\Requests\UpdateComandos;
 use App\Om;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,12 +38,18 @@ class ComandoController extends Controller
                 ;
             })
             ->addColumn('omds', function (Comando $comando) {
-              return $comando->id;
+                return 
+                '<div class="row"  style="height: 25px;">
+                <div class="col-md-12 mx-auto" style="height: 25px;">
+                <a href="/comandos/subordinados/' . $comando->id . '" style="color: inherit;" ><center><i class="fas fa-external-link-alt"	title="Mostrar OMDS"></i></center></a> 
+                </div>
+                </div>'
+                ;
             })
             ->editColumn('nomeCmdo', function(Comando $comando) {
                 return '<a href="'.route('comandos.show',$comando->id).'" style="color: inherit;">'. $comando->nomeCmdo .'</a>';
             })
-            ->rawColumns(['nomeCmdo', 'action'])
+            ->rawColumns(['nomeCmdo', 'action', 'omds'])
             ->make(true)
             
             ;
@@ -58,7 +65,7 @@ class ComandoController extends Controller
      */
     public function create()
     {
-        //
+        return view('comandos.create');
     }
 
     /**
@@ -67,9 +74,16 @@ class ComandoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UpdateComandos $request)
     {
-        //
+        $comando = new Comando;
+        $comando->nomeCmdo = $request->nomeCmdo;
+        $comando->siglaCmdo = $request->siglaCmdo;
+        $comando->codomOm = $request->codomOm;
+        $comando->codugOm = $request->codugOm;
+       
+       $comando->save();
+       return redirect ( '/comandos/' )->with ( 'success', 'Comando incluído com sucesso!' );
     }
 
     /**
@@ -81,6 +95,27 @@ class ComandoController extends Controller
     public function show(Comando $comando)
     {
         return view('comandos.show', compact('comando'));
+    }
+
+    public function showSubordinadas($id)
+    {
+
+      // Om::with('comandos')->where('comandos.id',1)->select(['id', 'nomeOm']);
+         $cmdsu = Comando::find($id);
+     
+      // Om::with('comandos')->where('comandos.id',1)->select(['id', 'nomeOm']);
+      // $om = Om::with('comandos')->where('oms.id',3)->select(['oms.*', 'comandos.*'])->get();
+     // dd($om[0]->id);
+      // dd($om) ;
+      // dd($data);
+        
+        // dd($data);
+       // if ($request->ajax()) {
+       //     return DataTables::of($om)->make(true);
+//
+     //   }
+    	//$cmdsu = Comando::find($id);
+    	return view('comandos.showSubordinadas', compact('cmdsu'));
     }
 
     /**
@@ -120,7 +155,7 @@ class ComandoController extends Controller
      */
     public function destroy(Comando $comando)
     {
-        $om->delete();
-        return redirect ( '/comandos' )->with ( 'success', 'Comando excluída com sucesso!' );
+        $comando->delete();
+        return redirect ( '/comandos' )->with ( 'success', 'Comando excluído com sucesso!' );
     }
 }

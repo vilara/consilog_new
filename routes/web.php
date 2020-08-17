@@ -33,6 +33,10 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('comandos', 'ComandoController')->except(['destroy']);
     Route::get('cmdo/delete/{comando}', 'ComandoController@destroy')->name('cmdo_delete');
 
+    // views dos comandos 
+
+    Route::get('/comandos/subordinados/{id}','ComandoController@showSubordinadas')->name('omds');
+
     Route::get('/home', 'HomeController@index')->name('home');
 
 });
