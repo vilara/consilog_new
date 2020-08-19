@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comando;
+use App\Endereco;
 use App\Http\Requests\UpdateOms;
 use App\Om;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class OmController extends Controller
     public function index(Request $request)
     {
         $om = Om::all();
+       // dd($om);
         if ($request->ajax()) {
             return DataTables::of($om)
             ->addColumn('action', function (Om $om) {
@@ -43,10 +45,30 @@ class OmController extends Controller
                     return '<a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>';
                 }
             })
+            ->addColumn('endereco', function (Om $om) {
+            
+                if($om->enderecos->count() > 0){
+                     return '
+                     <div class="row" style="height: 25px;">
+                     <div class="col-md-12 pt-0 h-auto">
+                         <a href="'. route('oms.enderecos.show', [$om->id, $om->enderecos[0]->id]).'" class="" style="color: black;" ><center><i class="fas fa-home"	title="Mostrar endereco de OM"></i></center></a>            
+                     </div>
+                     </div>
+                     ';
+                }else{
+                    return '
+                    <div class="row" style="height: 25px;">
+                       <div class="col-md-12 pt-0 h-auto">
+                           <a href="'. route('oms.enderecos.create', $om->id).'" class="" style="color: red;" ><center><i class="fas fa-home"	title="Inserir endereco de OM"></i></center></a>            
+                       </div>
+                    </div>
+                    ';
+                }
+            })
             ->editColumn('nomeOm', function(Om $om) {
                 return '<a href="'.route('oms.show',$om->id).'" style="color: inherit;">'. $om->nomeOm .'</a>';
             })
-            ->rawColumns(['nomeOm', 'action'])
+            ->rawColumns(['nomeOm', 'action', 'endereco'])
             ->make(true);
         }
         return view('oms.index');

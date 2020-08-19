@@ -4,7 +4,7 @@
 @section('title', 'Dashboard')
 
 @section('content_header')
-    <h1>Perfil de {{ $om->id }}</h1>
+    <h1>Perfil de {{ $om->nomeOm }}</h1>
 @stop
 @section('content')
     <div class="row">

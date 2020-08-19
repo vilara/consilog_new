@@ -44,6 +44,7 @@
                 <th>Sigla da OM</th>
                 <th>CODOM</th>
                 <th>CODUG</th>
+                <th>End</th>
                 <th>Ação</th>
               </tr>
               </thead>
@@ -55,6 +56,7 @@
                 <th>Sigla da OM</th>
                 <th>CODOM</th>
                 <th>CODUG</th>
+                <th>End</th>
                 <th>Ação</th>
               </tr>
               </tr>
@@ -91,6 +93,7 @@
                 { data: 'siglaOM', name: 'siglaOM' },
                 { data: 'codom', name: 'codom' },
                 { data: 'codug', name: 'codug' },
+                { data: 'endereco', name: 'endereco' },
                 { data: 'action', name: 'action'},
             ],
             columnDefs: [

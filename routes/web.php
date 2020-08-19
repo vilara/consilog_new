@@ -23,11 +23,22 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('profile/delete/{user}', 'HomeController@deleteUser')->name('profile_delete');
     Route::resource('rolers', 'RolerController');
     Route::resource('details', 'DetailController');
-
+    
+    
+    // om
     Route::resource('oms', 'OmController')->except(['destroy']);
     Route::get('oms/delete/{om}', 'OmController@destroy')->name('om_delete');
     Route::get('/oms/subordinacao/create/{id}','OmController@CreateSubordinacaoOm');
     Route::post('/oms/subordinacao/store','OmController@StoreSubordinacaoOm');
+
+    // endereco
+
+    Route::resource('enderecos', 'EnderecoController')->except(['destroy']);
+
+    Route::resource('oms.enderecos', 'OmEnderecoController'); // php artisan make:controller OmEnderecoController -r --model=Endereco --parent=Om
+
+
+    //
 
 
     Route::resource('comandos', 'ComandoController')->except(['destroy']);

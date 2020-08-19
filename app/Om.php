@@ -32,5 +32,22 @@ class Om extends Model
     	return $this->belongsToMany('App\Comando', 'comando_om', 'om_id', 'comando_id' )->withPivot('omds');
     }
 
+     /**
+     * Get all of the om's telefones.
+     */
+    public function telefones()
+    {
+        return $this->morphMany('App\Telefone', 'telefoneable');
+    }
+
+     /**
+     * Get all of the om's enderecos.
+     */
+
+    public function enderecos()
+    {
+        return $this->morphMany('App\Endereco', 'enderecoable');
+    }
+
     public $timestamps = false;
 }
