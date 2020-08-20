@@ -27,25 +27,24 @@
         @if(session()->get('success'))
             <h3 class="card-title">{{ session()->get('success') }}</h3>
         @else 
-            <h3 class="card-title">Controle de OM</h3>
+            <h3 class="card-title">Controle de OM: {{ $om->nomeOm }}</h3>
         @endif
         <div class="card-tools">
-          <a href="{{ route('oms.create') }}" type="submit" class="btn btn-success">  {{ __('Incluir nova OM') }}
+          <a href="{{ route('oms.index') }}" type="submit" class="btn btn-success">  {{ __('Voltar') }}
+          <a href="{{ route('oms.telefones.create', $om->id) }}" type="submit" class="btn btn-success">  {{ __('Incluir novo telefone') }}
           
           </a>
       </div>
           </div><!-- /.card-header -->
           <div class="card-body">
-            <table id="oms" class="table table-bordered table-hover">
+            <table id="telefones" class="table table-bordered table-hover">
               <thead>
               <tr style="text-align: center;">
                 <th>ID</th>
-                <th>Nome da OM</th>
-                <th>Sigla da OM</th>
-                <th>CODOM</th>
-                <th>CODUG</th>
-                <th>Tel</th>
-                <th>End</th>
+                <th>DDD</th>
+                <th>Número</th>
+                <th>Seção</th>
+                <th>Tipo</th>
                 <th>Ação</th>
               </tr>
               </thead>
@@ -53,12 +52,10 @@
               <tfoot>
               <tr style="text-align: center;">
                 <th>ID</th>
-                <th>Nome da OM</th>
-                <th>Sigla da OM</th>
-                <th>CODOM</th>
-                <th>CODUG</th>
-                <th>Tel</th>
-                <th>End</th>
+                <th>DDD</th>
+                <th>Número</th>
+                <th>Seção</th>
+                <th>Tipo</th>
                 <th>Ação</th>
               </tr>
               </tr>
@@ -85,22 +82,17 @@
 @section('js')
     <script>
      $(document).ready(function () {
-    	 $('#oms').DataTable({
-            processing: true,
-            serverSide: false,
-            ajax: "{{ route('oms.index') }}",
-            columns: [
+    	 $('#telefones').DataTable({
+          processing: true,
+          serverSide: false,
+          ajax: "{{ route('oms.telefones.index', $om->id) }}",
+          columns: [
                 { data: 'id', name: 'id'},
-                { data: 'nomeOm', name: 'nomeOm' },
-                { data: 'siglaOM', name: 'siglaOM' },
-                { data: 'codom', name: 'codom' },
-                { data: 'codug', name: 'codug' },
-                { data: 'telefone', name: 'telefone' },
-                { data: 'endereco', name: 'endereco' },
+                { data: 'ddd', name: 'ddd'},
+                { data: 'numero', name: 'numero'},
+                { data: 'section.siglaSecao', name: 'section.siglaSecao'},
+                { data: 'tipo.telTipo', name: 'tipo.telTipo'},
                 { data: 'action', name: 'action'},
-            ],
-            columnDefs: [
-                {"targets": 4,"orderable": false,"searchable": false},
             ],
        		language: {
        		    processing:     "Carregando dados...",

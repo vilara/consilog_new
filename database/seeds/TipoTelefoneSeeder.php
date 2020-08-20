@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class TipoTelSeeder extends Seeder
+class TipoTelefoneSeeder extends Seeder
 {
     /**
      * Run the database seeds.

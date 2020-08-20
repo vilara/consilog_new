@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TipoTel extends Model
+class tipoTelefone extends Model
 {
     public function telefones(){
-		return $this->hasMany('App\Telefone','tipo_tel_id', 'id');
+		return $this->hasMany('App\Telefone','tipotelefone_id', 'id');
 	}
 }

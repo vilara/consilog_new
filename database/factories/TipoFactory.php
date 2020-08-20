@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\TipoTel;
+use App\tipo;
 use Faker\Generator as Faker;
 
-$factory->define(TipoTel::class, function (Faker $faker) {
+$factory->define(tipo::class, function (Faker $faker) {
     return [
         //
     ];

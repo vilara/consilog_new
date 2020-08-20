@@ -30,8 +30,8 @@ class Telefone extends Model
 		return $this->belongsTo('App\Section', 'section_id');
 	}
 	
-	public function tipoTel()
+	public function tipo()
 	{
-		return $this->belongsTo('App\TipoTel', 'tipo_tel_id');
+		return $this->belongsTo('App\tipo', 'tipo_id');
 	}
 }

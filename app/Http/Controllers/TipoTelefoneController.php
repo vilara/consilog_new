@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Telefone;
+use App\tipoTelefone;
 use Illuminate\Http\Request;
 
-class TelefoneController extends Controller
+class TipoTelefoneController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class TelefoneController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Telefone  $telefone
+     * @param  \App\tipoTelefone  $tipoTelefone
      * @return \Illuminate\Http\Response
      */
-    public function show(Telefone $telefone)
+    public function show(tipoTelefone $tipoTelefone)
     {
         //
     }
@@ -52,10 +52,10 @@ class TelefoneController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Telefone  $telefone
+     * @param  \App\tipoTelefone  $tipoTelefone
      * @return \Illuminate\Http\Response
      */
-    public function edit(Telefone $telefone)
+    public function edit(tipoTelefone $tipoTelefone)
     {
         //
     }
@@ -64,10 +64,10 @@ class TelefoneController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Telefone  $telefone
+     * @param  \App\tipoTelefone  $tipoTelefone
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Telefone $telefone)
+    public function update(Request $request, tipoTelefone $tipoTelefone)
     {
         //
     }
@@ -75,13 +75,11 @@ class TelefoneController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Telefone  $telefone
+     * @param  \App\tipoTelefone  $tipoTelefone
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Telefone $telefone)
+    public function destroy(tipoTelefone $tipoTelefone)
     {
-        dd($telefone);
-        $telefone->delete();
-        return redirect ( '/oms' )->with ( 'success', 'Telefone excluída com sucesso!' );
+        //
     }
 }

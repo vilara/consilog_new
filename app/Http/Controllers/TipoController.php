@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\TipoTel;
+use App\tipo;
 use Illuminate\Http\Request;
 
-class TipoTelController extends Controller
+class TipoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class TipoTelController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\TipoTel  $tipoTel
+     * @param  \App\tipo  $tipo
      * @return \Illuminate\Http\Response
      */
-    public function show(TipoTel $tipoTel)
+    public function show(tipo $tipo)
     {
         //
     }
@@ -52,10 +52,10 @@ class TipoTelController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TipoTel  $tipoTel
+     * @param  \App\tipo  $tipo
      * @return \Illuminate\Http\Response
      */
-    public function edit(TipoTel $tipoTel)
+    public function edit(tipo $tipo)
     {
         //
     }
@@ -64,10 +64,10 @@ class TipoTelController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\TipoTel  $tipoTel
+     * @param  \App\tipo  $tipo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TipoTel $tipoTel)
+    public function update(Request $request, tipo $tipo)
     {
         //
     }
@@ -75,10 +75,10 @@ class TipoTelController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TipoTel  $tipoTel
+     * @param  \App\tipo  $tipo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TipoTel $tipoTel)
+    public function destroy(tipo $tipo)
     {
         //
     }

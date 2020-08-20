@@ -65,10 +65,30 @@ class OmController extends Controller
                     ';
                 }
             })
+            ->addColumn('telefone', function (Om $om) {
+            
+                if($om->telefones->count() > 0){
+                     return '
+                     <div class="row" style="height: 25px;">
+                     <div class="col-md-12 pt-0 h-auto">
+                         <a href="'. route('oms.telefones.index', [$om->id]).'" class="" style="color: black;" ><center><i class="fas fa-phone"	title="Mostrar telefones de OM"></i></center></a>            
+                     </div>
+                     </div>
+                     ';
+                }else{
+                    return '
+                    <div class="row" style="height: 25px;">
+                       <div class="col-md-12 pt-0 h-auto">
+                           <a href="'. route('oms.telefones.create', $om->id).'" class="" style="color: red;" ><center><i class="fas fa-phone"	title="Inserir telefone de OM"></i></center></a>            
+                       </div>
+                    </div>
+                    ';
+                }
+            })
             ->editColumn('nomeOm', function(Om $om) {
                 return '<a href="'.route('oms.show',$om->id).'" style="color: inherit;">'. $om->nomeOm .'</a>';
             })
-            ->rawColumns(['nomeOm', 'action', 'endereco'])
+            ->rawColumns(['nomeOm', 'action', 'endereco', 'telefone'])
             ->make(true);
         }
         return view('oms.index');
@@ -93,6 +113,13 @@ class OmController extends Controller
 
     public function storeSubordinacaoOm(Request $request)
     {
+        $rules = ['cmdo' => 'required', 'omds' => 'required'];
+        $messages = [
+            'cmdo.required' => 'Campo obrigatório!',
+            'omds.required' => 'Campo obrigatório!',
+        ];
+
+        $this->validate($request, $rules, $messages);
     	
     	$om = Om::find($request->id);
     	$cmdo = Comando::find($request->cmdo);
