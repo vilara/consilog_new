@@ -32,22 +32,19 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/oms/subordinacao/store','OmController@StoreSubordinacaoOm');
 
     // endereco
-
     Route::resource('enderecos', 'EnderecoController')->except(['destroy']);
-
     Route::resource('oms.enderecos', 'OmEnderecoController'); // php artisan make:controller OmEnderecoController -r --model=Endereco --parent=Om
 
 
-    //
-
-
-    Route::resource('comandos', 'ComandoController')->except(['destroy']);
-    Route::get('cmdo/delete/{comando}', 'ComandoController@destroy')->name('cmdo_delete');
+    // telefone
+    Route::resource('telefones', 'TelefoneController');
+    Route::resource('oms.telefones', 'OmTelefoneController')->except(['destroy']); // php artisan make:controller OmTelefoneController -r --model=Telefone --parent=Om
+    Route::get('oms/{om}/telefones/{telefone}', 'OmTelefoneController@destroy')->name('telefone_delete');
 
     // views dos comandos 
-
+    Route::resource('comandos', 'ComandoController')->except(['destroy']);
+    Route::get('cmdo/delete/{comando}', 'ComandoController@destroy')->name('cmdo_delete');
     Route::get('/comandos/subordinados/{id}','ComandoController@showSubordinadas')->name('omds');
-
     Route::get('/home', 'HomeController@index')->name('home');
 
 });
