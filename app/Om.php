@@ -19,10 +19,22 @@ class Om extends Model
     /**
      * Get the users for the om.
      */
-    public function users()
+    public function detail()
     {
-        return $this->hasMany('App\User', 'user_id');
+        return $this->hasMany('App\detail', 'om_id');
     }
+
+    // public function user()
+    // {
+    //     return $this->hasManyThrough(
+    //         'App\User',
+    //         'App\Detail',
+    //         'om_id', // Foreign key on User table...
+    //         'user_id', // Foreign key on details table...
+    //         'id', // Local key on details table...
+    //         'id' // Local key on users table...
+    //     );
+    // }
 
        /**
      * Many to Many

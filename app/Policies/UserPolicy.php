@@ -2,8 +2,11 @@
 
 namespace App\Policies;
 
+use App\Comando;
+use App\Om;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class UserPolicy
 {
@@ -17,7 +20,6 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        //
     }
 
     /**
@@ -29,7 +31,26 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        //
+
+        $comando = Comando::where('codomOm', $user->detail->om->codom)->get();
+       // dd($comando[0]->oms);
+        $om = Om::where('id', $user->detail->om->id)->with('comandos')->get();
+        
+        if($user->can('update')){
+   
+            if($comando->isNotEmpty()){ // usuários de comandos
+            return $comando[0]->oms->contains('codom', $model->detail->om->codom) // retorna os usuários das OMS
+            || 
+            $user->detail->om->codom === $model->detail->om->codom // retorna os usuários da mesma OM
+            ;
+            }
+            //usuários de OM normais sem ser comando
+            return $user->detail->om->codom === $model->detail->om->codom; // retorna todos da mesma OM
+        }else{
+            return $user->id === $model->id; // retorna todos só o usuário logado
+        }
+       
+      
     }
 
     /**

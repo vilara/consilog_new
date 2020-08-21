@@ -44,13 +44,17 @@ class User extends Authenticatable
      */
     public function detail()
     {
-        return $this->hasOne('App\Detail', 'user_id', );
+        return $this->hasOne('App\Detail', 'user_id', )->with('detailable');
     }
 
-    public function om()
-    {
-    	return $this->belongsTo('App\Om');
-    }
+    // public function om()
+    // {
+    //     return $this->hasManyThrough(
+    //         'App\Detail',
+    //         'App\Om',
+           
+    //     );
+    // }
 
     public function cargo()
     {

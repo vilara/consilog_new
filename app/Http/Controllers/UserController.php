@@ -21,50 +21,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+//             
+        $user = User::with('detail')->get();
 
-        $data = User::all();
-        if ($request->ajax()) {
+      //  dd($user->om);
 
-            return Datatables::of($data)
-                ->setRowClass(function (User $user) {
-                    return $user->id % 2 == 0 ? '' : '';
-                })
-                ->addColumn('action', function (User $user) {
-                    $c = "'Confirma exclusão de usuário?'";
-                    $r = "profile/delete/".$user->id;
-                    $d = "@csrf @method('DELETE')";
-                    if (Auth::user()->can('update')) {
-                        return '
-                        <div class="row"  style="height: 25px;">
-                            <div class="col-md-6 mx-auto" style="height: 25px;">
-                                <a href="/usuarios/' . $user->id . '/edit" style="color: inherit;" ><center><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></center></a>            
-                            </div>
-                            <div class="col-md-6">
-                                <form class="form-group" action="'.$r.'" method="post">
-                                <button class="btn form-control pt-0 " type="submit" onclick="return confirm('.$c.')"><i class="far fa-trash-alt"></i></button>            
-                                </form>
-                            </div>
-                        </div>
-                        ';
-                    } else {
-                        return '<a disabled="disabled" href="/usuario/' . $user->id . '" class="' . $d . '" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>';
-                    }
-                //    <a href="/usuarios/' . $user->id . '/edit" class="' . $d . '" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>
-                //    <a href="/usuarios/' . $user->id . '/edit" class="' . $d . ' float-right" onclick="return confirm('.$c.')"><i class="fas fa-trash-alt"	title="Excluir usu&aacute;rio"></i></a>
-                })
-                ->editColumn('name', function (User $user) {
-                    return '<a href="/usuarios/' . $user->id . '" style="color: inherit;" >' . $user->name . '</a>';
-                })
-                ->rawColumns(['name', 'action'])
-                ->editColumn('roler', function (User $user) {
-                    return $user->rolers->first()->name;
-                })
-                ->editColumn('created_at', function (User $user) {
-                    return $user->created_at->diffForHumans();
-                })
-                ->make(true);
-        }
-        return view('users.index');
+        return view('users.index', compact('user'));
     }
 
     /**

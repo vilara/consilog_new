@@ -11,6 +11,14 @@ class Detail extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+     /**
+     * Get the post that owns the comment.
+     */
+    public function om()
+    {
+        return $this->belongsTo('App\Om', 'om_id');
+    }
+
     /**
      * Get the owning imageable model.
      */
