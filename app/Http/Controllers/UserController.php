@@ -24,7 +24,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
 //             
-        $user = User::with('detail')->get();
+        $user = User::has('detail')->get();
 
       //  dd($user->om);
 
