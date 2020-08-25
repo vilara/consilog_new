@@ -98,10 +98,14 @@ class DetailController extends Controller
      */
     public function update(UpdateDetails $request, Detail $detail)
     {
+
+        //dd($request);
         $usuario = User::find($detail->user_id);
         $usuario->name = $request->name;
         $usuario->email = $request->email;
         $usuario->save();
+        //$usuario->rolers()->dedattach();
+        $usuario->rolers()->sync($request->perfil);
         
         $mil = Military::find($detail->detailable_id);
         $mil->postograd_id = $request['postograd_id'];
@@ -116,9 +120,9 @@ class DetailController extends Controller
         $detail->cargo_id =$request['funcao_id'];
         $detail->save();
         if (Auth::user()->id == $detail->user_id) {
-            return redirect ( '/profile' )->with ( 'success', 'Usuário Editado com sucesso!' );
+            return redirect ( '/usuarios' )->with ( 'success', 'Usuário Editado com sucesso!' );
         }else{
-            return redirect ( '/usuarios/'.$detail->user_id )->with ( 'success', 'Usuário Editado com sucesso!' );
+            return redirect ( '/usuarios/' )->with ( 'success', 'Usuário Editado com sucesso!' );
         }
         //dd($detail);
 

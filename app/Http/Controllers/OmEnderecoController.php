@@ -40,8 +40,22 @@ class OmEnderecoController extends Controller
      */
     public function store(Request $request, Om $om)
     {
-        $rules = ['cep' => 'required'];
-        $messages = ['cep.required' => 'Campo obrigatório.',];
+        $rules = [
+            'cep' => 'required',
+            'rua' => 'required',
+            'numeroEndereco' => 'required',
+            'cidade' => 'required',
+            'bairro' => 'required',
+            'estado' => 'required'
+        ];
+        $messages = [
+            'cep.required' => 'Campo obrigatório.',
+            'rua.required' => 'Campo obrigatório',
+            'numeroEndereco.required' => 'Campo obrigatório',
+            'cidade.required' => 'Campo obrigatório',
+            'bairro.required' => 'Campo obrigatório',
+            'estado.required' => 'Campo obrigatório',            
+        ];
 
         $this->validate($request, $rules, $messages);
         $endereco = new Endereco();

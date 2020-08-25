@@ -31,10 +31,10 @@
                             {{-- input cep da OM --}}
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>cep da OM</label>
-                                    <input type="cep"
+                                    <label>CEP da OM</label>
+                                    <input type="text"
                                         class="form-control form-control-sm @error('cep') is-invalid @enderror" name="cep"
-                                        id="cep1">
+                                        id="cep1"  value="{{ old('cep') }}">
                                     @error('cep')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -191,7 +191,7 @@
 
                 var cep1 = $(this).val().replace(/\D/g, '');
                 if (cep1 != "") {
-                    $.getJSON("https://viacep1.com.br/ws/" + cep1 + "/json/?callback=?", function(dados) {
+                    $.getJSON("https://viacep.com.br/ws/" + cep1 + "/json/?callback=?", function(dados) {
 
                         if (!("erro" in dados)) {
                             //Atualiza os campos com os valores da consulta.
@@ -205,7 +205,7 @@
                         else {
                             //cep1 pesquisado não foi encontrado.
                             limpa_formulário_cep1();
-                            alert("cep1 não encontrado.");
+                            alert("CEP não encontrado.");
                         }
                     });
                     // alert(cep1);

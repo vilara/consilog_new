@@ -173,10 +173,10 @@
 
                         @foreach ($user->rolers as $per)
                             <div class="form-group col-md-2">
-                                <label for="perfil">Perfil</label> <select class="form-control form-control-sm" id="perfil" disabled name="perfil">
+                                <label for="perfil">Perfil</label> <select class="form-control form-control-sm" id="perfil" @cannot('update') disabled @endcannot  name="perfil">
                                     @foreach ($perfi as $perfil)
 
-                                        <option value="{{ $perfil->id }}">{{ $perfil->name }}</option>
+                                        <option @if($user->rolers[0]->pivot->roler_id == $perfil->id ) selected @endif value="{{ $perfil->id }}">{{ $perfil->name }}</option>
 
                                     @endforeach
                                 </select>

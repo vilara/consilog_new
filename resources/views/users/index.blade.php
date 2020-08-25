@@ -36,7 +36,11 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
+                        @if(session()->get('success'))
+                        <h3 class="card-title">{{ session()->get('success') }}</h3>
+                        @else 
                         <h3 class="card-title">Controle de Usuários</h3>
+                        @endif
                     </div><!-- /.card-header -->
                     <div class="card-body">
 
