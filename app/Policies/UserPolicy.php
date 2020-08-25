@@ -33,7 +33,7 @@ class UserPolicy
     public function view(User $user, User $model)
     {
         $c = new UserController;
-        $model = User::find(3);
+        //$model = User::find(3);
         $comando = Comando::where('codomOm', $user->detail->om->codom)->first();
 
         if ($c->isUserGCmdo($user)) { // se o  usuario autenticado for pertecente a comando
