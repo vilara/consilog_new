@@ -60,37 +60,6 @@
                                 </tr>
                             </thead>
 
-                            <tbody style="text-align: center;">
-                                @foreach ($user as $user)
-                                @can('view', $user)
-                                        <tr>
-                                          
-                                            <td>{{ $user->id }}</td>
-                                            <td><a href="/usuarios/{{ $user->id }}" style="color: inherit;" >{{ $user->name }}</a></td>
-                                            <td>{{ $user->detail->om->siglaOM }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->rolers->first()->name }}</td>
-                                            <td>{{ $user->created_at->diffForHumans() }}</td>
-                                            <td>
-                                              <div class="row"  style="height: 25px;">
-                                                <div class="col-md-6 mx-auto" style="height: 25px;">
-                                                  <a href="/usuarios/{{ $user->id }}/edit" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar usu&aacute;rio"></i></a>            
-                                                </div>
-                                                <div class="col-md-6">
-                                                  <form class="form-group" action="{{ route('usuarios.destroy', $user) }}" method="post">
-                                                    @csrf @method('DELETE')
-                                                   @can('update')
-                                                   <button class="btn form-control pt-0 " type="submit" onclick="return confirm('Confirma a exclusão do usuário?')"><i class="far fa-trash-alt"></i></button>            
-                                                   @endcan
-                                                 
-                                                  </form>
-                                                </div>
-                                              </div>
-                                            </td>
-                                        </tr>
-                                @endcan
-                                @endforeach
-                            </tbody>
                             <tfoot>
                                 <tr style="text-align: center;">
                                     <th>ID</th>
@@ -126,39 +95,39 @@
     <script>
         $(document).ready(function() {
             $('#example2').DataTable({
-                // processing: true,
-                // serverSide: false,
-                // ajax: "{{ route('usuarios.index') }}",
+                processing: true,
+                serverSide: false,
+                ajax: "{{ route('usuarios.index') }}",
 
-                // columns: [{
-                //         data: 'DT_RowData.id',
-                //         name: 'id'
-                //     },
-                //     {
-                //         data: 'name',
-                //         name: 'name'
-                //     },
-                //     {
-                //         data: 'om',
-                //         name: 'om'
-                //     },
-                //     {
-                //         data: 'email',
-                //         name: 'email'
-                //     },
-                //     {
-                //         data: 'roler',
-                //         name: 'roler'
-                //     },
-                //     {
-                //         data: 'created_at',
-                //         name: 'created_at'
-                //     },
-                //     {
-                //         data: 'action',
-                //         name: 'action'
-                //     },
-                // ],
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'om',
+                        name: 'om'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'roler',
+                        name: 'roler'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ],
                 columnDefs: [{
                         "targets": 4,
                         "orderable": false,

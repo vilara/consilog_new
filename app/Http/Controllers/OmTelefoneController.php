@@ -43,7 +43,7 @@ class OmTelefoneController extends Controller
                 </div>
                 ';
             } else {
-                return '<a href="/oms/' . $telefones->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>';
+                return '<a disabled="disabled" href="/oms/' . $telefones->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>';
             }
         })
         ->setRowAttr([

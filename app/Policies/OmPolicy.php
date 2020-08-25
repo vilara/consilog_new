@@ -2,6 +2,8 @@
 
 namespace App\Policies;
 
+use App\Comando;
+use App\Http\Controllers\UserController;
 use App\Om;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -30,7 +32,14 @@ class OmPolicy
      */
     public function view(User $user, Om $om)
     {
-        //
+
+        $c = new UserController;
+        $comando = Comando::where('codomOm', $user->detail->om->codom)->first();
+        if ($c->isUserGCmdo($user)) { // se o  usuario autenticado for pertecente a comando
+        return $comando->oms->contains('codom', $om->codom); // visualiza os usuários das omds
+        }else{
+            return $user->detail->om->id === $om->id;
+        }
     }
 
     /**

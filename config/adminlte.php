@@ -251,7 +251,7 @@ return [
         [
             'text'    => 'Admin Sistema',
             'icon'    => 'fas fa-tools',
-            'can'     => 'delete',
+            'can'     => 'create',
             'submenu' => [
 
                 [

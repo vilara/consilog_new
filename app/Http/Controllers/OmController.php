@@ -20,8 +20,12 @@ class OmController extends Controller
      */
     public function index(Request $request)
     {
-        $om = Om::all()->sortBy('id');
-        //dd($om[3]->comandosOmds);
+        $om = Om::all()->filter(function($om) {
+            if(Auth::user()->can('view', $om)){
+                return $om;
+            }
+          });
+
         if ($request->ajax()) {
             return DataTables::of($om)
             ->addColumn('action', function (Om $om) {
@@ -42,7 +46,7 @@ class OmController extends Controller
                     </div>
                     ';
                 } else {
-                    return '<a href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>';
+                    return '<a disabled="disabled"  href="/oms/' . $om->id . '/edit" class="" style="color: inherit;" ><i class="fas fa-edit"	title="Alterar OM"></i></a>';
                 }
             })
             ->addColumn('endereco', function (Om $om) {
