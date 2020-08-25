@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Comando;
+use App\Http\Controllers\UserController;
 use App\Om;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -31,26 +32,21 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
+        $c = new UserController;
+        $model = User::find(3);
+        $comando = Comando::where('codomOm', $user->detail->om->codom)->first();
 
-        $comando = Comando::where('codomOm', $user->detail->om->codom)->get();
-       // dd($comando[0]->oms);
-        $om = Om::where('id', $user->detail->om->id)->with('comandos')->get();
-        
-        if($user->can('update')){
-   
-            if($comando->isNotEmpty()){ // usuários de comandos
-            return $comando[0]->oms->contains('codom', $model->detail->om->codom) // retorna os usuários das OMS
-            || 
-            $user->detail->om->codom === $model->detail->om->codom // retorna os usuários da mesma OM
-            ;
+        if ($c->isUserGCmdo($user)) { // se o  usuario autenticado for pertecente a comando
+            if($user->can('update')){ // se o usuario autenticado pertence a comando e é gerente (update)
+              return $user->detail->om->codom == $model->detail->om->codom || // visualiza os usuarios da mesma Om ou 
+              $comando->omdsCmdo->contains('codom', $c->gCmdoDiretamenteEnqdUser($model)->codomOm); // visualiza os usuários das omds
+            }else{
+                return $user->id == $model->id; // visualiza somente o usuáiro logado
             }
-            //usuários de OM normais sem ser comando
-            return $user->detail->om->codom === $model->detail->om->codom; // retorna todos da mesma OM
         }else{
-            return $user->id === $model->id; // retorna todos só o usuário logado
+            return $user->id == $model->id; // visualiza somente o usuáiro logado
         }
-       
-      
+
     }
 
     /**

@@ -50,16 +50,12 @@
                                 </tr>
 
                             <tbody style="text-align: center;">
-                                @foreach ($cmdsu->oms as $om)
-                                    @if ($om->comandos
-                                            ->where('id', $cmdsu->id)
-                                            ->where('pivot.omds', 1)
-                                            ->isNotEmpty())
+                                @foreach ($cmdsu->omdsCmdo as $om)
+                                   
                                         <tr>
                                             <td>{{ $om->id }}</th>
                                             <td>{{ $om->nomeOm }}</th>
                                         </tr>
-                                    @endif
                                 @endforeach
                             </tbody>
                             </thead>

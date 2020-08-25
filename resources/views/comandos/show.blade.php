@@ -90,9 +90,50 @@
             </form>
             </div>
         </div>
+
     </div>
     <!-- /.card-body -->
     <!-- /.card -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                        <h3 class="card-title">Organizações Militares Diretamente Subordinadas:</h3>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                    <table id="subordinadas" class="table table-bordered table-hover">
+                        <thead>
+                            <tr style="text-align: center;">
+                                <th>ID</th>
+                                <th>Nome da OM</th>
+
+                            </tr>
+
+                        <tbody style="text-align: center;">
+                            @foreach ($comando->omdsCmdo as $om)
+                               
+                                    <tr>
+                                        <td>{{ $om->id }}</th>
+                                        <td>{{ $om->nomeOm }}</th>
+                                    </tr>
+                            @endforeach
+                        </tbody>
+                        </thead>
+
+                        <tfoot>
+                            <tr style="text-align: center;">
+                                <th>ID</th>
+                                <th>Om</th>
+
+                            </tr>
+                            </tr>
+                        </tfoot>
+                    </table><!-- /table -->
+                </div><!-- /.card-body -->
+            </div><!-- /.card -->
+        </div><!-- /.col 12-->
+    </div><!-- /.row -->
 
 
 

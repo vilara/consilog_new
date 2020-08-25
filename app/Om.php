@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\CustomCollection;
 
 class Om extends Model
 {
@@ -38,11 +39,35 @@ class Om extends Model
 
        /**
      * Many to Many
+     * retorna todds os comandos 
      */
     public function comandos()
     {
-    	return $this->belongsToMany('App\Comando', 'comando_om', 'om_id', 'comando_id' )->withPivot('omds');
+    	return $this->belongsToMany('App\Comando', 'comando_om', 'om_id', 'comando_id' )->orderBy('comando_id')->withPivot('omds');
     }
+
+       /**
+     * Many to Many
+     * Retorna o comando diretamente enquadrante
+     */
+    public function comandosOmds()
+    {
+    	return $this->belongsToMany('App\Comando', 'comando_om', 'om_id', 'comando_id' )->orderBy('comando_id')->wherePivot('omds', 1);
+    }
+
+
+   
+
+    /**
+     * Create a new Eloquent Collection instance.
+     *
+     * @param  array  $models
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    // public function newCollection(array $models = [])
+    // {
+    //     return new CustomCollection($models);
+    // }
 
      /**
      * Get all of the om's telefones.
@@ -60,6 +85,9 @@ class Om extends Model
     {
         return $this->morphMany('App\Endereco', 'enderecoable');
     }
+ 
+    
+   
 
     public $timestamps = false;
 }

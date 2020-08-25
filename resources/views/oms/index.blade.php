@@ -1,3 +1,7 @@
+@php
+// echo $oms;    
+@endphp
+
 @extends('adminlte::page')
 
 @section('title', 'Admin OM')
@@ -42,6 +46,7 @@
                 <th>ID</th>
                 <th>Nome da OM</th>
                 <th>Sigla da OM</th>
+                <th>G Cmdo</th>
                 <th>CODOM</th>
                 <th>CODUG</th>
                 <th>Tel</th>
@@ -55,6 +60,7 @@
                 <th>ID</th>
                 <th>Nome da OM</th>
                 <th>Sigla da OM</th>
+                <th>G Cmdo</th>
                 <th>CODOM</th>
                 <th>CODUG</th>
                 <th>Tel</th>
@@ -93,6 +99,7 @@
                 { data: 'id', name: 'id'},
                 { data: 'nomeOm', name: 'nomeOm' },
                 { data: 'siglaOM', name: 'siglaOM' },
+                { data: 'gcmdo', name: 'gcmdo' },
                 { data: 'codom', name: 'codom' },
                 { data: 'codug', name: 'codug' },
                 { data: 'telefone', name: 'telefone' },

@@ -1,3 +1,8 @@
+@php
+  //  $c = new App\Http\Controllers\omController;
+   // dd($c->isSubordinada($om));
+@endphp
+
 @extends('adminlte::page')
 
 

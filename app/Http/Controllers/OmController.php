@@ -20,8 +20,8 @@ class OmController extends Controller
      */
     public function index(Request $request)
     {
-        $om = Om::all();
-       // dd($om);
+        $om = Om::all()->sortBy('id');
+        //dd($om[3]->comandosOmds);
         if ($request->ajax()) {
             return DataTables::of($om)
             ->addColumn('action', function (Om $om) {
@@ -65,6 +65,12 @@ class OmController extends Controller
                     ';
                 }
             })
+            ->addColumn('gcmdo', function (Om $om) {
+                foreach ($om->comandosOmds as $cmdo) {
+                    return '<a href="'.route('comandos.show',$cmdo->id).'" style="color: inherit;">'. $cmdo->siglaCmdo .'</a>';
+                }
+                })
+                
             ->addColumn('telefone', function (Om $om) {
             
                 if($om->telefones->count() > 0){
@@ -88,7 +94,7 @@ class OmController extends Controller
             ->editColumn('nomeOm', function(Om $om) {
                 return '<a href="'.route('oms.show',$om->id).'" style="color: inherit;">'. $om->nomeOm .'</a>';
             })
-            ->rawColumns(['nomeOm', 'action', 'endereco', 'telefone'])
+            ->rawColumns(['nomeOm', 'action', 'endereco', 'telefone', 'gcmdo'])
             ->make(true);
         }
         return view('oms.index');
@@ -200,4 +206,18 @@ class OmController extends Controller
         $om->delete();
         return redirect ( '/oms' )->with ( 'success', 'OM excluída com sucesso!' );
     }
+
+    public function isSubordinada(Om $om){
+        $cmdo = Comando::find(1);
+       // dd($cmdo);
+        if ($om->comandosOmds()->contains('id', $cmdo->id)) {
+          return true; 
+        }else{
+            return false;   
+        }
+        
+   }
+
+
+ 
 }

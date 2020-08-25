@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Cargo;
+use App\Comando;
 use App\Detail;
 use App\Om;
 use App\Postograd;
 use App\Roler;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
@@ -124,5 +126,30 @@ class UserController extends Controller
     {
         $user->delete();
         return redirect ( '/usuarios/' )->with ( 'success', 'Usuário excluído com sucesso!' );
+    }
+
+    /**
+     * Mostra o grande comando diretamente enquadrante do usuário
+     */
+    public function gCmdoDiretamenteEnqdUser(User $user)
+    {
+       return $user->detail->om->comandosOmds()->first() ;
+    }
+
+    /**
+     * Mosra os comandos enquadrantes do usuário
+     */
+    public function gCmdosEnqdUser(User $user)
+    {
+       return $user->detail->om->comandos() ;
+    }
+
+    /**
+     * Mostra se o usuário pertence a um grande comando
+    */
+    public function isUserGCmdo(User $user)
+    {
+       $comandos = Comando::all();
+       return $comandos->contains('codomOm', $user->detail->om->codom);
     }
 }
