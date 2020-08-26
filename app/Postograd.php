@@ -8,6 +8,10 @@ class Postograd extends Model
 {
     public function military(){
 		return $this->hasMany('App\Military');
+    }
+    
+    public function irtaexefetivo(){
+		return $this->hasMany('App\IrtaexEfetivo');
 	}
 
     public function details()

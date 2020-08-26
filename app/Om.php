@@ -69,6 +69,16 @@ class Om extends Model
     }
 
 
+     /**
+     * Many to Many
+     * retorna todds os comandos 
+     */
+    public function irtaexefetivo()
+    {
+    	return $this->belongsToMany('App\IrtaexEfetivo', 'irtaexefetivo_om', 'om_id', 'irtaexefetivo_id' )->withPivot('efetivo');
+    }
+
+
 
    
 

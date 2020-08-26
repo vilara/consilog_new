@@ -14,5 +14,13 @@ class V extends Model
         return $this->morphOne('App\Material', 'materialable');
     }
 
+     /**
+     * The om that belong to the irtaexefetivo.
+     */
+    public function irtaexoiis()
+    {
+        return $this->belongsToMany('App\IrtaexOii','irtaexeoii_v', 'v_id', 'irtaexoii_id')->withPivot('quantidade');;
+    }
+
     protected $table = 'v';
 }
