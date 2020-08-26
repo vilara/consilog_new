@@ -1735,6 +1735,7 @@ pre code {
   border: 1px solid #dee2e6;
 }
 
+
 .table-bordered thead th,
 .table-bordered thead td {
   border-bottom-width: 2px;
@@ -31186,6 +31187,8 @@ a.text-muted:hover {
 .accent-gray-dark [class*="sidebar-light-"] .sidebar a:not(.dropdown-item):not(.btn-app):not(.nav-link):not(.brand-link):hover {
   color: #212529;
 }
+
+
 
 [class*="accent-"] a.btn-primary {
   color: #ffffff;

@@ -287,10 +287,31 @@ return [
                         ],
                     ],
                 ],
+                
+            ],
+        ],
+
+
+        [
+            'text'    => 'Classes de Materiais',
+            'icon'    => 'fas fa-tools',
+            'can'     => 'create',
+            'submenu' => [
+
                 [
-                    'text'    => 'Funções',
-                    'icon'    => 'fas fa-street-view',
+                    'text'    => 'Classe V - Mun',
+                    'icon'    => 'fas fa-user-friends',
                     'url'     => '#',
+                    'submenu' => [
+                        [
+                            'text' => 'Munições cadastrads',
+                            'url'  => 'v',
+                        ],
+                        [
+                            'text' => 'Munições 8º BPE',
+                            'url'  => 'oms/15/materials',
+                        ],
+                    ],
                 ],
             ],
         ],

@@ -55,6 +55,20 @@ class Om extends Model
     	return $this->belongsToMany('App\Comando', 'comando_om', 'om_id', 'comando_id' )->orderBy('comando_id')->wherePivot('omds', 1);
     }
 
+     /**
+     * The om that belong to the material.
+     */
+    public function materials()
+    {
+        return $this->belongsToMany('App\Material','material_om', 'om_id', 'material_id')->withPivot('patrimonio','inclusao','validade','qtde','sit');
+    }
+
+    public function materialsTot()
+    {
+        return $this->belongsToMany('App\Material','material_om', 'om_id', 'material_id')->withPivot('patrimonio','inclusao','validade','qtde','sit');
+    }
+
+
 
    
 
@@ -85,6 +99,8 @@ class Om extends Model
     {
         return $this->morphMany('App\Endereco', 'enderecoable');
     }
+
+
  
     
    

@@ -70,6 +70,14 @@
  a[disabled="disabled"] {
     pointer-events: none;
 }
+td.details-control {
+  background: url('images/details_open.png') no-repeat center center;
+  cursor: pointer;
+}
+.tr.shown td.details-control {
+  background: url('images/details_close.png') no-repeat center center;
+}
+
 </style>
 </head>
 
@@ -98,7 +106,8 @@
 
     @else
         <script src="{{ mix(config('adminlte.laravel_mix_js_path', 'js/app.js')) }}"></script>
-    @endif
+    
+        @endif
 
     {{-- Custom Scripts --}}
     @yield('adminlte_js')

@@ -47,4 +47,16 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/comandos/subordinados/{id}','ComandoController@showSubordinadas')->name('omds');
     Route::get('/home', 'HomeController@index')->name('home')->middleware('CheckDetailExist');
 
+    // material classe v
+    Route::resource('material', 'MaterialController')->except(['destroy']);
+    Route::resource('vs.materials', 'ClasseVMaterialController'); // php artisan make:controller ClasseVMaterialController -r --model=Material --parent=V
+
+    // material classe v
+    Route::resource('v', 'VController')->except(['destroy']);
+
+    // Om material controller
+    Route::resource('oms.materials', 'OmMaterialController'); 
+
+
+
 });
