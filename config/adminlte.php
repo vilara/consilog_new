@@ -315,6 +315,19 @@ return [
                 ],
             ],
         ],
+        [
+            'text'    => 'IRTAEx',
+            'icon'    => 'fas fa-tools',
+            'can'     => 'create',
+            'submenu' => [
+
+                [
+                    'text'    => 'Quantitativos de Cl V',
+                    'icon'    => 'fas fa-user-friends',
+                    'url'     => 'irtaex/municoes/om',
+                ],
+            ],
+        ],
     ],
 
     /*

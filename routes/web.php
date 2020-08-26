@@ -57,6 +57,9 @@ Route::group(['middleware' => ['auth']], function(){
     // Om material controller
     Route::resource('oms.materials', 'OmMaterialController'); 
 
+    // IRTAEx
+    Route::get('irtaex/municoes/om', 'IrtaexController@ResumoMunOiiOm'); 
+
 
 
 });

@@ -16,7 +16,6 @@ class OmMaterialController extends Controller
      */
     public function index(Om $om)
     {
-        
         return view('oms.material.v.index', compact('om'));
     }
 
