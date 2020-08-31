@@ -1,11 +1,5 @@
 @php
-//$t = $efe[0]->oms->where('id',15);
-//dd($t[0]->pivot->efetivo);
- //dd($v);
-// dd($oii);
-// $om[0]->irtaexefetivo[0]->pivot->efetivo // calcula o efetivo por posto grad
 
-//dd($om[0]->irtaexefetivo[0]->pivot->efetivo);
 @endphp
 
 @extends('adminlte::page')
@@ -16,7 +10,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Quantitativo de Munições</h1>
+                <h1>Quantitativo de Munições para o Prepararo</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -32,69 +26,72 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Controle de Munições do {{ $om[0]->siglaOM }}</h3>
+                        <h1 class="card-title">Controle de Munições do {{ $om[0]->siglaOM }}</h1>
                     </div><!-- /.card-header -->
 
+                    @php
+                    $colecao = collect($oii)->groupBy(function ($item, $key) {
+                    return $item->oii;
+                    });
+                    @endphp
 
-                    @foreach ($oii as $oii)
+                    @foreach ($colecao as $oii)
 
-                    <div class="card-body">
-                        <h5>{{ $oii->oii }}</h5>
-                        <table id="v" class="table table-bordered table-hover">
-                            <thead>
-                                <tr style="text-align: center;">
-                                    <th >Mun</th>
-                                    <th >Tipo</th>
-                                    <th >Qtde</th>
-                                    <th >Efetivo</th>
-                                    <th >Tot</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach ($oii->vs as $v)
+                        <div class="card-body">
+                            <div class="border bg-green rounded shadow-sm p-1 mt-2">
+                                <h5 claass="card-title">{{ $oii[0]->oii }}</h5>
+                            </div>
+                            <table id="v" class="table table-bordered table-hover">
+                                <thead>
                                     <tr style="text-align: center;">
-                                        <td>{{ $v->material->nome }}</td>
-                                        <td>{{ $v->modelo }}</td>
-                                        <td>{{ $v->pivot->quantidade }}</td>
-                                         @php
-                                             $r = $om[0]->irtaexefetivo[0];
-                                         @endphp
-
-                                        <td>{{ $r->pivot->efetivo }}</td>
-                                         @php
-                                             $tot = $v->pivot->quantidade * $om[0]->irtaexefetivo[0]->pivot->efetivo;
-                                         @endphp
-                                        <td>{{ $tot }}</td>
+                                        <th class="col-2">Cat</th>
+                                        <th class="col-3">Mun</th>
+                                        <th class="col-2">Tipo</th>
+                                        <th class="col-2">Qtde</th>
+                                        <th class="col-1">Efetivo</th>
+                                        <th class="col-2">Tot</th>
+                                        <th class="col-2">Estoque</th>
                                     </tr>
-                                @endforeach
+                                </thead>
+                                <tbody>
 
-                            </tbody>
+                                    @foreach ($oii as $item)
+                                        @foreach ($item->vs as $item1)
+                                            <tr>
+                                                <td class="col-2" style="widht: center;">
+                                                    {{ $item->irtaexcategory->armamento }}</td>
+                                                <td class="col-3">{{ $item1->material->nome }}</td>
+                                                <td class="col-2">{{ $item1->modelo }}</td>
+                                                <td class="col-2" style="text-align: center;">
+                                                    {{ $item1->pivot->quantidade }}</td>
 
-                            <tfoot>
-                                <tr style="text-align: center;">
-                                    <th>Mun</th>
-                                    <th >Tipo</th>
-                                    <th>Qtde</th>
-                                    <th>Efetivo</th>
-                                    <th >Tot</th>
-                                </tr>
-                            </tfoot>
-                        </table><!-- /table -->
-                    </div><!-- /.card-body -->
+                                                @foreach ($oii as $item2)
+                                                    @foreach ($item2->irtaexefetivos as $item3)
+                                                        @php
+                                                        $d = $item3->oms;
+                                                        $colecao1 = collect($d)->sum('pivot.efetivo');
+                                                        @endphp
+                                                    @endforeach
+                                                    <td class="col-1" style="text-align: center;">{{ $colecao1 }}</td>
+                                                    <td class="col-2" style="text-align: center;">
+                                                        {{ $colecao1 * $item1->pivot->quantidade }}</td>
+                                                    <td></td>
+                                                @endforeach
 
+                                        @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table><!-- /table -->
+                        </div><!-- /.card-body -->
                     @endforeach
-
-
                 </div><!-- /.card -->
             </div><!-- /.col 12-->
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
-
 @stop
-
 @section('footer')
     <div class="float-right d-none d-sm-block">
         <b>Version</b> 3.1.0-pre

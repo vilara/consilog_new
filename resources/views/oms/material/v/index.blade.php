@@ -50,14 +50,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+
+                                {{-- {{ $om->materialsTot->where('nee', '1305BR1011206')}} --}}
                                 @foreach ($om->materialsTot->groupBy('nee') as $material)
                                     <tr>
+                                    
                                         <td>{{ $material[0]->id }}</td>
                                         <td>{{ $material[0]->nome }}</td>
                                         <td>{{ $material[0]->materialable->modelo }}</td>
                                         @foreach ($om->materialsTot->where('nee', $material[0]->nee) as $item)
                                             @php
-                                            $d = $om->materials;
+                                            $d = $om->materialsTot;
 
                                             $colecao = collect($d)->groupBy(function ($item, $key) {
                                             return $item->nee;
