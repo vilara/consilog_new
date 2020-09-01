@@ -36,7 +36,9 @@
                     return $item->oii;
                     });
                     @endphp
-
+                    {{-- {{ dd($colecao) }} --}}
+                    {{-- {{ dd($oii->where('irtaexcategory_id', 1)) }}
+                    --}}
                     @foreach ($colecao as $oii)
 
                         <div class="card-body">
@@ -47,17 +49,58 @@
                                 <thead>
                                     <tr style="text-align: center;">
                                         <th class="col-2">Cat</th>
+                                        <th class="col-1">Efetivo</th>
                                         <th class="col-3">Mun</th>
                                         <th class="col-2">Tipo</th>
                                         <th class="col-2">Qtde</th>
-                                        <th class="col-1">Efetivo</th>
                                         <th class="col-2">Tot</th>
                                         <th class="col-2">Estoque</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
+                                    @php
+                                    $r = 0;
+                                    @endphp
                                     @foreach ($oii as $item)
+                                        @foreach ($item->irtaexefetivos as $item1)
+                                            @php
+                                            $i = $item1->oms[0]->pivot->efetivo;
+                                            $r= $r + $i;
+                                            @endphp
+                                        @endforeach
+                                        @php
+                                        $l = collect($item->vs) ;
+                                        @endphp
+                                        @foreach ($l as $ll)
+                                            <tr>
+                                                <td class="col-2" style="widht: center;">
+                                                    {{ $item->irtaexcategory->armamento }}
+                                                </td>
+                                                <td class="col-2" style="widht: center;"> {{ $r }} </td>
+                                                <td class="col-3">{{ $ll->material->nome }}</td>
+                                                <td class="col-3">{{ $ll->modelo }}</td>
+                                                <td class="col-3">{{ $ll->irtaexoiis[0]->pivot->quantidade }}</td>
+                                                <td class="col-2" style="widht: center;">
+                                                    {{ $ll->irtaexoiis[0]->pivot->quantidade * $r }}
+                                                </td>
+                                                @foreach ($om[0]->materialsTot->where('nee', $ll->material->nee) as $item3)
+                                                    @php
+                                                    $d = $om[0]->materialsTot;
+
+                                                    $colecao = collect($d)->groupBy(function ($item4, $key) {
+                                                    return $item4->nee;
+                                                    })
+                                                    ->map(function ($item5, $key) {
+                                                    return $item5->sum('pivot.qtde');
+                                                    });
+                                                    @endphp
+                                                @endforeach
+                                                <td>{{ $colecao[$ll->material->nee] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endforeach
+
+                                    {{-- @foreach ($oii as $item)
                                         @foreach ($item->vs as $item1)
                                             <tr>
                                                 <td class="col-2" style="widht: center;">
@@ -71,18 +114,19 @@
                                                     @foreach ($item2->irtaexefetivos as $item3)
                                                         @php
                                                         $d = $item3->oms;
+
                                                         $colecao1 = collect($d)->sum('pivot.efetivo');
                                                         @endphp
                                                     @endforeach
-                                                    <td class="col-1" style="text-align: center;">{{ $colecao1 }}</td>
+                                                    <td class="col-1" style="text-align: center;">{{ collect($d) }}</td>
                                                     <td class="col-2" style="text-align: center;">
                                                         {{ $colecao1 * $item1->pivot->quantidade }}</td>
-                                                    <td></td>
+                                                    <td> </td>
                                                 @endforeach
 
                                         @endforeach
                                         </tr>
-                                    @endforeach
+                                    @endforeach --}}
                                 </tbody>
                             </table><!-- /table -->
                         </div><!-- /.card-body -->
