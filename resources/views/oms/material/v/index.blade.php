@@ -1,13 +1,5 @@
 @php
-// $d = $om->materials;
-
-// $colecao = collect($d)->groupBy(function ($item, $key) {
-// return $item->nee;
-// })
-// ->map(function ($item, $key) {
-// return $item->sum('pivot.qtde');
-// });
-// dd($colecao['1305BR1007980']);
+$u = new App\Http\Controllers\OmMaterialController;
 @endphp
 
 @extends('adminlte::page')
@@ -36,7 +28,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                            <h3 class="card-title">Controle de munições do {{ $om->siglaOM }}</h3>
+                        <h3 class="card-title">Controle de munições do {{ $om->siglaOM }}</h3>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <table id="municao" class="table table-bordered table-hover">
@@ -50,35 +42,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                {{-- {{ $om->materialsTot->where('nee', '1305BR1011206')}} --}}
                                 @foreach ($om->materialsTot->groupBy('nee') as $material)
                                     <tr>
-                                    
-                                        <td>{{ $material[0]->id }}</td>
-                                        <td>{{ $material[0]->nome }}</td>
-                                        <td>{{ $material[0]->materialable->modelo }}</td>
-                                        @foreach ($om->materialsTot->where('nee', $material[0]->nee) as $item)
-                                            @php
-                                            $d = $om->materialsTot;
-
-                                            $colecao = collect($d)->groupBy(function ($item, $key) {
-                                            return $item->nee;
-                                            })
-                                            ->map(function ($item, $key) {
-                                            return $item->sum('pivot.qtde');
-                                            });
-
-                                            @endphp
-                                        @endforeach
-                                        <td>{{ $colecao[$material[0]->nee] }}</td>
-                                        <td>{{ $material[0]->pivot->validade }}</td>
+                                        <td>{{ $material->first()->id }}</td>
+                                        <td>{{ $material->first()->nome }}</td>
+                                        <td>{{ $material->first()->materialable->modelo }}</td>
+                                        <td>{{ $material->sum('pivot.qtde') }}</td>
+                                        <td>{{ $material->first()->pivot->validade }}</td>
                                     </tr>
                                 @endforeach
-
-
                             </tbody>
-
                             <tfoot>
                                 <tr style="text-align: center;">
                                     <th>ID</th>

@@ -26,6 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+     //   dd(get_browser());
         return view('home');
     }
 

@@ -16,6 +16,7 @@ class VController extends Controller
      */
     public function index(Request $request)
     {
+        
         $material = Material::with('materialable')->get();
        // dd($v);
         if ($request->ajax()) {

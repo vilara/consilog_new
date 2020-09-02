@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Material;
 use App\Om;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 class OmMaterialController extends Controller
 {
@@ -89,5 +90,26 @@ class OmMaterialController extends Controller
     public function destroy(Om $om, Material $material)
     {
         //
+    }
+
+
+    public function SomaMunicaoOm(Om $om, Collection $col){
+
+        foreach ($om->materialsTot->where('nee', 'erwerwqer') as $item){
+           $d = $om->materialsTot;
+
+        $colecao = collect($d)->groupBy(function ($item, $key) {
+        return $item->nee;
+        })
+        ->map(function ($item, $key) {
+        return $item->sum('pivot.qtde');
+        }); 
+        }
+        
+        
+
+        
+    
+   // <td>{{ $colecao[$material[0]->nee] }}</td>
     }
 }

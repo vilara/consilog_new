@@ -1,5 +1,5 @@
 @php
-
+$u = new App\Http\Controllers\IrtaexController;
 @endphp
 
 @extends('adminlte::page')
@@ -28,17 +28,19 @@
             <div class="col-12">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h1 class="card-title">Controle de Munições do {{ $om[0]->siglaOM }}</h1>
+                        <h1 class="card-title">Controle de Munições do {{ $om->siglaOM }}</h1>
                     </div><!-- /.card-header -->
 
                     @php
                     $colecao = collect($oii)->groupBy(function ($item, $key) {
                     return $item->oii;
                     });
+                    // dd($colecao->collapse());
                     @endphp
                     {{-- {{ dd($colecao) }} --}}
                     {{-- {{ dd($oii->where('irtaexcategory_id', 1)) }}
                     --}}
+
                     @foreach ($colecao as $oii)
 
                         <div class="card-body">
@@ -58,16 +60,8 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @php
-                                    $r = 0;
-                                    @endphp
-                                    @foreach ($oii as $item)
-                                        @foreach ($item->irtaexefetivos as $item1)
-                                            @php
-                                            $i = $item1->oms[0]->pivot->efetivo;
-                                            $r= $r + $i;
-                                            @endphp
-                                        @endforeach
+                                    @foreach($oii as $item)
+                                       
                                         @php
                                         $l = collect($item->vs) ;
                                         @endphp
@@ -76,16 +70,16 @@
                                                 <td class="col-2" style="widht: center;">
                                                     {{ $item->irtaexcategory->armamento }}
                                                 </td>
-                                                <td class="col-2" style="widht: center;"> {{ $r }} </td>
+                                                <td class="col-2" style="widht: center;"> {{ $u->SomaEfetivoOii($oii) }} </td>
                                                 <td class="col-3">{{ $ll->material->nome }}</td>
                                                 <td class="col-3">{{ $ll->modelo }}</td>
                                                 <td class="col-3">{{ $ll->irtaexoiis[0]->pivot->quantidade }}</td>
                                                 <td class="col-2" style="widht: center;">
-                                                    {{ $ll->irtaexoiis[0]->pivot->quantidade * $r }}
+                                                    {{ $ll->irtaexoiis[0]->pivot->quantidade * $u->SomaEfetivoOii($oii) }}
                                                 </td>
-                                                @foreach ($om[0]->materialsTot->where('nee', $ll->material->nee) as $item3)
+                                                @foreach ($om->materialsTot->where('nee', $ll->material->nee) as $item3)
                                                     @php
-                                                    $d = $om[0]->materialsTot;
+                                                    $d = $om->materialsTot;
 
                                                     $colecao = collect($d)->groupBy(function ($item4, $key) {
                                                     return $item4->nee;
