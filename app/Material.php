@@ -32,7 +32,7 @@ class Material extends Model
      */
     public function oms()
     {
-        return $this->belongsToMany('App\Om','material_om', 'material_id', 'om_id')->withPivot('patrimonio','inclusao','validade','qtde','sit');;
+        return $this->belongsToMany('App\Om','material_om', 'material_id', 'om_id')->withPivot('patrimonio','inclusao','validade','qtde','sit');
     }
 
 }

@@ -1,5 +1,6 @@
 @php
 $u = new App\Http\Controllers\IrtaexController;
+$matomcontrole = new App\Http\Controllers\OmMaterialController;
 @endphp
 
 @extends('adminlte::page')
@@ -30,22 +31,19 @@ $u = new App\Http\Controllers\IrtaexController;
                     <div class="card-header">
                         <h1 class="card-title">Controle de Munições do {{ $om->siglaOM }}</h1>
                     </div><!-- /.card-header -->
-
                     @php
-                    $colecao = collect($oii)->groupBy(function ($item, $key) {
-                    return $item->oii;
-                    });
-                    // dd($colecao->collapse());
+                    $i = 0;
+                    $collect = collect($oii->groupBy('oii'));
+                   // dd($collect->count());
                     @endphp
-                    {{-- {{ dd($colecao) }} --}}
-                    {{-- {{ dd($oii->where('irtaexcategory_id', 1)) }}
-                    --}}
-
-                    @foreach ($colecao as $oii)
-
+                    @foreach ($collect as $oii)
+                        @php
+                       // $i++;
+                     //  echo $i; 
+                        @endphp
                         <div class="card-body">
                             <div class="border bg-green rounded shadow-sm p-1 mt-2">
-                                <h5 claass="card-title">{{ $oii[0]->oii }}</h5>
+                                <h5 claass="card-title">{{ $oii->first()->oii}}</h5>
                             </div>
                             <table id="v" class="table table-bordered table-hover">
                                 <thead>
@@ -60,70 +58,76 @@ $u = new App\Http\Controllers\IrtaexController;
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($oii as $item)
-                                       
+                                    @foreach ($oii as $item)
+                                        {{-- separa cada oii por categorias
+                                        --}}
+
                                         @php
+                                        //dd($oii);
+                                        echo $i;
                                         $l = collect($item->vs) ;
+                                        //dd($l);
+                                        $i = 0;
+                                        $rr = collect([]) ;
+                                        $concatenated = collect([]) ;
                                         @endphp
                                         @foreach ($l as $ll)
-                                            <tr>
-                                                <td class="col-2" style="widht: center;">
-                                                    {{ $item->irtaexcategory->armamento }}
-                                                </td>
-                                                <td class="col-2" style="widht: center;"> {{ $u->SomaEfetivoOii($oii) }} </td>
-                                                <td class="col-3">{{ $ll->material->nome }}</td>
-                                                <td class="col-3">{{ $ll->modelo }}</td>
-                                                <td class="col-3">{{ $ll->irtaexoiis[0]->pivot->quantidade }}</td>
-                                                <td class="col-2" style="widht: center;">
-                                                    {{ $ll->irtaexoiis[0]->pivot->quantidade * $u->SomaEfetivoOii($oii) }}
-                                                </td>
-                                                @foreach ($om->materialsTot->where('nee', $ll->material->nee) as $item3)
-                                                    @php
-                                                    $d = $om->materialsTot;
+                                            @php
 
-                                                    $colecao = collect($d)->groupBy(function ($item4, $key) {
-                                                    return $item4->nee;
-                                                    })
-                                                    ->map(function ($item5, $key) {
-                                                    return $item5->sum('pivot.qtde');
-                                                    });
-                                                    @endphp
-                                                @endforeach
-                                                <td>{{ $colecao[$ll->material->nee] }}</td>
-                                            </tr>
-                                        @endforeach
-                                    @endforeach
-
-                                    {{-- @foreach ($oii as $item)
-                                        @foreach ($item->vs as $item1)
+                                            $collect = collect([]);
+                                            @endphp
+                                            {{-- separa cada categoria de oii pelo tipo e
+                                            quantidade de municao --}}
                                             <tr>
                                                 <td class="col-2" style="widht: center;">
                                                     {{ $item->irtaexcategory->armamento }}</td>
-                                                <td class="col-3">{{ $item1->material->nome }}</td>
-                                                <td class="col-2">{{ $item1->modelo }}</td>
-                                                <td class="col-2" style="text-align: center;">
-                                                    {{ $item1->pivot->quantidade }}</td>
+                                                <td class="col-2" style="widht: center;"> {{ $u->SomaEfetivoOii($oii) }}
+                                                </td>
+                                                <td class="col-3">{{ $ll->material->nome }}</td>
+                                                <td class="col-3">{{ $ll->modelo }}</td>
+                                                <td class="col-3">{{ $ll->irtaexoiis->first()->pivot->quantidade }}</td>
+                                                <td class="col-2" style="widht: center;">
+                                                    {{ $ll->irtaexoiis->first()->pivot->quantidade * $u->SomaEfetivoOii($oii) }}
+                                                </td>
+                                                @php
 
-                                                @foreach ($oii as $item2)
-                                                    @foreach ($item2->irtaexefetivos as $item3)
-                                                        @php
-                                                        $d = $item3->oms;
+                                                //echo $s[$ll->material->nee];
 
-                                                        $colecao1 = collect($d)->sum('pivot.efetivo');
-                                                        @endphp
-                                                    @endforeach
-                                                    <td class="col-1" style="text-align: center;">{{ collect($d) }}</td>
-                                                    <td class="col-2" style="text-align: center;">
-                                                        {{ $colecao1 * $item1->pivot->quantidade }}</td>
-                                                    <td> </td>
-                                                @endforeach
 
+                                                $tot[$ll->material->nee] = $ll->irtaexoiis->first()->pivot->quantidade *
+                                                $u->SomaEfetivoOii($oii);
+                                                $estoque[$ll->material->nee] =
+                                                $matomcontrole->SomaMunicaoTotalNee($ll->material->nee);
+
+
+                                                $s[$ll->material->nee] = $estoque[$ll->material->nee] -
+                                                $tot[$ll->material->nee];
+                                                // $estoque[$ll->material->nee] = $s[$ll->material->nee];
+                                                // $estoque[$ll->material->nee] = $estoque[$ll->material->nee] - $s;
+
+
+
+                                                @endphp
+                                                <td>{{ $matomcontrole->SomaMunicaoTotalNee($ll->material->nee) }}</td>
+                                                {{-- pega o somatorio de municao por om por
+                                                nee agrupado --}}
+                                            </tr>
                                         @endforeach
-                                        </tr>
-                                    @endforeach --}}
+                                        @php
+                                        $i++;
+                                        @endphp
+                                    @endforeach
+                                    @php
+                                    // echo "brasil";
+                                    $i++;
+                                    @endphp
                                 </tbody>
                             </table><!-- /table -->
                         </div><!-- /.card-body -->
+                        @php
+
+                       // $i++;
+                        @endphp
                     @endforeach
                 </div><!-- /.card -->
             </div><!-- /.col 12-->

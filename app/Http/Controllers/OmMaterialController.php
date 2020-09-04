@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\IrtaexOii;
 use App\Material;
 use App\Om;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -17,7 +19,8 @@ class OmMaterialController extends Controller
      */
     public function index(Om $om)
     {
-        return view('oms.material.v.index', compact('om'));
+        $mytime = Carbon::now();
+        return view('oms.material.v.index', compact('om','mytime'));
     }
 
     /**
@@ -93,23 +96,69 @@ class OmMaterialController extends Controller
     }
 
 
-    public function SomaMunicaoOm(Om $om, Collection $col){
+    public function SomaMunicaoOm(Om $om){
 
-        foreach ($om->materialsTot->where('nee', 'erwerwqer') as $item){
-           $d = $om->materialsTot;
-
-        $colecao = collect($d)->groupBy(function ($item, $key) {
+        $colecao = $om->materialsTot->groupBy(function ($item, $key) {
         return $item->nee;
         })
         ->map(function ($item, $key) {
         return $item->sum('pivot.qtde');
         }); 
-        }
-        
-        
 
+        return $colecao;
         
-    
-   // <td>{{ $colecao[$material[0]->nee] }}</td>
+    }
+
+    public function SomaMunicaoTotalNee($nee){
+        $material = Material::with('oms')->get();
+        $colecao = $material->where('nee',$nee)
+        ->first()
+        ->oms->groupBy(function ($item, $key) {
+            return $item->nee;
+            })
+        ->map(function ($item1, $key) {
+            return $item1->sum('pivot.qtde');
+            });
+         // dd($colecao->first());
+        return $colecao->first();
+        
+    }
+
+    public function SomaMunicaoTotalNeeOii($nee){
+        $oii = IrtaexOii::all();
+        $oiiv = $oii->groupBy('oii'); 
+      foreach ($oiiv as $rr) {
+         echo $rr[0]->oii ." - " . $rr[0]->vs->first()->id ." </br> ";
+      }
+   
+        $material = Material::with('oms')->get();
+        $colecao = $material->where('nee',$nee)
+        ->first()
+        ->oms->groupBy(function ($item, $key) {
+            return $item->nee;
+            })
+        ->map(function ($item1, $key) {
+            return $item1->sum('pivot.qtde');
+            });
+         // dd($colecao->first());
+        return $colecao->first();
+        
+    }
+
+    public function SomaMunicaoTotalGeral(){
+        $geral = 0;
+        $materials = Material::with('oms')->get();
+        foreach ($materials as $material) {
+        $tot =  $material->oms
+        ->groupBy(function ($item, $key) {
+            return $item->nee;
+            })
+        ->map(function ($item1, $key) {
+            return $item1->sum('pivot.qtde');
+            });
+        $geral = $geral + $tot->first();
+        }
+       
+        return $geral;
     }
 }

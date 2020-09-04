@@ -43,12 +43,25 @@ $u = new App\Http\Controllers\OmMaterialController;
                             </thead>
                             <tbody>
                                 @foreach ($om->materialsTot->groupBy('nee') as $material)
-                                    <tr>
+
+                                @php
+                                   // dd($material->where('pivot.validade',$material->min('pivot.validade'))->sum('pivot.qtde'));
+                                @endphp
+                                    <tr style="text-align: center;">
                                         <td>{{ $material->first()->id }}</td>
                                         <td>{{ $material->first()->nome }}</td>
                                         <td>{{ $material->first()->materialable->modelo }}</td>
                                         <td>{{ $material->sum('pivot.qtde') }}</td>
-                                        <td>{{ $material->first()->pivot->validade }}</td>
+                                        @if (strtotime($material->min('pivot.validade')) < strtotime($mytime))
+                                            <td style="background-color: tomato">
+                                            {{ date( 'd/m/Y' , strtotime($material->min('pivot.validade')))}}
+                                        <span class="badge badge-info right ml-2">{{ $material->where('pivot.validade',$material->min('pivot.validade'))->sum('pivot.qtde') }}</span></td>
+                                        @else
+                                        <td>
+                                            {{ date( 'd/m/Y' , strtotime($material->min('pivot.validade')))}}
+                                        </td>
+                                            @endif
+                                       {{--  <td>{{  date( 'd/m/Y' ,strtotime($mytime))  }}</td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>
