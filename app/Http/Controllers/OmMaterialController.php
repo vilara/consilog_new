@@ -124,6 +124,23 @@ class OmMaterialController extends Controller
         
     }
 
+    public function SomaMunicaoTotalNeeOM(Om $om, $nee){
+        $material = $om->materialsTot;
+       dd($material);
+      //  $material = Material::with('oms')->get();
+        $colecao = $material->where('nee',$nee)
+        ->first()
+        ->oms->groupBy(function ($item, $key) {
+            return $item->nee;
+            })
+        ->map(function ($item1, $key) {
+            return $item1->sum('pivot.qtde');
+            });
+         // dd($colecao->first());
+        return $colecao->first();
+        
+    }
+
     public function SomaMunicaoTotalNeeOii($nee){
         $oii = IrtaexOii::all();
         $oiiv = $oii->groupBy('oii'); 
