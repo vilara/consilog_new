@@ -45,7 +45,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                         <th >Mun</th>
                                         <th >Tipo</th>
                                         <th >Qtde</th>
-                                        <th >Tot</th>
+                                        <th > Nec Mun</th>
                                         <th > Saldo Estoque</th>
                                     </tr>
                                 </thead>
@@ -54,12 +54,12 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                         @foreach ($item->vs as $ll){{-- separa cada categoria de oii pelo tipo de munição --}}
                                             @if ($u->SomaEfetivoOiiOm($oii, $om) > 0 && $ll->irtaexoiis->first()->pivot->quantidade > 0){{-- só inclui as categorias que tem efetivo cadastrado e munição com quantidade cadastrada --}}
                                                 <tr>
-                                                    <td  style="widht: center;">{{ $item->irtaexcategory->armamento }}</td>{{-- busca o armamento da categoria na tabela irtaexcategories --}}
-                                                    <td  style="widht: center;">{{ $u->SomaEfetivoOiiOm($oii, $om) }}</td>{{-- soma o efetivo total da OM por OII na tabela irtaexefetivo_om --}}
+                                                    <td  style="text-align: center;">{{ $item->irtaexcategory->armamento }}</td>{{-- busca o armamento da categoria na tabela irtaexcategories --}}
+                                                    <td  style="text-align: center;">{{ $u->SomaEfetivoOiiOm($oii, $om) }}</td>{{-- soma o efetivo total da OM por OII na tabela irtaexefetivo_om --}}
                                                     <td >{{ $ll->material->nome }}</td>{{-- descreve o nome da munição buscando na tabela materials --}}
-                                                    <td >{{ $ll->modelo }}</td>{{-- descreve o modelo da munição buscando na tabela v --}}
-                                                    <td >{{ $ll->irtaexoiis->first()->pivot->quantidade }}</td>{{-- busca a quantidade total por tipo de munição necessária por OII --}}
-                                                    <td  style="widht: center;">{{ $ll->irtaexoiis->first()->pivot->quantidade * $u->SomaEfetivoOiiOm($oii, $om) }}</td>{{-- multiplica o efetivo total pela quantidade de munição necessária por OII --}}
+                                                    <td style="text-align: center;">{{ $ll->modelo }}</td>{{-- descreve o modelo da munição buscando na tabela v --}}
+                                                    <td style="text-align: center;">{{ $ll->irtaexoiis->first()->pivot->quantidade }}</td>{{-- busca a quantidade total por tipo de munição necessária por OII --}}
+                                                    <td style="text-align: center;">{{ $ll->irtaexoiis->first()->pivot->quantidade * $u->SomaEfetivoOiiOm($oii, $om) }}</td>{{-- multiplica o efetivo total pela quantidade de munição necessária por OII --}}
                                                     @php
                                                     $tot[$ll->material->nee] = $ll->irtaexoiis->first()->pivot->quantidade * $u->SomaEfetivoOii($oii);/* apenas seta a variável para ser empregada abaixo */
                                                     //$per = ($mat->index($ll->material) * 100) / $tot[$ll->material->nee];
@@ -68,7 +68,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                                     $perr = number_format($per * 100 / $tot[$ll->material->nee], 0, '', '')." %";
                                                     if ($perr < 0) {$perr = '0 %';}
                                                     @endphp
-                                                    <td @if($mat->index($ll->material) >  0 ) style="widht: center; background-color: rgba(96, 238, 103, 0.26);" @else style="widht: center; background-color: rgba(238, 96, 96, 0.26);" @endif>{{ $mat->index($ll->material) }}<span class="badge badge-info right ml-2">@if($mat->index($ll->material) >  0 )100% @else {{ $perr }}@endif</span></td></td>{{-- busca o saldo atualizado da munição por tipo --}}
+                                                    <td @if($mat->index($ll->material) >  0 ) style="text-align: center; background-color: rgba(96, 238, 103, 0.26);" @else style="text-align: center; background-color: rgba(238, 96, 96, 0.26);" @endif>{{ $mat->index($ll->material) }}<span class="badge badge-info right ml-2">@if($mat->index($ll->material) >  0 )100% @else {{ $perr }}@endif</span></td></td>{{-- busca o saldo atualizado da munição por tipo --}}
                                                 </tr>
                                             @endif
                                         @endforeach
