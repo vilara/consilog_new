@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class IrtaexOii extends Model
 {
+
+    protected $fillable = ['oii', 'tarefa', 'condicao', 'padraminimo', 'irtaexcategory_id'];
+
     public function irtaexcategory()
 	{
 		return $this->belongsTo('App\irtaexCategory', 'irtaexcategory_id', 'id');
@@ -35,6 +38,8 @@ class IrtaexOii extends Model
     {
         return $this->belongsToMany('App\IrtaexEfetivo','irtaexefetivo_irtaexoii', 'irtaexoii_id', 'irtaexefetivo_id')->withPivot('tipo');;
     }
+
+    public $timestamps = false;
 
     protected $table = 'irtaexoiis';
 }

@@ -59,7 +59,12 @@ Route::group(['middleware' => ['auth']], function(){
 
     // IRTAEx
     Route::get('irtaex/municoes/om', 'IrtaexController@ResumoMunOiiOm'); 
-
+        // category
+    Route::resource('categories', 'IrtaexCategoryController')->except(['destroy']);
+    Route::get('category/delete/{category}', 'IrtaexCategoryController@destroy')->name('category_delete');
+          // oii
+    Route::resource('oiis', 'IrtaexOiiController')->except(['destroy']);
+    Route::get('oii/delete/{oii}', 'IrtaexOiiController@destroy')->name('oii_delete');
 
 
 });

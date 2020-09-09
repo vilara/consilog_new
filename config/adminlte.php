@@ -294,13 +294,13 @@ return [
 
         [
             'text'    => 'Classes de Materiais',
-            'icon'    => 'fas fa-tools',
+            'icon'    => 'fas fa-binoculars',
             'can'     => 'create',
             'submenu' => [
 
                 [
                     'text'    => 'Classe V - Mun',
-                    'icon'    => 'fas fa-user-friends',
+                    'icon'    => 'fas fa-bomb',
                     'url'     => '#',
                     'submenu' => [
                         [
@@ -317,14 +317,40 @@ return [
         ],
         [
             'text'    => 'IRTAEx',
-            'icon'    => 'fas fa-tools',
-            'can'     => 'create',
+            'icon'    => 'fas fa-file',
+            'can'     => 'read',
             'submenu' => [
+                [
+                    'text'    => 'Cadastros',
+                    'icon'    => 'fas fa-edit',
+                    'url'     => 'irtaex/municoes/om',
+                    'submenu' => [
+                        [
+                            'text'    => 'Efetivos',
+                            'icon'    => 'fas fa-user-friends',
+                            'url'     => 'irtaex/municoes/om',
+                            'can'     => 'create',
+                        ],
+                        [
+                            'text'    => 'Categorias',
+                            'icon'    => 'fas fa-directions',
+                            'url'     => 'categories',
+                            'can'     => 'delete',
+                        ],
+                        [
+                            'text'    => 'OII',
+                            'icon'    => 'fas fa-bullseye',
+                            'url'     => 'oiis',
+                            'can'     => 'delete',
+                        ],
+                    ],
+                ],
 
                 [
                     'text'    => 'Quantitativos de Cl V',
-                    'icon'    => 'fas fa-user-friends',
+                    'icon'    => 'fas fa-bomb',
                     'url'     => 'irtaex/municoes/om',
+                    'can'     => 'read',
                 ],
             ],
         ],
