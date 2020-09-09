@@ -51,7 +51,8 @@ $u = new App\Http\Controllers\OmMaterialController;
                                         <td>{{ $material->first()->id }}</td>
                                         <td>{{ $material->first()->nome }}</td>
                                         <td>{{ $material->first()->materialable->modelo }}</td>
-                                        <td>{{ $material->sum('pivot.qtde') }}</td>
+                                        <td>{{ $u->SomaMunicaoTotalNeeOM($om, $material->first()->nee) }}</td> {{-- retorna a quantidade de munição por OM por NEE --}}
+                                        {{-- <td>{{ $material->sum('pivot.qtde') }}</td> --}}
                                         @if (strtotime($material->min('pivot.validade')) < strtotime($mytime))
                                             <td style="background-color: tomato">
                                             {{ date( 'd/m/Y' , strtotime($material->min('pivot.validade')))}}

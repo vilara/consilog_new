@@ -35,4 +35,12 @@ class Material extends Model
         return $this->belongsToMany('App\Om','material_om', 'material_id', 'om_id')->withPivot('patrimonio','inclusao','validade','qtde','sit');
     }
 
+     /**
+     * Get the comments for the blog post.
+     */
+    public function materialomtotal()
+    {
+        return $this->hasOne('App\material_om_total');
+    }
+
 }

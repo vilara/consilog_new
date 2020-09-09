@@ -1,6 +1,7 @@
 @php
 $u = new App\Http\Controllers\IrtaexController;
 $matomcontrole = new App\Http\Controllers\OmMaterialController;
+$mat = new App\Http\Controllers\MaterialOmTotalController;
 @endphp
 
 @extends('adminlte::page')
@@ -31,104 +32,54 @@ $matomcontrole = new App\Http\Controllers\OmMaterialController;
                     <div class="card-header">
                         <h1 class="card-title">Controle de Munições do {{ $om->siglaOM }}</h1>
                     </div><!-- /.card-header -->
-                    @php
-                    $i = 0;
-                    $collect = collect($oii->groupBy('oii'));
-                   // dd($collect->count());
-                    @endphp
-                    @foreach ($collect as $oii)
-                        @php
-                       // $i++;
-                     //  echo $i; 
-                        @endphp
+                    @foreach ($oii->groupBy('oii') as $oii)
                         <div class="card-body">
                             <div class="border bg-green rounded shadow-sm p-1 mt-2">
-                                <h5 claass="card-title">{{ $oii->first()->oii}}</h5>
+                                <h5 claass="card-title">{{ $oii->first()->oii }}</h5>
                             </div>
                             <table id="v" class="table table-bordered table-hover">
                                 <thead>
                                     <tr style="text-align: center;">
-                                        <th class="col-2">Cat</th>
-                                        <th class="col-1">Efetivo</th>
-                                        <th class="col-3">Mun</th>
-                                        <th class="col-2">Tipo</th>
-                                        <th class="col-2">Qtde</th>
-                                        <th class="col-2">Tot</th>
-                                        <th class="col-2">Estoque</th>
+                                        <th >Cat</th>
+                                        <th >Efetivo</th>
+                                        <th >Mun</th>
+                                        <th >Tipo</th>
+                                        <th >Qtde</th>
+                                        <th >Tot</th>
+                                        <th > Saldo Estoque</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($oii as $item)
-                                        {{-- separa cada oii por categorias
-                                        --}}
-
-                                        @php
-                                        //dd($oii);
-                                        echo $i;
-                                        $l = collect($item->vs) ;
-                                        //dd($l);
-                                        $i = 0;
-                                        $rr = collect([]) ;
-                                        $concatenated = collect([]) ;
-                                        @endphp
-                                        @foreach ($l as $ll)
-                                            @php
-
-                                            $collect = collect([]);
-                                            @endphp
-                                            {{-- separa cada categoria de oii pelo tipo e
-                                            quantidade de municao --}}
-                                            <tr>
-                                                <td class="col-2" style="widht: center;">
-                                                    {{ $item->irtaexcategory->armamento }}</td>
-                                                <td class="col-2" style="widht: center;"> {{ $u->SomaEfetivoOii($oii) }}
-                                                </td>
-                                                <td class="col-3">{{ $ll->material->nome }}</td>
-                                                <td class="col-3">{{ $ll->modelo }}</td>
-                                                <td class="col-3">{{ $ll->irtaexoiis->first()->pivot->quantidade }}</td>
-                                                <td class="col-2" style="widht: center;">
-                                                    {{ $ll->irtaexoiis->first()->pivot->quantidade * $u->SomaEfetivoOii($oii) }}
-                                                </td>
-                                                @php
-
-                                                //echo $s[$ll->material->nee];
-
-
-                                                $tot[$ll->material->nee] = $ll->irtaexoiis->first()->pivot->quantidade *
-                                                $u->SomaEfetivoOii($oii);
-                                                $estoque[$ll->material->nee] =
-                                                $matomcontrole->SomaMunicaoTotalNee($ll->material->nee);
-
-
-                                                $s[$ll->material->nee] = $estoque[$ll->material->nee] -
-                                                $tot[$ll->material->nee];
-                                                // $estoque[$ll->material->nee] = $s[$ll->material->nee];
-                                                // $estoque[$ll->material->nee] = $estoque[$ll->material->nee] - $s;
-
-
-
-                                                @endphp
-                                                <td>{{ $matomcontrole->SomaMunicaoTotalNee($ll->material->nee) }}</td>
-                                                {{-- pega o somatorio de municao por om por
-                                                nee agrupado --}}
-                                            </tr>
+                                    @foreach ($oii as $item){{-- separa cada oii por categorias  --}}
+                                        @foreach ($item->vs as $ll){{-- separa cada categoria de oii pelo tipo de munição --}}
+                                            @if ($u->SomaEfetivoOiiOm($oii, $om) > 0 && $ll->irtaexoiis->first()->pivot->quantidade > 0){{-- só inclui as categorias que tem efetivo cadastrado e munição com quantidade cadastrada --}}
+                                                <tr>
+                                                    <td  style="widht: center;">{{ $item->irtaexcategory->armamento }}</td>{{-- busca o armamento da categoria na tabela irtaexcategories --}}
+                                                    <td  style="widht: center;">{{ $u->SomaEfetivoOiiOm($oii, $om) }}</td>{{-- soma o efetivo total da OM por OII na tabela irtaexefetivo_om --}}
+                                                    <td >{{ $ll->material->nome }}</td>{{-- descreve o nome da munição buscando na tabela materials --}}
+                                                    <td >{{ $ll->modelo }}</td>{{-- descreve o modelo da munição buscando na tabela v --}}
+                                                    <td >{{ $ll->irtaexoiis->first()->pivot->quantidade }}</td>{{-- busca a quantidade total por tipo de munição necessária por OII --}}
+                                                    <td  style="widht: center;">{{ $ll->irtaexoiis->first()->pivot->quantidade * $u->SomaEfetivoOiiOm($oii, $om) }}</td>{{-- multiplica o efetivo total pela quantidade de munição necessária por OII --}}
+                                                    @php
+                                                    $tot[$ll->material->nee] = $ll->irtaexoiis->first()->pivot->quantidade * $u->SomaEfetivoOii($oii);/* apenas seta a variável para ser empregada abaixo */
+                                                    //$per = ($mat->index($ll->material) * 100) / $tot[$ll->material->nee];
+                                                    $mat->retiradaStore($tot[$ll->material->nee],$matomcontrole->SomaMunicaoTotalNee($ll->material->nee),$ll->material); /* chama  o metodo retiradaStore() do objeto da classe MaterialOmTotalController para debitar a necessidade da municao do estoque geral */
+                                                    $per = $mat->index($ll->material) + $tot[$ll->material->nee];
+                                                    $perr = number_format($per * 100 / $tot[$ll->material->nee], 0, '', '')." %";
+                                                    if ($perr < 0) {$perr = '0 %';}
+                                                    @endphp
+                                                    <td @if($mat->index($ll->material) >  0 ) style="widht: center; background-color: rgba(96, 238, 103, 0.26);" @else style="widht: center; background-color: rgba(238, 96, 96, 0.26);" @endif>{{ $mat->index($ll->material) }}<span class="badge badge-info right ml-2">@if($mat->index($ll->material) >  0 )100% @else {{ $perr }}@endif</span></td></td>{{-- busca o saldo atualizado da munição por tipo --}}
+                                                </tr>
+                                            @endif
                                         @endforeach
-                                        @php
-                                        $i++;
-                                        @endphp
                                     @endforeach
-                                    @php
-                                    // echo "brasil";
-                                    $i++;
-                                    @endphp
                                 </tbody>
                             </table><!-- /table -->
                         </div><!-- /.card-body -->
-                        @php
-
-                       // $i++;
-                        @endphp
                     @endforeach
+                    @php
+                         $mat->destroyaall();
+                    @endphp
                 </div><!-- /.card -->
             </div><!-- /.col 12-->
         </div><!-- /.row -->

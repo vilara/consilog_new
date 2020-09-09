@@ -42,4 +42,22 @@ class IrtaexController extends Controller
 
         return $r;  // retorna o somatório como int
     }
+
+    public function SomaEfetivoOiiOm(Collection $col, Om $om)
+    {
+       // dd($om);
+      // dd($col);
+        $r = 0;
+        //dd($col);
+        foreach ($col as $coll) {
+            
+          //   dd($coll->irtaexefetivos);
+            foreach ($coll->irtaexefetivos as $item1) {
+                $i = $item1->oms->where('id',$om->id)->first()->pivot->efetivo;
+                $r = $r + $i;
+            }
+        }
+
+        return $r;  // retorna o somatório como int
+    }
 }
