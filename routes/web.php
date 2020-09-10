@@ -55,7 +55,8 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('v', 'VController')->except(['destroy']);
 
     // Om material controller
-    Route::resource('oms.materials', 'OmMaterialController'); 
+    Route::resource('oms.materials', 'OmMaterialController')->except(['index']); 
+    Route::get('oms/materials/index', 'OmMaterialController@index')->name('oms_materials');
 
     // IRTAEx
     Route::get('irtaex/municoes/om', 'IrtaexController@ResumoMunOiiOm'); 

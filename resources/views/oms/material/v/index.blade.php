@@ -28,51 +28,19 @@ $u = new App\Http\Controllers\OmMaterialController;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Controle de munições do {{ $om->siglaOM }}</h3>
+                        <h3 class="card-title">Controle de munições do </h3>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <table id="municao" class="table table-bordered table-hover">
                             <thead>
                                 <tr style="text-align: center;">
                                     <th>ID</th>
-                                    <th>Nome</th>
-                                    <th>Tipo</th>
-                                    <th>Qtde</th>
-                                    <th>Validade</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($om->materialsTot->groupBy('nee') as $material)
 
-                                @php
-                                   // dd($material->where('pivot.validade',$material->min('pivot.validade'))->sum('pivot.qtde'));
-                                @endphp
-                                    <tr style="text-align: center;">
-                                        <td>{{ $material->first()->id }}</td>
-                                        <td>{{ $material->first()->nome }}</td>
-                                        <td>{{ $material->first()->materialable->modelo }}</td>
-                                        <td>{{ $u->SomaMunicaoTotalNeeOM($om, $material->first()->nee) }}</td> {{-- retorna a quantidade de munição por OM por NEE --}}
-                                        {{-- <td>{{ $material->sum('pivot.qtde') }}</td> --}}
-                                        @if (strtotime($material->min('pivot.validade')) < strtotime($mytime))
-                                            <td style="background-color: tomato">
-                                            {{ date( 'd/m/Y' , strtotime($material->min('pivot.validade')))}}
-                                        <span class="badge badge-info right ml-2">{{ $material->where('pivot.validade',$material->min('pivot.validade'))->sum('pivot.qtde') }}</span></td>
-                                        @else
-                                        <td>
-                                            {{ date( 'd/m/Y' , strtotime($material->min('pivot.validade')))}}
-                                        </td>
-                                            @endif
-                                       {{--  <td>{{  date( 'd/m/Y' ,strtotime($mytime))  }}</td> --}}
-                                    </tr>
-                                @endforeach
-                            </tbody>
                             <tfoot>
                                 <tr style="text-align: center;">
                                     <th>ID</th>
-                                    <th>Nome</th>
-                                    <th>Tipo</th>
-                                    <th>Qtde</th>
-                                    <th>Validade</th>
                                 </tr>
                                 </tr>
                             </tfoot>
@@ -101,17 +69,10 @@ $u = new App\Http\Controllers\OmMaterialController;
             $('#municao').DataTable({
                 processing: true,
                 serverSide: false,
-                // ajax: "{{ route('comandos.index') }}",
-                // columns: [
-                //     { data: 'id', name: 'id'},
-                //     { data: 'nomeCmdo', name: 'nomeCmdo' },
-                //     { data: 'siglaCmdo', name: 'siglaCmdo' },
-                //     { data: 'omds', name: 'omds' },
-                //     { data: 'action', name: 'action'},
-                // ],
-                // columnDefs: [
-                //     {"targets": 4,"orderable": false,"searchable": false},
-                // ],
+                ajax: "{{ route('oms_materials') }}",
+                columns: [
+                    { data: 'nee', name: 'nee'},
+                ],
                 language: {
                     processing: "Carregando dados...",
                     search: "Procurar&nbsp;:",

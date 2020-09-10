@@ -309,7 +309,7 @@ return [
                         ],
                         [
                             'text' => 'Munições 8º BPE',
-                            'url'  => 'oms/15/materials',
+                            'url'  => 'oms/materials/index',
                         ],
                     ],
                 ],

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\IrtaexOii;
 use App\Material;
 use App\Om;
+use App\V;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Yajra\DataTables\DataTables;
 
 class OmMaterialController extends Controller
 {
@@ -17,10 +19,40 @@ class OmMaterialController extends Controller
      * @param  \App\Om  $om
      * @return \Illuminate\Http\Response
      */
-    public function index(Om $om)
+    public function index(Request $request)
     {
+        $v1 = V::all();
+        $v= V::all()->filter(function($v){
+            
+            return $v->material;
+        });
+        $om = Om::all()->filter(function($om){
+             return $om->id == 15;
+        })->first()->materials->filter(function($value){
+            return $value->materialable_type == 'v';
+        });
+
+
+        // $rr = $om->first()->materials->filter(function($value){
+        //     return $value->materialable_type == 'v';
+        // })
+        $material = $om->groupBy('nee');
+        // dd($v[0]->material->oms->filter(function($value){
+        //    return $value->id == 13;
+        // }));
         $mytime = Carbon::now();
-        return view('oms.material.v.index', compact('om','mytime'));
+
+        if ($request->ajax()) {
+
+            return DataTables::of($material)
+            ->addColumn('nee', function ($material) {
+                return $material->first()->materialable->modelo;})            
+            ->make();
+        }
+
+
+
+        return view('oms.material.v.index');
     }
 
     /**
