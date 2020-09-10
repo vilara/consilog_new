@@ -32,7 +32,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Nome da OM</label>
-                                <input type="nomeOm" class="form-control form-control-sm @error('nomeOm') is-invalid @enderror" name="nomeOm" id="nomeOm" value="{{ old('nomeOm') }}">
+                                <input type="text" class="form-control form-control-sm @error('nomeOm') is-invalid @enderror" name="nomeOm" id="nomeOm" value="{{ old('nomeOm') }}">
                                 @error('nomeOm')
                                        <span class="invalid-feedback" role="alert">
                                            <strong>{{ $message }}</strong>

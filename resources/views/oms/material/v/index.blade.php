@@ -9,10 +9,10 @@ $u = new App\Http\Controllers\OmMaterialController;
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Painel de controle de munições</h1>
+            <div class="col-sm-8">
+                <h1>Painel de controle de munições do(a): {{ $oms->first()->siglaOM }}</h1>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-4">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Principal</a></li>
                     <li class="breadcrumb-item active">Munições</li>
@@ -28,9 +28,23 @@ $u = new App\Http\Controllers\OmMaterialController;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Controle de munições do </h3>
+                        <h3 class="card-title">Parâmetros de pesquisa: </h3>
                     </div><!-- /.card-header -->
                     <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select type="text" class="form-control form-control-sm " name="om" id="om" placeholder="Selecione a om...">
+                                    @foreach ($omg as $omg)
+                                        <option value="{{ $omg->id }}">{{ $omg->siglaOM }}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <button type="submit" class="btn btn-default btn-sm">Buscar</button>
+                            </div>
+                        </div>
                         <table id="municao" class="table table-bordered table-hover">
                             <thead>
                                 <tr style="text-align: center;">

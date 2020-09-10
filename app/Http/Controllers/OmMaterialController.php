@@ -21,6 +21,8 @@ class OmMaterialController extends Controller
      */
     public function index(Request $request)
     {
+        $omg = Om::all();
+        $oms = Om::where('id', 15)->get();
         $om = Om::all()->filter(function ($om) {
             return $om->id == 15;
         })->first()->materials->filter(function ($value) {
@@ -68,7 +70,7 @@ class OmMaterialController extends Controller
 
 
 
-        return view('oms.material.v.index');
+        return view('oms.material.v.index', compact('oms','omg'));
     }
 
     /**
