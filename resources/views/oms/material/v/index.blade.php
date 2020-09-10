@@ -36,6 +36,9 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 <tr style="text-align: center;">
                                     <th>ID</th>
                                     <th>Nome</th>
+                                    <th>Modelo</th>
+                                    <th>Estoque</th>
+                                    <th>Validade</th>
                                 </tr>
                             </thead>
 
@@ -43,6 +46,9 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 <tr style="text-align: center;">
                                     <th>ID</th>
                                     <th>Nome</th>
+                                    <th>Modelo</th>
+                                    <th>Estoque</th>
+                                    <th>Validade</th>
                                 </tr>
                                 </tr>
                             </tfoot>
@@ -75,6 +81,9 @@ $u = new App\Http\Controllers\OmMaterialController;
                 columns: [
                     { data: 'id', name: 'id'},
                     { data: 'nome', name: 'nome'},
+                    { data: 'modelo', name: 'modelo'},
+                    { data: 'qtde', name: 'qtde'},
+                    { data: 'validade', name: 'validade'},
                 ],
                 language: {
                     processing: "Carregando dados...",
