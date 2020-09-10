@@ -35,12 +35,14 @@ $u = new App\Http\Controllers\OmMaterialController;
                             <thead>
                                 <tr style="text-align: center;">
                                     <th>ID</th>
+                                    <th>Nome</th>
                                 </tr>
                             </thead>
 
                             <tfoot>
                                 <tr style="text-align: center;">
                                     <th>ID</th>
+                                    <th>Nome</th>
                                 </tr>
                                 </tr>
                             </tfoot>
@@ -71,7 +73,8 @@ $u = new App\Http\Controllers\OmMaterialController;
                 serverSide: false,
                 ajax: "{{ route('oms_materials') }}",
                 columns: [
-                    { data: 'nee', name: 'nee'},
+                    { data: 'id', name: 'id'},
+                    { data: 'nome', name: 'nome'},
                 ],
                 language: {
                     processing: "Carregando dados...",
