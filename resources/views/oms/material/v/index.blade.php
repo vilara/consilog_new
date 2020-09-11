@@ -9,10 +9,10 @@ $u = new App\Http\Controllers\OmMaterialController;
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-10">
-                <h1>Painel de controle de munições geral</h1>
+            <div class="col-sm-8">
+                <h1>Painel de controle de munições do(a):</h1>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-4">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Principal</a></li>
                     <li class="breadcrumb-item active">Munições</li>
@@ -134,7 +134,7 @@ $u = new App\Http\Controllers\OmMaterialController;
             $('#filter').click(function(){
                
                 var om = $('#oms').val();
-                //alert(om);
+
                 if(om != ''){
                     $('#municao').DataTable().destroy();
                     load_data(om);

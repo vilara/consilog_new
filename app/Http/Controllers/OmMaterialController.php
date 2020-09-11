@@ -21,13 +21,16 @@ class OmMaterialController extends Controller
      */
     public function index(Request $request)
     {
+        //$t =  array(0);
+
+       
 
         $omg = Om::all()->sortBy('siglaOM');
         foreach ($omg as $rr) {
             $t[] = $rr->id;
         }
        
-        $oms = Om::where('id', 15)->get();
+       // $oms = Om::where('id', 15)->get();
 
 
         // dd($om) ;
@@ -38,13 +41,10 @@ class OmMaterialController extends Controller
         //     return $value->materialable_type == 'v';
         // });
 
-        
+
 
         if ($request->ajax()) {
-           
-            
             if (!empty($request->om)) {
-                
                 $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
                     return $item->materials->filter(function ($value) {
                         return $value->materialable_type == 'v';
@@ -91,7 +91,7 @@ class OmMaterialController extends Controller
                 ->rawColumns(['validade'])
                 ->make();
         }
-        return view('oms.material.v.index', compact('oms', 'omg'));
+        return view('oms.material.v.index', compact('omg'));
     }
 
     /**
