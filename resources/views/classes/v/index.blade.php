@@ -74,7 +74,15 @@
     <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
 @section('css')
-
+<style>
+td.details-control {
+    background: url('images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('images/details_close.png') no-repeat center center;
+}
+</style>
 @stop
 
 @section('js')
@@ -90,7 +98,7 @@
                     '</tr>' +
                     '</table>';
             }
-            $('#v').DataTable({
+            var table = $('#v').DataTable({
                 processing: true,
                 serverSide: false,
                 ajax: "{{ route('v.index') }}",
@@ -149,8 +157,7 @@
             $('#v tbody').on('click', 'td.details-control', function() {
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
-
-                if (row.child.isShown()) {
+                                if (row.child.isShown()) {
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');

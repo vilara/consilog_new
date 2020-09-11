@@ -106,6 +106,7 @@
                 { data: 'endereco', name: 'endereco' },
                 { data: 'action', name: 'action'},
             ],
+            order: [[ 1, 'asc' ]],
             columnDefs: [
                 {"targets": 4,"orderable": false,"searchable": false},
             ],

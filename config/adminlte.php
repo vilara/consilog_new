@@ -308,7 +308,7 @@ return [
                             'url'  => 'v',
                         ],
                         [
-                            'text' => 'Munições 8º BPE',
+                            'text' => 'Ctrl Mun das OM',
                             'url'  => 'oms/materials/index',
                         ],
                     ],
@@ -432,7 +432,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

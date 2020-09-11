@@ -21,18 +21,44 @@ class OmMaterialController extends Controller
      */
     public function index(Request $request)
     {
-        $omg = Om::all();
+
+        $omg = Om::all()->sortBy('siglaOM');
+        foreach ($omg as $rr) {
+            $t[] = $rr->id;
+        }
+       
         $oms = Om::where('id', 15)->get();
-        $om = Om::all()->filter(function ($om) {
-            return $om->id == 15;
-        })->first()->materials->filter(function ($value) {
-            return $value->materialable_type == 'v';
-        });
 
 
-        $material = $om->groupBy('nee');
+        // dd($om) ;
+
+        // $om = Om::all()->filter(function ($om) {
+        //     return $om->id == 15 ;
+        // })->first()->materials->filter(function ($value) {
+        //     return $value->materialable_type == 'v';
+        // });
+
+        
 
         if ($request->ajax()) {
+           
+            
+            if (!empty($request->om)) {
+                
+                $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
+                    return $item->materials->filter(function ($value) {
+                        return $value->materialable_type == 'v';
+                    });;
+                })->collapse();
+            }else{
+                $om = Om::whereIn('id', $t)->get()->map(function ($item) {
+                    return $item->materials->filter(function ($value) {
+                        return $value->materialable_type == 'v';
+                    });;
+                })->collapse();
+            }
+            
+            $material = $om->groupBy('nee');
 
             return DataTables::of($material)
                 ->addColumn('id', function ($material) {
@@ -48,29 +74,24 @@ class OmMaterialController extends Controller
                     return $material->sum('pivot.qtde');
                 })
                 ->addColumn('validade', function ($material) {
-                    $date = date( 'd/m/Y' , strtotime($material->min('pivot.validade')));
-                    if( strtotime($material->min('pivot.validade')) < strtotime(Carbon::now())){
+                    $date = date('d/m/Y', strtotime($material->min('pivot.validade')));
+                    if (strtotime($material->min('pivot.validade')) < strtotime(Carbon::now())) {
 
-                        $date .= '<span class="badge badge-info right ml-2">'.($material->where('pivot.validade',$material->min('pivot.validade')))->sum('pivot.qtde')  .'</span>';
+                        $date .= '<span class="badge badge-info right ml-2">' . ($material->where('pivot.validade', $material->min('pivot.validade')))->sum('pivot.qtde')  . '</span>';
                     }
                     return  $date;
                 })
-                ->setRowClass(function($material){
-                    if( strtotime($material->min('pivot.validade')) < strtotime(Carbon::now())){
+                ->setRowClass(function ($material) {
+                    if (strtotime($material->min('pivot.validade')) < strtotime(Carbon::now())) {
                         return 'text-center table-danger';
-
-                    }else{
+                    } else {
                         return 'text-center';
                     }
-                   
                 })
                 ->rawColumns(['validade'])
                 ->make();
         }
-
-
-
-        return view('oms.material.v.index', compact('oms','omg'));
+        return view('oms.material.v.index', compact('oms', 'omg'));
     }
 
     /**
@@ -82,8 +103,8 @@ class OmMaterialController extends Controller
     public function create(Om $om)
     {
         //
-    }
 
+    }
     /**
      * Store a newly created resource in storage.
      *
