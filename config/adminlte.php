@@ -328,7 +328,7 @@ return [
                         [
                             'text'    => 'Efetivos',
                             'icon'    => 'fas fa-user-friends',
-                            'url'     => 'irtaex/municoes/om',
+                            'url'     => 'efetivos',
                             'can'     => 'create',
                         ],
                         [

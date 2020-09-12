@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class IrtaexEfetivo extends Model
 {
+    protected $fillable = ['circulo', 'pessoal', 'postograd_id', 'irtaexcategory_id'];
 
     public function postograd()
 	{
@@ -32,6 +33,9 @@ class IrtaexEfetivo extends Model
     {
         return $this->belongsToMany('App\IrtaexOii','irtaexefetivo_irtaexoii', 'irtaexefetivo_id', 'irtaexoii_id')->withPivot('tipo');;
     }
+
+    public $timestamps = false;
+
     
     protected $table = 'irtaexefetivos';
 }

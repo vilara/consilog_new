@@ -66,6 +66,10 @@ Route::group(['middleware' => ['auth']], function(){
           // oii
     Route::resource('oiis', 'IrtaexOiiController')->except(['destroy']);
     Route::get('oii/delete/{oii}', 'IrtaexOiiController@destroy')->name('oii_delete');
+        //efetivos
+    Route::resource('efetivos', 'IrtaexEfetivoController')->except(['destroy','create']);
+    Route::get('efetivo/delete/{efetivo}', 'IrtaexEfetivoController@destroy')->name('efetivo_delete');
+    Route::get('efetivo/create/{categoria}', 'IrtaexEfetivoController@create')->name('efetivo_create');
 
 
 });
