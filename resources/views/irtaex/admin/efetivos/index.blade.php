@@ -15,7 +15,7 @@ $u = new App\Http\Controllers\OmMaterialController;
             <div class="col-sm-4">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Principal</a></li>
-                    <li class="breadcrumb-item active">Munições</li>
+                    <li class="breadcrumb-item active">Efetivos</li>
                 </ol>
             </div>
         </div>
@@ -35,18 +35,21 @@ $u = new App\Http\Controllers\OmMaterialController;
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4"
-                                    name="categoria" id="categoria">
-                                    @foreach ($categoria as $categoria)
-                                    <option value="{{ $categoria->id }}">{{ $categoria->armamento }}</option>
-                                    @endforeach
-                                </select>
+                                        name="categoria" id="categoria">
+                                        <option></option>
+                                        @foreach ($categoria as $categoria)
+                                            <option value="{{ $categoria->id }}">{{ $categoria->armamento }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-3">
-                            <button type="submit" id="filter" class="btn btn-default btn-sm">Buscar</button>
-                            <button type="submit" id="refresh" class="btn btn-default btn-sm">Limpar</button>
-                        </div>
-                        <div class="card-tools col-3"></div>
+                            <div class="col-3">
+                                <button type="submit" id="filter" class="btn btn-default btn-sm">Buscar</button>
+                                <button type="submit" id="refresh" class="btn btn-default btn-sm">Limpar</button>
+                            </div>
+                            <div class="col-3">
+                                <div class="card-tools"></div>
+                            </div>
                         </div>
                         <table id="efetivo" class="table table-bordered table-hover">
                             <thead>
@@ -93,14 +96,15 @@ $u = new App\Http\Controllers\OmMaterialController;
     <script>
         $(document).ready(function() {
 
-            $(".card-tools").hide(); 
+            $(".card-tools").hide();
             $("p").click(function() {
 
-            
+
             });
 
             $('#categoria').select2({
-                placeholder: "Selecione uma categoria..."
+                placeholder: "Selecinone uma categoria",
+                allowClear: true
             });
 
             load_data();
@@ -163,26 +167,22 @@ $u = new App\Http\Controllers\OmMaterialController;
 
                 var categoria = $('#categoria').val();
 
-                if (categoria != '') {
+                if (categoria != null) {
+
                     $('#efetivo').DataTable().destroy();
                     load_data(categoria);
-
-                    var out = "<a href='efetivo/create/"+categoria+"' type='submit' class='btn btn-default btn-sm'>  Incluir Efetivo </a>";
-                    
-                    
-                    
+                    var out = "<a href='efetivo/create/" + categoria +
+                        "' type='submit' class='btn btn-default btn-sm'>  Incluir Efetivo </a>";
                     $(".card-tools").html(out);
-                    $(".card-tools").show(); 
-
-
-
+                    $(".card-tools").show();
+                    // alert(categoria);
                 } else {
                     alert('Selecione uma categoria');
                 }
             });
 
             $('#refresh').click(function() {
-                $(".card-tools").hide(); 
+                $(".card-tools").hide();
                 $("#categoria").val([]).change();
                 $('#efetivo').DataTable().destroy();
                 load_data();

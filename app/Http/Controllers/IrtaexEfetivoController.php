@@ -6,6 +6,7 @@ use App\irtaexCategory;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\IrtaexEfetivo;
+use App\Postograd;
 use phpDocumentor\Reflection\Types\Integer as TypesInteger;
 use PhpParser\Node\Expr\Cast\Int_;
 use Ramsey\Uuid\Type\Integer;
@@ -54,8 +55,36 @@ class IrtaexEfetivoController extends Controller
     }
 
     public function create(Int $categoria){
-        dd($categoria);
+
+        $category = irtaexCategory::find($categoria);
+        $posto = Postograd::all();
+        
+       // dd($category);
+        return view('irtaex.admin.efetivos.create', compact('category','posto'));
     }
     
+
+    public function store(Request $request)
+    {
+
+      //  dd($request);
+        $rules = [
+            'circulo' => 'required',
+            'pessoal' => 'required',
+            'postograd_id' => 'required',
+        ];
+        $messages = [
+            'circulo.required' => 'Campo obrigatório.',
+            'pessoal.required' => 'Campo obrigatório',
+            'postograd_id.required' => 'Campo obrigatório',
+        ];
+
+       $this->validate($request, $rules, $messages);
+       
+        IrtaexEfetivo::create($request->all());
+        
+        return redirect('efetivos');
+    }
+
 
 }
