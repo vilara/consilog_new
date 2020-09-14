@@ -41,8 +41,9 @@
                                     <th>OII</th>
                                     <th>Tarefa</th>
                                     <th>Categoria</th>
+                                    <th>Efetivo</th>
                                     <th>Ações</th>
-
+                                    
                                 </tr>
                             </thead>
                             <tfoot>
@@ -51,6 +52,7 @@
                                     <th>OII</th>
                                     <th>Tarefa</th>
                                     <th>Categoria</th>
+                                    <th>Efetivo</th>
                                     <th>Ações</th>
                                 </tr>
                                 </tr>
@@ -95,6 +97,10 @@
                 {
                     data: 'categoria',
                     name: 'categoria'
+                },
+                {
+                    data: 'efetivo',
+                    name: 'efetivo'
                 },
                 {
                     data: 'action',

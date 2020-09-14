@@ -30,10 +30,31 @@ class IrtaexOiiController extends Controller
                 '</div>';
 
             })
+            ->addColumn('efetivo', function (IrtaexOii $oii) {
+                
+               
+                if($oii->irtaexefetivos->count() > 0){
+                    return '
+                    <div class="row" style="height: 25px;">
+                    <div class="col-md-12 pt-0 h-auto">
+                        <a href="'. route('efetivos.index', [$oii->id]).'" class="" style="color: black;" ><center><i class="fas fa-user-friends"	title="Mostrar telefones de OM"></i></center></a>            
+                    </div>
+                    </div>
+                    ';
+               }else{
+                   return '
+                   <div class="row" style="height: 25px;">
+                      <div class="col-md-12 pt-0 h-auto">
+                          <a href="'. route('efetivos.index', $oii->id).'" class="" style="color: red;" ><center><i class="fas fa-user-friends"	title="Inserir telefone de OM"></i></center></a>            
+                      </div>
+                   </div>
+                   ';
+               }
+            })
             ->editColumn('categoria', function (IrtaexOii $oii) {
                 return $oii->irtaexcategory->armamento;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'efetivo'])
             ->make(true);
         }
 
