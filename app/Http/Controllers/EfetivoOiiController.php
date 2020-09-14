@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\IrtaexEfetivo;
 use App\IrtaexOii;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class EfetivoOiiController extends Controller
 {
@@ -14,9 +15,19 @@ class EfetivoOiiController extends Controller
      * @param  \App\IrtaexOii  $irtaexOii
      * @return \Illuminate\Http\Response
      */
-    public function index(IrtaexOii $irtaexOii)
+    public function index(Request $request, IrtaexOii $oii)
     {
-        //
+        $efetivos = $oii->irtaexefetivos;
+      // dd($efetivos);
+        if ($request->ajax()) {
+
+            return DataTables::of($efetivos)
+            ->addColumn('postograd', function(IrtaexEfetivo $efetivos){
+                return $efetivos->postograd->siglaPg;
+            })
+            ->make(true);
+        }
+        return view('irtaex.admin.efetivos.oii.index', compact('oii'));
     }
 
     /**
@@ -25,9 +36,34 @@ class EfetivoOiiController extends Controller
      * @param  \App\IrtaexOii  $irtaexOii
      * @return \Illuminate\Http\Response
      */
-    public function create(IrtaexOii $irtaexOii)
+    public function create(Request $request, IrtaexOii $oii)
     {
-        //
+
+
+       // dd($oii);
+         $categoria =  $oii->irtaexcategory_id;
+        $efetivo = IrtaexEfetivo::where('irtaexcategory_id', $oii->irtaexcategory_id)->get();
+
+   // dd($efetivo[0]->irtaexoiis->contains('oii', "$oii->oii") ? "checked" : "");
+        if ($request->ajax()) {
+            return DataTables::of($efetivo)
+            ->addColumn('action', function (IrtaexEfetivo $efetivo) use ($oii) {
+            $s = $efetivo->irtaexoiis->contains('oii', $oii->oii) ? "checked" : "";
+            $c = "'Confirma a exlusão do efetivo?'";
+            return 
+            ' <input type="checkbox" class="editavel" name="vincular" '.$s.' id="vincular" value="teste">';
+
+        })
+        ->addColumn('posto',function($efetivo){
+          return $efetivo->postograd->siglaPg;
+        })
+        
+      
+        ->rawColumns(['action'])
+        ->make(true);
+    }
+
+        return view('irtaex.admin.efetivos.oii.create', compact('oii', 'categoria', 'efetivo'));
     }
 
     /**

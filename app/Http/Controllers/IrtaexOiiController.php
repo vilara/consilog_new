@@ -12,6 +12,7 @@ class IrtaexOiiController extends Controller
     public function index(Request $request)
     {
         $oii = IrtaexOii::all();
+       // dd($oii);
         if ($request->ajax()) {
 
             return DataTables::of($oii)
@@ -37,7 +38,7 @@ class IrtaexOiiController extends Controller
                     return '
                     <div class="row" style="height: 25px;">
                     <div class="col-md-12 pt-0 h-auto">
-                        <a href="'. route('efetivos.index', [$oii->id]).'" class="" style="color: black;" ><center><i class="fas fa-user-friends"	title="Mostrar telefones de OM"></i></center></a>            
+                        <a href="'. route('oiis.efetivos.index', $oii->id).'" class="" style="color: black;" ><center><i class="fas fa-user-friends"	title="Mostrar telefones de OM"></i></center></a>            
                     </div>
                     </div>
                     ';
@@ -45,7 +46,7 @@ class IrtaexOiiController extends Controller
                    return '
                    <div class="row" style="height: 25px;">
                       <div class="col-md-12 pt-0 h-auto">
-                          <a href="'. route('efetivos.index', $oii->id).'" class="" style="color: red;" ><center><i class="fas fa-user-friends"	title="Inserir telefone de OM"></i></center></a>            
+                          <a href="'. route('oiis.efetivos.create', $oii->id).'" class="" style="color: red;" ><center><i class="fas fa-user-friends"	title="Inserir telefone de OM"></i></center></a>            
                       </div>
                    </div>
                    ';

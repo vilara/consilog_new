@@ -71,7 +71,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('efetivo/delete/{efetivo}', 'IrtaexEfetivoController@destroy')->name('efetivo_delete');
     Route::get('efetivo/create/{categoria}', 'IrtaexEfetivoController@create')->name('efetivo_create');
     // efetivo oii controller
-    Route::resource('efetivos.oiis', 'EfetivoOiiController')->except(['index']); //php artisan make:controller EfetivoOiiController -r --model=IrtaexEfetivo --parent=IrtaexOii
-    Route::get('efetivos/oiis/index', 'EfetivoOiiController@index')->name('efetivos_oiis');
+    Route::resource('oiis.efetivos', 'EfetivoOiiController'); //php artisan make:controller EfetivoOiiController -r --model=IrtaexEfetivo --parent=IrtaexOii
+   // Route::get('{oii}/efetivos', 'EfetivoOiiController@index')->name('efetivos_oiis');
 
 });
