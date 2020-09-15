@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\IrtaexEfetivo;
 use App\IrtaexOii;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Boolean;
 use Yajra\DataTables\DataTables;
 
 class EfetivoOiiController extends Controller
@@ -73,9 +74,16 @@ class EfetivoOiiController extends Controller
      * @param  \App\IrtaexOii  $irtaexOii
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, IrtaexOii $irtaexOii)
+    public function store(Request $request, IrtaexOii $oii)
     {
-        //
+
+        
+        if($request->chk == "true"){
+            $oii->irtaexefetivos()->attach($request->id,['tipo' => 1]);
+        }else{
+            $oii->irtaexefetivos()->detach($request->id);
+        }
+        return "ok";
     }
 
     /**

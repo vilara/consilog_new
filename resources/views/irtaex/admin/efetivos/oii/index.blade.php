@@ -34,10 +34,8 @@
             <h3 class="card-title">Controle de OII: {{ $oii->id }}</h3>
         @endif
         <div class="card-tools">
-          <a href="{{ route('oiis.efetivos.index', $oii->id) }}" type="submit" class="btn btn-success">  {{ __('Voltar') }}
-          <a href="{{ route('oiis.efetivos.create', $oii->id) }}" type="submit" class="btn btn-success">  {{ __('Vincular novo efetivo') }}
-          
-          </a>
+          <a href="{{ route('oiis.index') }}" type="submit" class="btn btn-success">  {{ __('Voltar') }} </a>
+          <a href="{{ route('oiis.efetivos.create', $oii->id) }}" type="submit" class="btn btn-success">  {{ __('Vincular novo efetivo') }}</a>
       </div>
           </div><!-- /.card-header -->
           <div class="card-body">

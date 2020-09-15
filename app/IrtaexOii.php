@@ -36,7 +36,7 @@ class IrtaexOii extends Model
      */
     public function irtaexefetivos()
     {
-        return $this->belongsToMany('App\IrtaexEfetivo','irtaexefetivo_irtaexoii', 'irtaexoii_id', 'irtaexefetivo_id')->withPivot('tipo');;
+        return $this->belongsToMany('App\IrtaexEfetivo','irtaexefetivo_irtaexoii', 'irtaexoii_id', 'irtaexefetivo_id')->withTimestamps()->withPivot('tipo');;
     }
 
     public $timestamps = false;

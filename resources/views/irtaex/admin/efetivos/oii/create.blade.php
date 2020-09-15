@@ -8,9 +8,9 @@ $u = new App\Http\Controllers\OmMaterialController;
 
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-sm-8">
-                <h1>Painel de controle de efetivos: {{ $oii->oii }}</h1>
+                <h4>Painel de controle de efetivos: {{ $oii->oii }}</h4>
             </div>
             <div class="col-sm-4">
                 <ol class="breadcrumb float-sm-right">
@@ -28,27 +28,23 @@ $u = new App\Http\Controllers\OmMaterialController;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Parâmetros de pesquisa: </h3>
-                    </div><!-- /.card-header -->
-                    <div class="card-body">
-                        <div class="row mb-3 input-dataranger">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <select style="width: 100%;" class="form-control form-control-sm select2bs4"
-                                        name="categoria" id="categoria">
-                                        <option></option>
-
-                                    </select>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="position-relative p-3 bg-olive" style="height: 100px">
+                                    <div class="ribbon-wrapper">
+                                        <div class="ribbon bg-olive  disabled">
+                                            Manual
+                                        </div>
+                                    </div>
+                                    Vinculação de efetivos com OII <br />
+                                    <small>A tabela abaixo mostra os efetivos cadastrados para a categoria de armamento
+                                        selecionada. Para vincular com o OII acima descrito basta selecionar ou
+                                        desselecionar os boxes da última coluna</small>
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <button type="submit" id="filter" class="btn btn-default btn-sm">Buscar</button>
-                                <button type="submit" id="refresh" class="btn btn-default btn-sm">Limpar</button>
-                            </div>
-                            <div class="col-3">
-                                <div class="card-tools"></div>
-                            </div>
                         </div>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
                         <table id="efetivo" class="table table-bordered table-hover">
                             <thead>
                                 <tr style="text-align: center;">
@@ -60,19 +56,13 @@ $u = new App\Http\Controllers\OmMaterialController;
 
                                 </tr>
                             </thead>
-
-                            <tfoot>
-                                <tr style="text-align: center;">
-                                    <th>ID</th>
-                                    <th>Círculo</th>
-                                    <th>Pessoal</th>
-                                    <th>Posto/Grad</th>
-                                    <th>Ação</th>
-                                </tr>
-                                </tr>
-                            </tfoot>
                         </table><!-- /table -->
                     </div><!-- /.card-body -->
+
+                    <div class="card-footer">
+                            <a href="{{ url('oiis') }}" type="submit" class="btn btn-success">  {{ __('Voltar') }}
+                            </a>
+                    </div>
                 </div><!-- /.card -->
             </div><!-- /.col 12-->
         </div><!-- /.row -->
@@ -94,30 +84,19 @@ $u = new App\Http\Controllers\OmMaterialController;
     <script>
         $(document).ready(function() {
 
-            $(".card-tools").hide();
-            $("p").click(function() {
-
-
-            });
-
-            $('#categoria').select2({
-                placeholder: "Selecinone uma categoria",
-                allowClear: true
-            });
-
             load_data();
 
-            function load_data(categoria = '') {
+            function load_data() {
 
                 $('#efetivo').DataTable({
                     processing: true,
                     serverSide: true,
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "filter":false,
                     ajax: {
                         url: "{{ route('oiis.efetivos.create', $oii) }}",
-                        data: {
-                            categoria: categoria
-                        }
-
                     },
 
                     columns: [{
@@ -161,36 +140,25 @@ $u = new App\Http\Controllers\OmMaterialController;
                 });
             }
 
-            $('#filter').click(function() {
 
-                var categoria = $('#categoria').val();
+            $('#efetivo').on('click', 'input[type="checkbox"]', function() {  // event do checkbox da última coluna de cada linha
 
-                if (categoria != null) {
+                var chk = $(this).is(":checked"); // checa se o box está selecionado ou não
 
-                    $('#efetivo').DataTable().destroy();
-                    load_data(categoria);
-                    var out = "<a href='efetivo/create/" + categoria +
-                        "' type='submit' class='btn btn-default btn-sm'>  Incluir Efetivo </a>";
-                    $(".card-tools").html(out);
-                    $(".card-tools").show();
-                    // alert(categoria);
-                } else {
-                    alert('Selecione uma categoria');
-                }
+                $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
+                    type: "POST",
+                    url: "{{ route('oiis.efetivos.store', $oii) }}",
+                    data: {
+                        id: $(this).parent('td').siblings().first().text(), // busca o numero do id na primeira coluna de cada linha
+                        chk: $(this).is(":checked"),
+                    },
+
+                    success: function(result) {
+                       // alert(result); // mostra o resultado do return da route especificada na url
+                    }
+                });
+
             });
-
-            $('#refresh').click(function() {
-                $(".card-tools").hide();
-                $("#categoria").val([]).change();
-                $('#efetivo').DataTable().destroy();
-                load_data();
-            });
-
-
-            $('#efetivo').on('click', 'input[type="checkbox"]', function() {
-                alert($(this).parent('td').siblings().first().text());
-            });
-
 
         });
 
