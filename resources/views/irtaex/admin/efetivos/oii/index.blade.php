@@ -31,7 +31,7 @@
         @if(session()->get('success'))
             <h3 class="card-title">{{ session()->get('success') }}</h3>
         @else 
-            <h3 class="card-title">Controle de OII: {{ $oii->id }}</h3>
+            <h3 class="card-title">Controle de OII: {{ $oii->oii }}</h3>
         @endif
         <div class="card-tools">
           <a href="{{ route('oiis.index') }}" type="submit" class="btn btn-success">  {{ __('Voltar') }} </a>
@@ -50,16 +50,6 @@
             </tr>
         </thead>
         
-        <tfoot>
-            <tr style="text-align: center;">
-                <th>ID</th>
-                <th>Círculo</th>
-                <th>Pessoal</th>
-                <th>Posto/Grad</th>
-              
-              </tr>
-              </tr>
-              </tfoot>
             </table><!-- /table -->
           </div><!-- /.card-body -->
         </div><!-- /.card -->

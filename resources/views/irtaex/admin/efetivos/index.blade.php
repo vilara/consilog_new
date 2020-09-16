@@ -1,5 +1,7 @@
 @php
 $u = new App\Http\Controllers\OmMaterialController;
+
+$cat = new App\Http\Controllers\IrtaexEfetivoController;
 @endphp
 
 @extends('adminlte::page')
@@ -9,14 +11,18 @@ $u = new App\Http\Controllers\OmMaterialController;
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-8">
-                <h1>Painel de controle de efetivos: </h1>
-            </div>
-            <div class="col-sm-4">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Principal</a></li>
-                    <li class="breadcrumb-item active">Efetivos</li>
-                </ol>
+            <div class="col-12">
+                <div class="info-box ">
+                    <span class="info-box-icon bg-olive"><i class="fas fa-users"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            <h1>Efetivos</h1>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
             </div>
         </div>
     </div><!-- /.container-fluid -->
@@ -28,7 +34,24 @@ $u = new App\Http\Controllers\OmMaterialController;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Parâmetros de pesquisa: </h3>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="position-relative p-3 bg-olive" style="height: 100%">
+                                    <div class="ribbon-wrapper">
+                                        <div class="ribbon bg-olive  disabled">
+                                            <b>Manual</b>
+                                        </div>
+                                    </div>
+                                    Lista de fetivos cadastrados <br />
+                                    <small>Selecione abaixo o tipo de armamento para ser mostrado a lista de efetivos
+                                        cadastrados por categoria. Apoś isso será mostrado os tipos de efetivos cadastrados
+                                        no sistema por categoria de armamento. A úlitma coluna (ação) possui o ícone para
+                                        edição e
+                                        exclusão de cada tipo de efetivo, porém só é habilitada para os administradores do
+                                        sistema.</small>
+                                </div>
+                            </div>
+                        </div>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="row mb-3 input-dataranger">
@@ -96,6 +119,8 @@ $u = new App\Http\Controllers\OmMaterialController;
     <script>
         $(document).ready(function() {
 
+            $('#efetivo').hide();
+
             $(".card-tools").hide();
             $("p").click(function() {
 
@@ -107,18 +132,22 @@ $u = new App\Http\Controllers\OmMaterialController;
                 allowClear: true
             });
 
-            load_data();
+            //load_data();
 
             function load_data(categoria = '') {
 
                 $('#efetivo').DataTable({
                     processing: true,
                     serverSide: true,
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "filter": false,
                     ajax: {
                         url: "{{ route('efetivos.index') }}",
                         data: {
-                            categoria: categoria
-                        }
+                            categoria: categoria,
+                        },
 
                     },
 
@@ -168,11 +197,18 @@ $u = new App\Http\Controllers\OmMaterialController;
                 var categoria = $('#categoria').val();
 
                 if (categoria != null) {
+                    $('#efetivo').show();
+
+
+                    var armamento = $('#categoria :selected').text();
+                    var out1 = "<h3 class='card-title'>Parâmetros de pesquisa:  " + armamento + "</h3>";
+                    $(".card-header").html(out1);
 
                     $('#efetivo').DataTable().destroy();
                     load_data(categoria);
                     var out = "<a href='efetivo/create/" + categoria +
-                        "' type='submit' class='btn btn-default btn-sm'>  Incluir Efetivo </a>";
+                        "' type='submit' class='btn btn-success btn-sm'>  Incluir Efetivo de " + armamento +
+                        "</a>";
                     $(".card-tools").html(out);
                     $(".card-tools").show();
                     // alert(categoria);
@@ -182,10 +218,12 @@ $u = new App\Http\Controllers\OmMaterialController;
             });
 
             $('#refresh').click(function() {
+                $(".card-header").html("<h3 class='card-title'>Selecione o tipo de armamento abaixo:</h3>");
                 $(".card-tools").hide();
                 $("#categoria").val([]).change();
                 $('#efetivo').DataTable().destroy();
-                load_data();
+                $('#efetivo').hide();
+                //   load_data();
             });
 
 

@@ -19,11 +19,14 @@ class IrtaexEfetivoController extends Controller
 
         //dd($request);
         // $cat = $request->categoria;
-   
+       // $_POST["name"]
+       // $armamneto = $_POST["armamento"];
+       // dd($armamneto);
+       
         $categoria = irtaexCategory::all();
         if ($request->ajax()) {
           
-            $h ='teste';
+           
             $efetivo = IrtaexEfetivo::where('irtaexcategory_id', $request->categoria)->get();
 
             return DataTables::of($efetivo)
@@ -85,6 +88,14 @@ class IrtaexEfetivoController extends Controller
         
         return redirect('efetivos');
     }
+
+
+    // manipuladores
+
+    public function getArmamentoById($id){
+      
+        return irtaexCategory::find($id)->armamento;
+      }
 
 
 }

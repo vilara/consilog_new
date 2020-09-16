@@ -9,14 +9,16 @@
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Categorias</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#"></a></li>
-                    <li class="breadcrumb-item active"></li>
-                </ol>
+            <div class="col-12">
+                <div class="info-box ">
+                    <span class="info-box-icon bg-olive"><i class="fas fa-prescription-bottle"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text"><h1>Categorias</h1></span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
             </div>
         </div>
     </div><!-- /.container-fluid -->
@@ -28,13 +30,27 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Lista de categorias</h3>
-                        <div class="card-tools">
-                        <a href="{{ route('categories.create') }}" type="submit" class="btn btn-success">{{ __('Incluir nova categoria') }}</a>
+                        <div class="col-sm-12">
+                            <div class="position-relative p-3 bg-olive" style="height: 100%">
+                                <div class="ribbon-wrapper">
+                                    <div class="ribbon bg-olive  disabled">
+                                        <b>Manual</b>
+                                    </div>
+                                </div>
+                                Lista de categorias<br />
+                                <small>A tabela abaixo mostra as categorias cadastrados no sistema. Para acrescentar outra
+                                    categoria clique no botão abaixo. A úlitma coluna (ação) possui o ícone para edição e
+                                    exclusão de cada categoria, porém só é habilitada para os administradores do
+                                    sistema.</small>
+                            </div>
+                        </div>
+                        <div class="card-tools float-left ml-2 mt-2">
+                            <a href="{{ route('categories.create') }}" type="submit"
+                                class="btn bg-olive">{{ __('Incluir nova categoria') }}</a>
                         </div>
                     </div><!-- /.card-header -->
                     <div class="card-body">
-                        <table id="categories" class="table table-bordered table-hover">
+                        <table id="categories" class="table table-striped table-bordered">
                             <thead>
                                 <tr style="text-align: center;">
                                     <th>ID</th>
@@ -43,15 +59,6 @@
                                     <th>Ação</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr style="text-align: center;">
-                                    <th>ID</th>
-                                    <th>Categoria</th>
-                                    <th>Armamento</th>
-                                    <th>Ação</th>
-                                </tr>
-                                </tr>
-                            </tfoot>
                         </table><!-- /table -->
                     </div><!-- /.card-body -->
                 </div><!-- /.card -->
@@ -75,14 +82,29 @@
             $('#categories').DataTable({
                 processing: true,
                 serverSide: false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "filter": false,
                 ajax: "{{ route('categories.index') }}",
 
-                columns: [
-                    {data: 'id',name: 'id'},
-                    {data: 'categoria',name: 'categoria'},
-                    {data: 'armamento',name: 'armamento'},
-                    {data: 'action',name: 'action'},
-                     ],
+                columns: [{
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'categoria',
+                        name: 'categoria'
+                    },
+                    {
+                        data: 'armamento',
+                        name: 'armamento'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ],
 
                 language: {
                     processing: "Carregando dados...",

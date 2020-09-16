@@ -27,7 +27,7 @@
                         @if (session()->get('success'))
                             <h3 class="card-title">{{ session()->get('success') }}</h3>
                         @else
-                            <h3 class="card-title">Controle de OM</h3>
+                            <h3 class="card-title">Munições cadastradas no sistema</h3>
                         @endif
                         <div class="card-tools">
                             <a href="{{ route('v.create') }}" type="submit" class="btn btn-success"> {{ __('Incluir') }}

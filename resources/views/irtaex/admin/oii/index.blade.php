@@ -9,14 +9,18 @@
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>OII</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#"></a></li>
-                    <li class="breadcrumb-item active"></li>
-                </ol>
+            <div class="col-12">
+                <div class="info-box ">
+                    <span class="info-box-icon bg-olive"><i class="fas fa-bullseye"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            <h1>Objetivos Intermediários de Instrução</h1>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
             </div>
         </div>
     </div><!-- /.container-fluid -->
@@ -28,9 +32,25 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Lista de OII cadastrados</h3>
-                        <div class="card-tools">
-                        <a href="{{ route('oiis.create') }}" type="submit" class="btn btn-success">{{ __('Incluir novo OII') }}</a>
+                        <div class="col-sm-12">
+                            <div class="position-relative p-3 bg-olive" style="height: 100%">
+                                <div class="ribbon-wrapper">
+                                    <div class="ribbon bg-olive  disabled">
+                                        <b>Manual</b>
+                                    </div>
+                                </div>
+                                Lista de OII<br />
+                                <small>A tabela abaixo mostra os OII cadastrados no sistema. Para acrescentar outro objetivo
+                                    clique no botão abaixo. A úlitma coluna (ação) possui os ícones para edição e
+                                    exclusão de cada objetivo, porém só são habilitados para os administradores do
+                                    sistema. A coluna efetivo possui um ícone que leva para os tipos de efetivo vinculados por OII,
+                                    caso o ícone esteja na cor vermelha significa que não existe nenhum efetivo
+                                    vinculado ao objetivo.</small>
+                            </div>
+                        </div>
+                        <div class="card-tools float-left ml-2 mt-2">
+                            <a href="{{ route('oiis.create') }}" type="submit"
+                                class="btn bg-olive">{{ __('Incluir novo OII') }}</a>
                         </div>
                     </div><!-- /.card-header -->
                     <div class="card-body">
@@ -43,7 +63,7 @@
                                     <th>Categoria</th>
                                     <th>Efetivo</th>
                                     <th>Ações</th>
-                                    
+
                                 </tr>
                             </thead>
                             <tfoot>
@@ -80,32 +100,37 @@
             $('#oii').DataTable({
                 processing: true,
                 serverSide: false,
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                "filter": false,
                 ajax: "{{ route('oiis.index') }}",
 
                 columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'oii',
-                    name: 'oii'
-                },  
-                {
-                    data: 'tarefa',
-                    name: 'tarefa'
-                }, 
-                {
-                    data: 'categoria',
-                    name: 'categoria'
-                },
-                {
-                    data: 'efetivo',
-                    name: 'efetivo'
-                },
-                {
-                    data: 'action',
-                    name: 'action'
-                },],
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
+                        data: 'oii',
+                        name: 'oii'
+                    },
+                    {
+                        data: 'tarefa',
+                        name: 'tarefa'
+                    },
+                    {
+                        data: 'categoria',
+                        name: 'categoria'
+                    },
+                    {
+                        data: 'efetivo',
+                        name: 'efetivo'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
+                    },
+                ],
 
                 language: {
                     processing: "Carregando dados...",

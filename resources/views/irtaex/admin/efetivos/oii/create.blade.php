@@ -33,7 +33,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 <div class="position-relative p-3 bg-olive" style="height: 100px">
                                     <div class="ribbon-wrapper">
                                         <div class="ribbon bg-olive  disabled">
-                                            Manual
+                                            <b>Manual</b>
                                         </div>
                                     </div>
                                     Vinculação de efetivos com OII <br />
