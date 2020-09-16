@@ -73,5 +73,8 @@ Route::group(['middleware' => ['auth']], function(){
     // efetivo oii controller
     Route::resource('oiis.efetivos', 'EfetivoOiiController'); //php artisan make:controller EfetivoOiiController -r --model=IrtaexEfetivo --parent=IrtaexOii
    // Route::get('{oii}/efetivos', 'EfetivoOiiController@index')->name('efetivos_oiis');
-
+   
+   // efetivo om controller
+   Route::resource('oms.efetivos', 'OmEfetivoController')->except(['index']); //php artisan make:controller OmEfetivoController -r --model=IrtaexEfetivo --parent=Om
+   Route::get('om/efetivo', 'OmEfetivoController@index')->name('om_efetivo_index');
 });

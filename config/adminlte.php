@@ -324,13 +324,8 @@ return [
                     'text'    => 'Cadastros',
                     'icon'    => 'fas fa-edit',
                     'url'     => 'irtaex/municoes/om',
+                    'can'     =>  'delete',
                     'submenu' => [
-                        [
-                            'text'    => 'Efetivos',
-                            'icon'    => 'fas fa-user-friends',
-                            'url'     => 'efetivos',
-                            'can'     => 'create',
-                        ],
                         [
                             'text'    => 'Categorias',
                             'icon'    => 'fas fa-directions',
@@ -341,6 +336,26 @@ return [
                             'text'    => 'OII',
                             'icon'    => 'fas fa-bullseye',
                             'url'     => 'oiis',
+                            'can'     => 'delete',
+                        ],
+                        [
+                            'text'    => 'Efetivos',
+                            'icon'    => 'fas fa-user-friends',
+                            'url'     => 'efetivos',
+                            'can'     => 'create',
+                        ],
+                    ],
+                ],
+                [
+                    'text'    => 'OM',
+                    'icon'    => 'fas fa-edit',
+                    'url'     => 'irtaex/municoes/om',
+                    'can'     =>  'delete',
+                    'submenu' => [
+                        [
+                            'text'    => 'Cadastro de efetivo',
+                            'icon'    => 'fas fa-user-friends',
+                            'url'     => 'om/efetivo',
                             'can'     => 'delete',
                         ],
                     ],
