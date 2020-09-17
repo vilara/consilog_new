@@ -75,7 +75,7 @@ class Om extends Model
      */
     public function irtaexefetivo()
     {
-    	return $this->belongsToMany('App\IrtaexEfetivo', 'irtaexefetivo_om', 'om_id', 'irtaexefetivo_id' )->withPivot('efetivo');
+    	return $this->belongsToMany('App\IrtaexEfetivo', 'irtaexefetivo_om', 'om_id', 'irtaexefetivo_id' )->withPivot('efetivo')->withTimestamps();
     }
 
 

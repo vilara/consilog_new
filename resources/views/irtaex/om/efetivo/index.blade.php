@@ -198,6 +198,8 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
                 });
             }
 
+            
+
             $('#filter').click(function() {
 
                 var categoria = $('#categoria').val();
@@ -216,7 +218,31 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
                     $(".card-tools").html(out);
 
                     $('#cadastro').click(function() {
-                        alert($('#efetivo_om.tr').val());
+                       // alert($('#efetivo_om tbody tr').children('td').siblings().first().text());
+                        var arr = []; // cria a arrayvObj = []; // cria a array
+                        var efe = [];
+                        $('#efetivo_om tbody tr').each(function() {
+                            // faz um array como todos os valores de cada coluna do efetivo
+                            arr.push($(this).children('td').siblings().last().children('input').val());
+                            // faz um array como todos os valores de cada coluna do id
+                            efe.push($(this).children('td').siblings().first().text());
+                        });
+                        $.ajax({
+                    type: "POST",
+                    url: "{{ route('om_efetivo_store') }}",
+                    data: {
+                       id : om,
+                       categoria : categoria,
+                       arr : arr,
+                       efe : efe,
+                    },
+                    success: function(result) {
+                        alert(result); 
+                    }
+                });
+
+
+                       // alert(arr);
                     });
 
                     $(".card-tools").show();

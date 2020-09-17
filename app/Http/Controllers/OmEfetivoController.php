@@ -21,39 +21,39 @@ class OmEfetivoController extends Controller
     {
 
         $oms = Om::all();
-      
-       
+
+
         $categorias = irtaexCategory::all();
-       
 
 
-        if ($request->ajax()) { 
 
-            $efetivo = irtaexCategory::where('id',$request->categoria)->get()->map(function ($item){
-            return $item->IrtaexEfetivo;
+        if ($request->ajax()) {
+
+            $efetivo = irtaexCategory::where('id', $request->categoria)->get()->map(function ($item) {
+                return $item->IrtaexEfetivo;
             })->collapse();
             $om = $request->om;
 
             return DataTables::of($efetivo)
-            ->addColumn('posto',function($efetivo){
-                return $efetivo->postograd->siglaPg;
-              })
-              ->addColumn('efetivo',function($efetivo) use ($om){
-                return 
-                '<input type="text" class="form-control form-control-sm id="efetivo" name="efetivo" value="'.
-                $efetivo->oms->where('id', $om)->sum('pivot.efetivo').
-                '">';
-              })
-              ->setRowClass(function ($efetivo) use ($om) {
-                if ($efetivo->oms->where('id', $om)->sum('pivot.efetivo') == 0) {
-                    return 'text-center table-danger';
-                } else {
-                    return 'text-center';
-                }
-            })
-            ->rawColumns(['efetivo'])
-            ->make(true);
-    }
+                ->addColumn('posto', function ($efetivo) {
+                    return $efetivo->postograd->siglaPg;
+                })
+                ->addColumn('efetivo', function ($efetivo) use ($om) {
+                    return
+                        '<input type="number" class="form-control form-control-sm col-sm-6"  id="efetivo" name="efetivo" value="' .
+                        $efetivo->oms->where('id', $om)->sum('pivot.efetivo') .
+                        '">';
+                })
+                ->setRowClass(function ($efetivo) use ($om) {
+                    if ($efetivo->oms->where('id', $om)->sum('pivot.efetivo') == 0) {
+                        return 'text-center table-danger';
+                    } else {
+                        return 'text-center';
+                    }
+                })
+                ->rawColumns(['efetivo'])
+                ->make(true);
+        }
         return view('irtaex.om.efetivo.index', compact('oms', 'categorias'));
     }
 
@@ -75,9 +75,18 @@ class OmEfetivoController extends Controller
      * @param  \App\Om  $om
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Om $om)
+    public function store(Request $request)
     {
-        //
+
+        $om = Om::where('id', $request->id)->get();
+        $tt = collect($request->arr);
+        $efe = collect($request->efe);
+        for ($i = 0; $i < $tt->count(); $i++) {
+            $om[0]->irtaexefetivo()->detach($efe[$i]);
+            $om[0]->irtaexefetivo()->attach($efe[$i], ['efetivo' => $tt[$i]]);
+        }
+
+        return "Efetivo inserido com sucesso";
     }
 
     /**
