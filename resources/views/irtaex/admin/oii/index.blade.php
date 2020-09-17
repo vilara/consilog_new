@@ -61,22 +61,12 @@
                                     <th>OII</th>
                                     <th>Tarefa</th>
                                     <th>Categoria</th>
+                                    <th>Munições</th>
                                     <th>Efetivo</th>
                                     <th>Ações</th>
 
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr style="text-align: center;">
-                                    <th>ID</th>
-                                    <th>OII</th>
-                                    <th>Tarefa</th>
-                                    <th>Categoria</th>
-                                    <th>Efetivo</th>
-                                    <th>Ações</th>
-                                </tr>
-                                </tr>
-                            </tfoot>
                         </table><!-- /table -->
                     </div><!-- /.card-body -->
                 </div><!-- /.card -->
@@ -121,6 +111,10 @@
                     {
                         data: 'categoria',
                         name: 'categoria'
+                    },
+                    {
+                        data: 'municao',
+                        name: 'municao'
                     },
                     {
                         data: 'efetivo',

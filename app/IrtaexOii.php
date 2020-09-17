@@ -28,7 +28,7 @@ class IrtaexOii extends Model
      */
     public function vs()
     {
-        return $this->belongsToMany('App\V','irtaexeoii_v', 'irtaexoii_id', 'v_id')->withPivot('quantidade');;
+        return $this->belongsToMany('App\V','irtaexeoii_v', 'irtaexoii_id', 'v_id')->withTimestamps()->withPivot('quantidade');;
 	}
 	
 	/**

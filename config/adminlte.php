@@ -344,6 +344,7 @@ return [
                             'url'     => 'efetivos',
                             'can'     => 'create',
                         ],
+                        
                     ],
                 ],
                 [
