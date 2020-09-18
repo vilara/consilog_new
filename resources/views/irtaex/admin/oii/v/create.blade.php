@@ -149,8 +149,8 @@ td {
             $('#municao').on('click', 'input[type="checkbox"]', function() {  // event do checkbox da última coluna de cada linha
 
                 var chk = $(this).is(":checked"); // checa se o box está selecionado ou não
-                alert($(this).parent('td').siblings().first().text());
-                alert(chk);
+              //  alert($(this).parent('td').siblings().first().text());
+              //  alert(chk);
                 $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
                     type: "POST",
                     url: "{{ route('oiis.vs.store', $oii) }}",
@@ -160,7 +160,7 @@ td {
                     },
 
                     success: function(result) {
-                        alert(result); // mostra o resultado do return da route especificada na url
+                      //  alert(result); // mostra o resultado do return da route especificada na url
                     }
                 });
 

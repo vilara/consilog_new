@@ -16,7 +16,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                <h1>Efetivo por OII</h1>
+                                <h1>Efetivo por OII {{ $oii->oii }}</h1>
                             </span>
                         </div>
                         <!-- /.info-box-content -->
@@ -41,7 +41,7 @@
                                         <b>Manual</b>
                                     </div>
                                 </div>
-                                Lista de Efetivo por OII<br />
+                                Lista de Efetivo do OII {{ $oii->oii }}<br />
                                 <small>A tabela abaixo mostra as categorias cadastrados no sistema. Para acrescentar outra
                                     categoria clique no botão abaixo. A úlitma coluna (ação) possui o ícone para edição e
                                     exclusão de cada categoria, porém só é habilitada para os administradores do

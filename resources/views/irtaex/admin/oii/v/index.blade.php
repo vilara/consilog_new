@@ -20,7 +20,7 @@
 
                         <div class="info-box-content">
                             <span class="info-box-text">
-                                <h1>Munições</h1>
+                                <h1>Munições do OII {{ $oii->oii }}</h1>
                             </span>
                         </div>
                         <!-- /.info-box-content -->

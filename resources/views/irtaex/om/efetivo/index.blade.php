@@ -45,11 +45,7 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
                                     Lista de fetivos cadastrados por OM<br />
                                     <small>Selecione abaixo o tipo de armamento para ser mostrado a lista de efetivos
                                         cadastrados por categoria. Apoś isso será mostrado os tipos de efetivos cadastrados
-                                        no sistema por categoria de armamento. A úlitma coluna (ação) possui o ícone para
-                                        edição e
-                                        exclusão de cada tipo de efetivo_om, porém só é habilitada para os administradores
-                                        do
-                                        sistema.</small>
+                                        no sistema por categoria de armamento. A úlitma coluna (ação) possui uma caixa de seleção que servirá para atualizar ou manter o efetivo. Para atualizar deve ser inserido um novo valor do efetivo e após clique no botão <b>ATUALIZAR EFETIVO DO ...</b></small>
                                 </div>
                             </div>
                         </div>
@@ -221,7 +217,7 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
                     $('#efetivo_om').DataTable().destroy();
                     load_data(categoria, om);
                     var out =
-                        "<button id='cadastro' type='submit' class='btn bg-olive btn-sm'>Cadastrar efetivo do(a) " +
+                        "<button id='cadastro' type='submit' class='btn bg-danger btn-sm'>Atualizar efetivo do(a) " +
                         om_nome + "</button>";
                     $(".card-tools").html(out);
 
