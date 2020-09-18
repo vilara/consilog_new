@@ -7,17 +7,19 @@ $u = new App\Http\Controllers\OmMaterialController;
 @section('title', 'Admin Cmdos')
 
 @section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-8">
-                <h1>Painel de controle de munições do(a):</h1>
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="info-box ">
+                <span class="info-box-icon bg-gray disabled"><i class="fas fa-prescription-bottle"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">
+                        <h1>Estoque de Munições por OM</h1>
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
             </div>
-            <div class="col-sm-4">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Principal</a></li>
-                    <li class="breadcrumb-item active">Munições</li>
-                </ol>
-            </div>
+            <!-- /.info-box -->
         </div>
     </div><!-- /.container-fluid -->
 @stop
@@ -28,22 +30,34 @@ $u = new App\Http\Controllers\OmMaterialController;
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Parâmetros de pesquisa: </h3>
+                        <div class="col-sm-12">
+                            <div class="position-relative p-3   bg-gray disabled" style="height: 100%">
+                                <div class="ribbon-wrapper">
+                                    <div class="ribbon bg-gray">
+                                        <b>Manual</b>
+                                    </div>
+                                </div>
+                                Parâmtros de Pesquisa<br />
+                                <small> Selecione abaixo uma OM e clique em buscar para ser mostrada a lista de Munição
+                                    total da OM extraída do SISCOFIS.</small>
+                            </div>
+                        </div>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="row mb-3 input-dataranger">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="om" id="oms" multiple="multiple">
-                                    @foreach ($omg as $omg)
-                                        <option value="{{ $omg->id }}">{{ $omg->siglaOM }}</option>
-                                    @endforeach
+                                    <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="om"
+                                        id="oms" multiple="multiple">
+                                        @foreach ($omg as $omg)
+                                            <option value="{{ $omg->id }}">{{ $omg->siglaOM }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                             <div class="col-3">
-                                <button type="submit" id="filter" class="btn btn-default btn-sm">Buscar</button>
-                                <button type="submit" id="refresh" class="btn btn-default btn-sm">Limpar</button>
+                                <button type="submit" id="filter" class="btn  bg-gray  btn-sm">Buscar</button>
+                                <button type="submit" id="refresh" class="btn  bg-gray  btn-sm">Limpar</button>
                             </div>
                         </div>
                         <table id="municao" class="table table-bordered table-hover">
@@ -90,27 +104,47 @@ $u = new App\Http\Controllers\OmMaterialController;
     <script>
         $(document).ready(function() {
 
-            $('#oms').select2({placeholder: "Selecione uma OM..."});
+            $('#oms').select2({
+                placeholder: "Selecione uma OM..."
+            });
 
-            load_data();
-            
-            function load_data(om = ''){
-                
+            $('#municao').hide();
+
+           // load_data();
+
+            function load_data(om = '') {
+
                 $('#municao').DataTable({
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        url : "{{ route('oms_materials') }}",
-                        data : {om : om}
-                        
+                        url: "{{ route('oms_materials') }}",
+                        data: {
+                            om: om
+                        }
+
                     },
-                    
-                    columns: [
-                        { data: 'id', name: 'id'},
-                        { data: 'nome', name: 'nome'},
-                        { data: 'modelo', name: 'modelo'},
-                        { data: 'qtde', name: 'qtde'},
-                        { data: 'validade', name: 'validade'},
+
+                    columns: [{
+                            data: 'id',
+                            name: 'id'
+                        },
+                        {
+                            data: 'nome',
+                            name: 'nome'
+                        },
+                        {
+                            data: 'modelo',
+                            name: 'modelo'
+                        },
+                        {
+                            data: 'qtde',
+                            name: 'qtde'
+                        },
+                        {
+                            data: 'validade',
+                            name: 'validade'
+                        },
                     ],
                     language: {
                         processing: "Carregando dados...",
@@ -130,25 +164,26 @@ $u = new App\Http\Controllers\OmMaterialController;
                     },
                 });
             }
-            
-            $('#filter').click(function(){
-               
+
+            $('#filter').click(function() {
+                $('#municao').show();
                 var om = $('#oms').val();
 
-                if(om != ''){
+                if (om != '') {
                     $('#municao').DataTable().destroy();
                     load_data(om);
-                }else{
+                } else {
                     alert('Selecione uma OM');
                 }
             });
 
-            $('#refresh').click(function(){
+            $('#refresh').click(function() {
                 $("#oms").val([]).change();
                 $('#municao').DataTable().destroy();
-                load_data();
+                $('#municao').hide();
+               // load_data();
             });
-            
+
 
 
         });

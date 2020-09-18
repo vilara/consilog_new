@@ -7,19 +7,25 @@ $u = new App\Http\Controllers\OmMaterialController;
 @section('title', 'Efetivos')
 
 @section('content_header')
+<div class="container-fluid">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-8">
-                <h4>Painel de controle de efetivos: {{ $oii->oii }}</h4>
-            </div>
-            <div class="col-sm-4">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Principal</a></li>
-                    <li class="breadcrumb-item active">Efetivos</li>
-                </ol>
+        <div class="row mb-2">
+            <div class="col-12">
+                <div class="info-box ">
+                    <span class="info-box-icon bg-olive"><i class="fas fa-user-friends"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            <h1>Tipos de fetivos cadastrados do OII: {{ $oii->oii }}</h1>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
             </div>
         </div>
     </div><!-- /.container-fluid -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('content')
@@ -36,13 +42,18 @@ $u = new App\Http\Controllers\OmMaterialController;
                                             <b>Manual</b>
                                         </div>
                                     </div>
-                                    Vinculação de efetivos com OII <br />
+                                    Vinculação de efetivos OII {{ $oii->oii }} <br />
                                     <small>A tabela abaixo mostra os efetivos cadastrados para a categoria de armamento
                                         selecionada. Para vincular com o OII acima descrito basta selecionar ou
                                         desselecionar os boxes da última coluna</small>
                                 </div>
                             </div>
                         </div>
+                    <div class="card-tools float-left ml-2 mt-2">
+                        <a href="{{ url('oiis') }}" type="submit" class="btn bg-olive">  {{ __('Voltar') }} </a>
+                    </div>
+
+
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <table id="efetivo" class="table table-bordered table-hover">
@@ -59,10 +70,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                         </table><!-- /table -->
                     </div><!-- /.card-body -->
 
-                    <div class="card-footer">
-                            <a href="{{ url('oiis') }}" type="submit" class="btn btn-success">  {{ __('Voltar') }}
-                            </a>
-                    </div>
+                   
                 </div><!-- /.card -->
             </div><!-- /.col 12-->
         </div><!-- /.row -->
@@ -77,7 +85,16 @@ $u = new App\Http\Controllers\OmMaterialController;
     <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
 @section('css')
-
+<style>
+    td {
+      text-align: center; /* center checkbox horizontally */
+      vertical-align: middle; /* center checkbox vertically */
+    }
+    input{
+        text-align: center;
+    }
+    
+    </style>
 @stop
 
 @section('js')

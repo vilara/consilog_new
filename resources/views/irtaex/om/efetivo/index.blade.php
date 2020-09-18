@@ -81,8 +81,8 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
                             </div>
 
                             <div class="col-3">
-                                <button type="submit" id="filter" class="btn btn-default btn-sm">Buscar</button>
-                                <button type="submit" id="refresh" class="btn btn-default btn-sm">Limpar</button>
+                                <button type="submit" id="filter" class="btn bg-olive btn-sm">Buscar</button>
+                                <button type="submit" id="refresh" class="btn bg-olive btn-sm">Limpar</button>
                             </div>
                             <div class="col-3">
                                 <div class="card-tools"></div>
@@ -116,6 +116,14 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
     <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
 @section('css')
+<style>
+    td {
+    text-align: center;
+    /* center checkbox horizontally */
+    vertical-align: middle;
+    /* center checkbox vertically */
+}
+    </style>
 
 @stop
 

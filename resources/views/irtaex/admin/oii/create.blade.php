@@ -4,7 +4,23 @@
 @section('title', 'OII')
 
 @section('content_header')
-    <h1>Cadastro de OII</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="info-box ">
+                <span class="info-box-icon bg-olive"><i class="fas fa-bullseye"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">
+                        <h1>Cadastro de OII</h1>
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
+</div><!-- /.container-fluid -->
 @stop
 @section('content')
     <div class="row">
@@ -12,8 +28,8 @@
             <form action="{{ route('oiis.store') }}" method="post">
                 @method('POST')
                 {{ csrf_field() }}
-                <div class="card card-success">
-                    <div class="card-header">
+                <div class="card ">
+                    <div class="card-header bg-olive">
                         <h4 class="card-title">Formulário para cadastro de OII</h4>
 
                         <div class="card-tools">
@@ -96,8 +112,8 @@
                 </div>
                 <!-- /.row -->
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-success">Cadastrar</button>
-                    <a href="{{ route('oiis.index') }}" type="submit" class="btn btn-success float-right">
+                    <button type="submit" class="btn bg-olive">Cadastrar</button>
+                    <a href="{{ route('oiis.index') }}" type="submit" class="btn bg-olive float-right">
                         {{ __('Cancelar') }} </a>
                 </div>
             </form>

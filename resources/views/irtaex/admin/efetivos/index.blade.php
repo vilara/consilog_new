@@ -67,10 +67,10 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
                                 </div>
                             </div>
                             <div class="col-3">
-                                <button type="submit" id="filter" class="btn btn-default btn-sm">Buscar</button>
-                                <button type="submit" id="refresh" class="btn btn-default btn-sm">Limpar</button>
+                                <button type="submit" id="filter" class="btn bg-olive btn-sm">Buscar</button>
+                                <button type="submit" id="refresh" class="btn bg-olive btn-sm">Limpar</button>
                             </div>
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card-tools"></div>
                             </div>
                         </div>
@@ -82,20 +82,8 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
                                     <th>Pessoal</th>
                                     <th>Posto/Grad</th>
                                     <th>Ação</th>
-
                                 </tr>
                             </thead>
-
-                            <tfoot>
-                                <tr style="text-align: center;">
-                                    <th>ID</th>
-                                    <th>Círculo</th>
-                                    <th>Pessoal</th>
-                                    <th>Posto/Grad</th>
-                                    <th>Ação</th>
-                                </tr>
-                                </tr>
-                            </tfoot>
                         </table><!-- /table -->
                     </div><!-- /.card-body -->
                 </div><!-- /.card -->
@@ -112,7 +100,15 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
     <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
 @section('css')
+<style>
+    td {
+        text-align: center;
+        /* center checkbox horizontally */
+        vertical-align: middle;
+        /* center checkbox vertically */
+    }
 
+</style>
 @stop
 
 @section('js')
@@ -202,12 +198,12 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
 
                     var armamento = $('#categoria :selected').text();
                     var out1 = "<h3 class='card-title'>Parâmetros de pesquisa:  " + armamento + "</h3>";
-                    $(".card-header").html(out1);
+                   // $(".card-header").html(out1);
 
                     $('#efetivo').DataTable().destroy();
                     load_data(categoria);
                     var out = "<a href='efetivo/create/" + categoria +
-                        "' type='submit' class='btn btn-success btn-sm'>  Incluir Efetivo de " + armamento +
+                        "' type='submit' class='btn bg-olive float-right btn-sm'>  Incluir Efetivo de " + armamento +
                         "</a>";
                     $(".card-tools").html(out);
                     $(".card-tools").show();
@@ -218,7 +214,7 @@ $cat = new App\Http\Controllers\IrtaexEfetivoController;
             });
 
             $('#refresh').click(function() {
-                $(".card-header").html("<h3 class='card-title'>Selecione o tipo de armamento abaixo:</h3>");
+                //$(".card-header").html("<h3 class='card-title'>Selecione o tipo de armamento abaixo:</h3>");
                 $(".card-tools").hide();
                 $("#categoria").val([]).change();
                 $('#efetivo').DataTable().destroy();

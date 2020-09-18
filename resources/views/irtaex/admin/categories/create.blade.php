@@ -4,7 +4,21 @@
 @section('title', 'Categorias')
 
 @section('content_header')
-    <h1>Cadastro de Categorias
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="info-box ">
+                <span class="info-box-icon bg-olive"><i class="fas fa-prescription-bottle"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text"><h1>Cadastro de Categorias</h1></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
+</div><!-- /.container-fluid -->
 @stop
 @section('content')
     <div class="row">
@@ -13,7 +27,7 @@
                 @method('POST')
                 {{ csrf_field() }}
                 <div class="card card-success">
-                    <div class="card-header">
+                    <div class="card-header bg-olive">
                         <h4 class="card-title">Formulário de Cadastro</h4>
 
                         <div class="card-tools">
@@ -51,8 +65,8 @@
                             </div>
                         </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-success">Cadastrar</button>
-                    <a href="{{ route('categories.index') }}" type="submit" class="btn btn-success float-right">
+                    <button type="submit" class="btn  bg-olive">Cadastrar</button>
+                    <a href="{{ route('categories.index') }}" type="submit" class="btn  bg-olive float-right">
                         {{ __('Cancelar') }} </a>
                 </div>
             </form>

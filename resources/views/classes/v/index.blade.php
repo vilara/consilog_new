@@ -5,14 +5,18 @@
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Lista de Munições</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Principal</a></li>
-                    <li class="breadcrumb-item active">Classe V - Munição</li>
-                </ol>
+            <div class="col-12">
+                <div class="info-box ">
+                    <span class="info-box-icon bg-gray disabled"><i class="fas fa-prescription-bottle"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">
+                            <h1>Lista de Munições</h1>
+                        </span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
             </div>
         </div>
     </div><!-- /.container-fluid -->
@@ -23,17 +27,23 @@
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        @if (session()->get('success'))
-                            <h3 class="card-title">{{ session()->get('success') }}</h3>
-                        @else
-                            <h3 class="card-title">Munições cadastradas no sistema</h3>
-                        @endif
-                        <div class="card-tools">
-                            <a href="{{ route('v.create') }}" type="submit" class="btn btn-success"> {{ __('Incluir') }}
-
-                            </a>
+                    <div class="card-header ">
+                        <div class="col-sm-12">
+                            <div class="position-relative p-3   bg-gray disabled" style="height: 100%">
+                                <div class="ribbon-wrapper">
+                                    <div class="ribbon bg-gray">
+                                        <b>Manual</b>
+                                    </div>
+                                </div>
+                                Munições cadastradas no sistema<br />
+                                <small>A tabela abaixo mostra as Munições cadastrados no sistema. As informações foram
+                                    extraídas do SISCOFIS.</small>
+                            </div>
                         </div>
+
+                        {{-- <div class="card-tools float-left ml-2 mt-2">
+                            <a href="{{ route('v.create') }}" type="submit" class="btn  bg-gray "> {{ __('Incluir') }}</a>
+                        </div> --}}
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <table id="v" class="table table-bordered table-hover">
@@ -74,15 +84,17 @@
     <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
 @section('css')
-<style>
-td.details-control {
-    background: url('images/details_open.png') no-repeat center center;
-    cursor: pointer;
-}
-tr.shown td.details-control {
-    background: url('images/details_close.png') no-repeat center center;
-}
-</style>
+    <style>
+        td.details-control {
+            background: url('images/details_open.png') no-repeat center center;
+            cursor: pointer;
+        }
+
+        tr.shown td.details-control {
+            background: url('images/details_close.png') no-repeat center center;
+        }
+
+    </style>
 @stop
 
 @section('js')
@@ -157,7 +169,7 @@ tr.shown td.details-control {
             $('#v tbody').on('click', 'td.details-control', function() {
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
-                                if (row.child.isShown()) {
+                if (row.child.isShown()) {
                     // This row is already open - close it
                     row.child.hide();
                     tr.removeClass('shown');

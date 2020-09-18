@@ -40,7 +40,7 @@ class OmEfetivoController extends Controller
                 })
                 ->addColumn('efetivo', function ($efetivo) use ($om) {
                     return
-                        '<input type="number" class="form-control form-control-sm col-sm-6"  id="efetivo" name="efetivo" value="' .
+                        '<input type="number" class="form-control form-control-sm col-sm-6 offset-sm-3"  id="efetivo" name="efetivo" value="' .
                         $efetivo->oms->where('id', $om)->sum('pivot.efetivo') .
                         '">';
                 })

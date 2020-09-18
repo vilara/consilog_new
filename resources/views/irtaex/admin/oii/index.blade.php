@@ -81,7 +81,13 @@
     <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
 @section('css')
-
+<style>
+    td {
+      text-align: center; /* center checkbox horizontally */
+      vertical-align: middle; /* center checkbox vertically */
+    }
+    
+    </style>
 @stop
 
 @section('js')

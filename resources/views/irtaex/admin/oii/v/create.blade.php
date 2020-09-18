@@ -43,6 +43,10 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 </div>
                             </div>
                         </div>
+                        <div class="card-tools float-left ml-1 mt-2">
+                            <a href="{{ url('oiis') }}" type="submit"
+                                class="btn bg-olive">{{ __('Voltar') }}</a>
+                        </div>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <table id="municao" class="table table-bordered table-hover">
@@ -58,11 +62,6 @@ $u = new App\Http\Controllers\OmMaterialController;
                             </thead>
                         </table><!-- /table -->
                     </div><!-- /.card-body -->
-
-                    <div class="card-footer">
-                            <a href="{{ url('oiis') }}" type="submit" class="btn btn-success">  {{ __('Voltar') }}
-                            </a>
-                    </div>
                 </div><!-- /.card -->
             </div><!-- /.col 12-->
         </div><!-- /.row -->
@@ -77,7 +76,13 @@ $u = new App\Http\Controllers\OmMaterialController;
     <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 @stop
 @section('css')
+<style>
+td {
+  text-align: center; /* center checkbox horizontally */
+  vertical-align: middle; /* center checkbox vertically */
+}
 
+</style>
 @stop
 
 @section('js')

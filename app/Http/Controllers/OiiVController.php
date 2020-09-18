@@ -30,7 +30,7 @@ class OiiVController extends Controller
 
               ->addColumn('qtde', function ($municoes) use($oii) {
                 return
-                '<input type="number" class="form-control form-control-sm col-sm-4"  id="efetivo" name="efetivo" value="' .
+                '<input type="number" class="form-control form-control-sm col-sm-4  offset-sm-4"  id="efetivo" name="efetivo" value="' .
                  $municoes->irtaexoiis->where('oii',$oii->oii)->first()->pivot->quantidade.
                  '">';
              })

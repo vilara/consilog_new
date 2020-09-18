@@ -4,7 +4,21 @@
 @section('title', 'Categoria')
 
 @section('content_header')
-    <h1>Edição de Categoria</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-12">
+            <div class="info-box ">
+                <span class="info-box-icon bg-olive"><i class="fas fa-prescription-bottle"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text"><h1>Edição de Categorias</h1></span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+    </div>
+</div><!-- /.container-fluid -->
 @stop
 @section('content')
     <div class="row">
@@ -14,11 +28,11 @@
                     {{ csrf_field() }}
             <input type="hidden" name="categoria" value="{{ $category->id }}">    
             <div class="card card-success">
-                <div class="card-header">
+                <div class="card-header bg-olive">
                     <h4 class="card-title">Edição das informações de categoria</h4>
 
                     <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <button type="button" class="btn btn-tool " data-card-widget="collapse">
                             <i class="fas fa-minus"></i>
                         </button>
                         <button type="button" class="btn btn-tool" data-card-widget="remove">
@@ -54,8 +68,8 @@
                 </div>
                 <!-- /.row -->
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-success">Atualizar</button>
-                    <button type="submit" class="btn btn-success float-right">Cancelar</button>
+                    <button type="submit" class="btn  bg-olive">Atualizar</button>
+                    <button type="submit" class="btn  bg-olive float-right">Cancelar</button>
                 </div>
             </form>
             </div>

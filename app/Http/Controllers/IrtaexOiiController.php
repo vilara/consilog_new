@@ -63,7 +63,7 @@ class IrtaexOiiController extends Controller
                         return '
                     <div class="row" style="height: 25px;">
                     <div class="col-md-12 pt-0 h-auto">
-                        <a href="#" class="" style="color: red;" ><center><i class="fas fa-chess-bishop" title="Mostrar munnições do OII"></i></center></a>
+                        <a href="'.route('oiis.vs.create', $oii).'" class="" style="color: red;" ><center><i class="fas fa-chess-bishop" title="Vincular munição"></i></center></a>
                     </div>
                     </div>
                     ';
