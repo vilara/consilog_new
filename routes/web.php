@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('oms/materials/index', 'OmMaterialController@index')->name('oms_materials');
 
     // IRTAEx
-    Route::get('irtaex/municoes/om', 'IrtaexController@ResumoMunOiiOm'); 
+    Route::get('irtaex/municoes/om', 'IrtaexController@ResumoMunOiiOm')->name('resumo_irtaex'); 
         // category
     Route::resource('categories', 'IrtaexCategoryController')->except(['destroy']);
     Route::get('category/delete/{category}', 'IrtaexCategoryController@destroy')->name('category_delete');

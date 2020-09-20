@@ -67,16 +67,6 @@
         <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
 <style type="text/css">
- a[disabled="disabled"] {
-    pointer-events: none;
-}
-td.details-control {
-  background: url('images/details_open.png') no-repeat center center;
-  cursor: pointer;
-}
-.tr.shown td.details-control {
-  background: url('images/details_close.png') no-repeat center center;
-}
 
 </style>
 </head>
