@@ -23,6 +23,8 @@ class IrtaexController extends Controller
                  return $value->vs;
              })->collapse();
             $ommm = Om::where('id', $request->om)->get();
+
+            //dd($municao);
             
             return DataTables::of($municao)
             ->addColumn('tipo', function ($municao) use ($oiis){
@@ -40,7 +42,7 @@ class IrtaexController extends Controller
              
             ->addColumn('efetivo', function ($municao) use ($ommm, $oiis){
                 
-                return $municao->modelo;
+                return $municao->pivot->quantidade;
              })
             
             ->make(true);

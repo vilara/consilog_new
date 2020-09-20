@@ -229,7 +229,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             }
 
             $('#filter').click(function() {
-                $('#v').show();
+                $('#v').DataTable().destroy();
+                 $('#v').hide();
                 var om = $('#oms').val();
                 var category = $('#category').val();
                 // alert(category);
@@ -237,6 +238,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                 if (om != '' && category != '') {
                     //  alert(category);
                     // $('#municao').DataTable().destroy();
+                $('#v').show();
                     load_data(om, category);
 
 
@@ -253,10 +255,11 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             });
 
             $('#refresh').click(function() {
-                alert("teste");
-                // $("#oms").val([]).change();
-                // $('#municao').DataTable().destroy();
-                // $('#municao').hide();
+               // alert("teste");
+                 $("#oms").val([]).change();
+                 $("#category").val([]).change();
+                 $('#v').DataTable().destroy();
+                 $('#v').hide();
                 // load_data();
             });
 
