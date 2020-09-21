@@ -83,7 +83,9 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     <th>Tipo</th>
                                     <th>Nome</th>
                                     <th>Modelo</th>
+                                    <th>Quantidade</th>
                                     <th>Efetivo</th>
+                                    <th>Mun Nec</th>
                                     {{-- <th>Cat</th> --}}
                                     {{-- <th>Efetivo</th>
                                     <th>Mun</th>
@@ -171,8 +173,16 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             name: 'modelo'
                         },
                         {
+                            data: 'quantidade',
+                            name: 'quantidade'
+                        },
+                        {
                             data: 'efetivo',
                             name: 'efetivo'
+                        },
+                        {
+                            data: 'mun_nec',
+                            name: 'mun_nec'
                         },
 
 
@@ -195,7 +205,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         }).data().each(function(group, i) {
                             if (last !== group) {
                                 $(rows).eq(i).before(
-                                    '<tr class="group  bg-warning"><td colspan="4">' + group +
+                                    '<tr class="group  bg-warning"><td colspan="7">' + group +
                                     '</td></tr>'
                                 );
 
