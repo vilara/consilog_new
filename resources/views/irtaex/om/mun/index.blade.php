@@ -86,6 +86,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     <th>Quantidade</th>
                                     <th>Efetivo</th>
                                     <th>Mun Nec</th>
+                                    <th>Estoque</th>
+                                    <th>Saldo</th>
                                     {{-- <th>Cat</th> --}}
                                     {{-- <th>Efetivo</th>
                                     <th>Mun</th>
@@ -126,6 +128,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 @section('js')
     <script>
         $(document).ready(function() {
+
+           
             $('#oms').select2({
                 placeholder: "Selecione uma OM..."
             });
@@ -142,7 +146,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
             function load_data(om = '', category = '') {
 
-
+              
                 var groupColumn = 1;
                 var table = $('#v').DataTable({
                     processing: true,
@@ -184,12 +188,24 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             data: 'mun_nec',
                             name: 'mun_nec'
                         },
+                        {
+                            data: 'estoque',
+                            name: 'estoque'
+                        },
+                        {
+                            data: 'saldo',
+                            name: 'saldo'
+                        },
 
 
                     ],
                     "columnDefs": [{
                         "visible": false,
                         "targets": groupColumn
+                    },
+                    {
+                        "visible": false,
+                        "targets": 0
                     }],
                     "displayLength": 25,
 
@@ -239,6 +255,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             }
 
             $('#filter').click(function() {
+
+                
                 $('#v').DataTable().destroy();
                  $('#v').hide();
                 var om = $('#oms').val();
@@ -265,6 +283,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             });
 
             $('#refresh').click(function() {
+                {{  $mat->destroyaall() }}
                // alert("teste");
                  $("#oms").val([]).change();
                  $("#category").val([]).change();
