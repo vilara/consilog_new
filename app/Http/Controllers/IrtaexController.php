@@ -76,7 +76,7 @@ class IrtaexController extends Controller
                     })->sum('pivot.efetivo');
                     
 
-                    return $o;
+                    return '<td rolspan="2">'.$o.'</td>';
                 })
                 ->addColumn('mun_nec', function ($municao) use ($ommm, $oiis) {
 
@@ -151,6 +151,7 @@ class IrtaexController extends Controller
                     //         return $array[$oiis[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->oii]["1305BR1011206"];
                     //     }
                 })
+                ->rawColumns(['efetivo'])
 
                 ->make(true);
 

@@ -79,15 +79,15 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         <table id="v" class="table table-bordered table-hover">
                             <thead>
                                 <tr style="text-align: center;">
-                                    <th>ID</th>
-                                    <th>Tipo</th>
-                                    <th>Nome</th>
-                                    <th>Modelo</th>
-                                    <th>Quantidade</th>
-                                    <th>Efetivo</th>
-                                    <th>Mun Nec</th>
-                                    <th>Estoque</th>
-                                    <th>Saldo</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
                                     {{-- <th>Cat</th> --}}
                                     {{-- <th>Efetivo</th>
                                     <th>Mun</th>
@@ -121,6 +121,10 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
         tr.shown td.details-control {
             background: url('../../images/details_close.png') no-repeat center center;
         }
+        td {
+      text-align: center; /* center checkbox horizontally */
+      vertical-align: middle; /* center checkbox vertically */
+    }
 
     </style>
 @stop
@@ -151,6 +155,10 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                 var table = $('#v').DataTable({
                     processing: true,
                     serverSide: false,
+                    "paging": false,
+                "ordering": false,
+                "info": false,
+                "filter": false,
                     ajax: {
                         url: "{{ route('resumo_irtaex') }}",
                         data: {
@@ -199,6 +207,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
 
                     ],
+                    
+
                     "columnDefs": [{
                         "visible": false,
                         "targets": groupColumn
@@ -221,8 +231,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         }).data().each(function(group, i) {
                             if (last !== group) {
                                 $(rows).eq(i).before(
-                                    '<tr class="group  bg-warning"><td colspan="7">' + group +
-                                    '</td></tr>'
+                                    '<tr class="group  bg-warning" ><td style=" text-align: left;" colspan="7"><h3><b>' + group + 
+                                    '</b></h3></td></tr><tr style=" text-align: center;"><th>Nome</th><th>Modelo</th><th>Qtde</th><th>Efetivo</th><th>Mun Nec</th><th>Estoque</th><th>Saldo </th></tr>'
                                 );
 
                                 last = group;
