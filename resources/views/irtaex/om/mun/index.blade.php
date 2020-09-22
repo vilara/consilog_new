@@ -75,13 +75,18 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
 
                     <div class="card-body">
-                        <div class="row col-6">
+                        <div class="row">
 
-                            <table id="resumo" width="300"  class="table table-bordered table-hover widht-50">
+                            <table id="resumo" width="400"  class="table table-bordered table-hover widht-50 ml-2">
                                 <thead>
-                                    <tr style="text-align: center;">
+                                    <tr class=" bg-warning" style="text-align: center;">
                                         <th>Munição</th>
                                         <th>Estoque</th>
+                                        <th>Necessidade</th>
+                                        <th>Efetivo</th>
+                                        <th>Mun Nec</th>
+                                        <th>soma</th>
+
                                     </tr>
                                 </thead>
                             </table>
@@ -185,7 +190,32 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         {
                             data: 'estoque',
                             name: 'estoque'
-                        }]
+                        },
+                        {
+                            data: 'necessidade',
+                            name: 'necessidade'
+                        },
+                        {
+                            data: 'efetivo',
+                            name: 'efetivo'
+                        },
+                        {
+                            data: 'mun_nec',
+                            name: 'mun_nec'
+                        }
+                        ,
+                        {
+                            data: 'soma',
+                            name: 'soma'
+                        }
+                        ],
+                         rowsGroup: [0,1],
+                         "columnDefs": [
+                             {
+                        "visible": false,
+                        "targets":[2,3]
+                    }],
+                        
                 });
               
                 var groupColumn = 1;
