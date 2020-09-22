@@ -1,15 +1,6 @@
 @php
 $matomcontrole = new App\Http\Controllers\OmMaterialController;
 $mat = new App\Http\Controllers\MaterialOmTotalController;
-
-$teste = new App\Http\Controllers\IrtaexController;
-
-        $om = App\Om::find(15);
-        $category = App\irtaexCategory::find(1);
-        $oiis = App\IrtaexOii::where('irtaexcategory_id', 1)->select('oii', 'id')->get();
-        $municao = App\V::find(3);
-
-      // dd($teste->GetSomaMunNecOiiCat($category, $municao, $om));
 @endphp
 
 @extends('adminlte::page')
@@ -86,16 +77,12 @@ $teste = new App\Http\Controllers\IrtaexController;
                     <div class="card-body">
                         <div class="row">
 
-                            <table id="resumo" width="400"  class="table table-bordered table-hover widht-50 ml-2">
+                            <table id="resumo" width="600"  class="table table-bordered table-hover widht-50 ml-2">
                                 <thead>
                                     <tr class=" bg-warning" style="text-align: center;">
                                         <th>Munição</th>
                                         <th>Estoque</th>
-                                        <th>Necessidade</th>
-                                        <th>Efetivo</th>
                                         <th>Mun Nec</th>
-                                        <th>soma</th>
-
                                     </tr>
                                 </thead>
                             </table>
@@ -201,29 +188,12 @@ $teste = new App\Http\Controllers\IrtaexController;
                             name: 'estoque'
                         },
                         {
-                            data: 'necessidade',
-                            name: 'necessidade'
-                        },
-                        {
-                            data: 'efetivo',
-                            name: 'efetivo'
-                        },
-                        {
                             data: 'mun_nec',
                             name: 'mun_nec'
-                        }
-                        ,
-                        {
-                            data: 'soma',
-                            name: 'soma'
-                        }
+                        },
+                        
                         ],
-                         rowsGroup: [0,1],
-                         "columnDefs": [
-                             {
-                        "visible": true,
-                        "targets":[2,3]
-                    }],
+                       
                         
                 });
               

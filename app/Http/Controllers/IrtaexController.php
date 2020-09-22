@@ -23,117 +23,24 @@ class IrtaexController extends Controller
         
         
         if ($request->ajax()) {
+           
             $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->select('oii', 'id')->get();
             $municao = $oiis->map(function ($value) {
                 return $value->vs;
-            })->collapse()->sortBy('id');
+            })->collapse()->groupBy('nee');
             $ommm = Om::where('id', $request->om)->get();
             return DataTables::of($municao)
                 ->editColumn('id', function ($municao) {
-                    return $municao->material->nome . " " . $municao->modelo;
+                    return $municao->first()->material->nome . " " . $municao->first()->modelo;
                 })
                 ->editColumn('estoque', function ($municao) use ($ommm) {
-                    return $municao->material->oms->filter(function ($iten) use ($ommm) {
+                    return $municao->first()->material->oms->filter(function ($iten) use ($ommm) {
                         return $iten->id == $ommm[0]->id;
                     })->sum('pivot.qtde');
                 })
-                ->editColumn('necessidade', function ($municao) use ($ommm, $oiis) {
-                    
-                    $oi = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->id;
-                   
-                    $v = $oiis->map(function($value) use ($municao){
-                       return $value->vs->where('nee',$municao->nee);
-                    })->collapse();
-                    
-                    $q = $v->filter(function ($value, $key) use ($oi) {
-                        return $value->pivot->irtaexoii_id == $oi;
-                    });
-                    $qtdemun = $q->first()->pivot->quantidade;
-
-                    // efetivo
-
-                    $efetivo = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
-                        return $item->oms;
-                    })->collapse()->filter(function ($val) use ($ommm) {
-                        return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');
-
-                    return $qtdemun;
+                ->editColumn('mun_nec', function ($municao) use ($ommm, $request) {
+                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id);
                 })
-                ->editColumn('efetivo', function ($municao) use ($ommm, $oiis) {
-                    
-                    $oi = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->id;
-                   
-                    $v = $oiis->map(function($value) use ($municao){
-                       return $value->vs->where('nee',$municao->nee);
-                    })->collapse();
-                    
-                    $q = $v->filter(function ($value, $key) use ($oi) {
-                        return $value->pivot->irtaexoii_id == $oi;
-                    });
-                    $qtdemun = $q->first()->pivot->quantidade;
-
-                    // efetivo
-
-                    $efetivo = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
-                        return $item->oms;
-                    })->collapse()->filter(function ($val) use ($ommm) {
-                        return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');
-
-                    return $efetivo;
-                })
-                ->editColumn('mun_nec', function ($municao) use ($ommm, $oiis) {
-                    
-                    $oi = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->id;
-                   
-                    $v = $oiis->map(function($value) use ($municao){
-                       return $value->vs->where('nee',$municao->nee);
-                    })->collapse();
-                    
-                    $q = $v->filter(function ($value, $key) use ($oi) {
-                        return $value->pivot->irtaexoii_id == $oi;
-                    });
-                    $qtdemun = $q->first()->pivot->quantidade;
-
-                    // efetivo
-
-                    $efetivo = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
-                        return $item->oms;
-                    })->collapse()->filter(function ($val) use ($ommm) {
-                        return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');
-
-                    return $efetivo * $qtdemun;
-                })
-
-                ->editColumn('soma', function ($municao) use ($ommm, $oiis) {
-                    
-                    $oi = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->id;
-                    $os = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->oii;
-                    $v = $oiis->map(function($value) use ($municao){
-                       return $value->vs->where('nee',$municao->nee);
-                    })->collapse();
-                    
-                    $q = $v->filter(function ($value, $key) use ($oi) {
-                        return $value->pivot->irtaexoii_id == $oi;
-                    });
-                    $qtdemun = $q->first()->pivot->quantidade;
-
-                    // efetivo
-
-                    $efetivo = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
-                        return $item->oms;
-                    })->collapse()->filter(function ($val) use ($ommm) {
-                        return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');
-
-                    $tot[$os] = $efetivo * $qtdemun;
-
-                    return collect($tot);
-                })
-                
-
                 ->make(true);
         }
     }
@@ -264,10 +171,13 @@ class IrtaexController extends Controller
         return $r;  // retorna o somatório como int
     }
 
-    public function GetSomaMunNecOiiCat(irtaexCategory $cat, V $municao, Om $om)
-    {
+    public function GetSomaMunNecOiiCat($cat, $municao, $om)
+    {     
+        
+        $municao = V::find($municao);
+        $om = Om::find($om);
 
-        $oiis = IrtaexOii::where('irtaexcategory_id', $cat->id)->get();
+        $oiis = IrtaexOii::where('irtaexcategory_id', $cat)->get();
 
         $mun = $oiis->map(function ($value) {
             return $value->vs;
