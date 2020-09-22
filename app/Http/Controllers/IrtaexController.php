@@ -18,14 +18,7 @@ class IrtaexController extends Controller
 
     public function ResumoMunTotOm(Request $request)
     {
-        $om = Om::find(15);
-        $category = irtaexCategory::find(1);
-        $oiis = IrtaexOii::where('irtaexcategory_id', 1)->select('oii', 'id')->get();
-        $municao = $oiis->map(function ($value) {
-            return $value->vs;
-        })->collapse()->sortBy('id');
-
-       // dd($this->GetSomaMunNecOiiCat($category, $municao, $om));
+       
 
         
         
@@ -271,10 +264,73 @@ class IrtaexController extends Controller
         return $r;  // retorna o somatório como int
     }
 
-    public function GetSomaMunNecOiiCat(irtaexCategory $cat, Collection $collect, Om $om)
+    public function GetSomaMunNecOiiCat(irtaexCategory $cat, V $municao, Om $om)
     {
+
+        $oiis = IrtaexOii::where('irtaexcategory_id', $cat->id)->get();
+
+        $mun = $oiis->map(function ($value) {
+            return $value->vs;
+        })->collapse()->filter(function($item) use ($municao){
+            return $item->id == $municao->id;
+        });
+        $col = collect([]);
+        foreach ($mun as $m) {
+
+            // $ef = $oiis[$i]->irtaexefetivos->map(function ($item) {
+            //     return $item->oms;
+            // })->collapse()->filter(function ($val) use ($om) {
+            //     return $val->id == $om->id;
+            // })->sum('pivot.efetivo');
+        
+            //$qtde->pivot->quantidade
+        
+             $col->push($m->pivot->irtaexoii_id);
+        
+            
+            } 
+               
+
+        $res = collect([]);
+
+
+        $v = $oiis->map(function($value) use ($municao){
+            return $value->vs->where('nee',$municao->nee);
+         })->collapse();
+
+        //  for ($i=0; $i < $v; $i++) { 
+        //     $res->push($v[$i]->id);
+        //  }
+
+        // $efe = $oiis->where('id', $mun->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
+        //     return $item->oms;
+        // })->collapse()->filter(function ($val) use ($om) {
+        //     return $val->id == $om->id;
+        // })->sum('pivot.efetivo');
+        
+  $i = 0;
+   foreach ($v as $qtde) {
+
+    // $ef = $oiis[$i]->irtaexefetivos->map(function ($item) {
+    //     return $item->oms;
+    // })->collapse()->filter(function ($val) use ($om) {
+    //     return $val->id == $om->id;
+    // })->sum('pivot.efetivo');
+
+      $efe = $oiis->where('id', $col[$i])->first()->irtaexefetivos->map(function ($item) {
+            return $item->oms;
+        })->collapse()->filter(function ($val) use ($om) {
+            return $val->id == $om->id;
+        })->sum('pivot.efetivo');
+
+    //$qtde->pivot->quantidade
+
+     $res->push($efe * $qtde->pivot->quantidade);
+
+      $i++;
+    } 
        
-        return "brasil";
+        return $res->sum();
     }
 
 

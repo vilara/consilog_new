@@ -1,6 +1,15 @@
 @php
 $matomcontrole = new App\Http\Controllers\OmMaterialController;
 $mat = new App\Http\Controllers\MaterialOmTotalController;
+
+$teste = new App\Http\Controllers\IrtaexController;
+
+        $om = App\Om::find(15);
+        $category = App\irtaexCategory::find(1);
+        $oiis = App\IrtaexOii::where('irtaexcategory_id', 1)->select('oii', 'id')->get();
+        $municao = App\V::find(3);
+
+      // dd($teste->GetSomaMunNecOiiCat($category, $municao, $om));
 @endphp
 
 @extends('adminlte::page')
@@ -212,7 +221,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                          rowsGroup: [0,1],
                          "columnDefs": [
                              {
-                        "visible": false,
+                        "visible": true,
                         "targets":[2,3]
                     }],
                         
