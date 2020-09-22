@@ -1,5 +1,4 @@
 @php
-$u = new App\Http\Controllers\IrtaexController;
 $matomcontrole = new App\Http\Controllers\OmMaterialController;
 $mat = new App\Http\Controllers\MaterialOmTotalController;
 @endphp
@@ -76,6 +75,17 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
 
                     <div class="card-body">
+                        <div class="row col-6">
+
+                            <table id="resumo" width="300"  class="table table-bordered table-hover widht-50">
+                                <thead>
+                                    <tr style="text-align: center;">
+                                        <th>Munição</th>
+                                        <th>Estoque</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                         <table id="v" class="table table-bordered table-hover">
                             <thead>
                                 <tr style="text-align: center;">
@@ -130,6 +140,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 @stop
 
 @section('js')
+         <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
     <script>
         $(document).ready(function() {
 
@@ -144,12 +155,38 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
 
             $('#v').hide();
+            $('#resumo').hide();
 
             /* Formatting function for row details - modify as you need */
 
 
             function load_data(om = '', category = '') {
 
+                var table = $('#resumo').DataTable({
+                    processing: true,
+                    serverSide: false,
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "filter": false,
+                    ajax: {
+                        url: "{{ route('resumo_municao_irtaex') }}",
+                        data: {
+                            om: om,
+                            category: category
+                        }
+
+                    },
+
+                    columns: [{
+                            data: 'id',
+                            name: 'id'
+                        },
+                        {
+                            data: 'estoque',
+                            name: 'estoque'
+                        }]
+                });
               
                 var groupColumn = 1;
                 var table = $('#v').DataTable({
@@ -207,8 +244,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
 
                     ],
-                    
-
+                   // rowsGroup: [5],
+                   
                     "columnDefs": [{
                         "visible": false,
                         "targets": groupColumn
@@ -216,6 +253,10 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     {
                         "visible": false,
                         "targets": 0
+                    },
+                    {
+                        "visible": false,
+                        "targets": 7
                     }],
                     "displayLength": 25,
 
@@ -232,7 +273,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             if (last !== group) {
                                 $(rows).eq(i).before(
                                     '<tr class="group  bg-warning" ><td style=" text-align: left;" colspan="7"><h3><b>' + group + 
-                                    '</b></h3></td></tr><tr style=" text-align: center;"><th>Nome</th><th>Modelo</th><th>Qtde</th><th>Efetivo</th><th>Mun Nec</th><th>Estoque</th><th>Saldo </th></tr>'
+                                    '</b></h3></td></tr><tr style=" text-align: center;"><th>Nome</th><th>Modelo</th><th>Qtde</th><th>Efetivo</th><th>Mun Nec</th><th>Saldo </th></tr>'
                                 );
 
                                 last = group;
@@ -268,7 +309,9 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
                 
                 $('#v').DataTable().destroy();
+                 $('#resumo').DataTable().destroy();
                  $('#v').hide();
+                 $('#resumo').hide();
                 var om = $('#oms').val();
                 var category = $('#category').val();
                 // alert(category);
@@ -277,29 +320,20 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     //  alert(category);
                     // $('#municao').DataTable().destroy();
                 $('#v').show();
+                $('#resumo').show();
                     load_data(om, category);
-
-
                 } else {
                     alert('Selecione uma OM e uma Categoria');
                 }
-
-
-                //     $('td.details-control').click(function(){
-                //      alert('sdfh');
-                //    });
-
-
             });
 
             $('#refresh').click(function() {
-                {{  $mat->destroyaall() }}
-               // alert("teste");
                  $("#oms").val([]).change();
                  $("#category").val([]).change();
                  $('#v').DataTable().destroy();
+                 $('#resumo').DataTable().destroy();
                  $('#v').hide();
-                // load_data();
+                 $('#resumo').hide();
             });
 
 
