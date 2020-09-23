@@ -26,7 +26,7 @@ class IrtaexController extends Controller
                 $o = $oiis->map(function ($value) {
                     return $value->id;
                 })->all();
-            }else{
+            } else {
                 $o = $request->oii;
             }
 
@@ -58,27 +58,46 @@ class IrtaexController extends Controller
                 ->editColumn('id', function ($municao) {
                     return $municao->first()->material->nome . " " . $municao->first()->modelo;
                 })
-                ->editColumn('estoque', function ($municao) use ($ommm) {
-                    return $municao->first()->material->oms->filter(function ($iten) use ($ommm) {
+                ->editColumn('estoque', function ($municao) use ($ommm, $request) {
+
+                     $estoque = $municao->first()->material->oms->filter(function ($iten) use ($ommm) {
                         return $iten->id == $ommm[0]->id;
                     })->sum('pivot.qtde');
+                     
+                     $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id);
+                     
+                     $perr = number_format($estoque * 100 / $necc, 0, '', '') . " %";
+                    if ($perr < 0) {
+                        $perr = '0 %';
+                    }
+                    if ($perr > 100) {
+                        $perr = '100 %';
+                    }
+                    if ($perr == '0 %') {
+                        $c = 'class="bg-danger disabled color-palette"';
+                    } elseif ($perr == '100 %') {
+                        $c = 'class="bg-success disabled color-palette"';
+                    } else {
+                        $c = 'class="bg-warning disabled color-palette"';}
+
+                    return '<div ' . $c . '>' .$estoque  . '  <span class="badge badge-info right ml-2 mb-1">' . $perr . '</span></div>';
                 })
                 ->editColumn('mun_nec', function ($municao) use ($ommm, $request) {
 
 
-                //     $per = $mat->index($municao->material) + $coll[$municao->material->nee];
-                //     $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
-                //     if ($perr < 0) {$perr='0 %' ;}
-                //     if ($perr > 100) {$perr='100 %' ;}
-                //  if($perr == '0 %'){
-                //      $c = 'class="bg-danger disabled color-palette"';
-                //  }elseif($perr == '100 %'){$c = 'class="bg-success disabled color-palette"';}
-                //  else{ $c = 'class="bg-warning disabled color-palette"';}
+                    //     $per = $mat->index($municao->material) + $coll[$municao->material->nee];
+                    //     $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
+                    //     if ($perr < 0) {$perr='0 %' ;}
+                    //     if ($perr > 100) {$perr='100 %' ;}
+                    //  if($perr == '0 %'){
+                    //      $c = 'class="bg-danger disabled color-palette"';
+                    //  }elseif($perr == '100 %'){$c = 'class="bg-success disabled color-palette"';}
+                    //  else{ $c = 'class="bg-warning disabled color-palette"';}
 
 
-                    return '<div '.'class="bg-danger disabled color-palette"'.'>'.$this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id).'  <span class="badge badge-info right ml-2 mb-1">'.'100%'.'</span></div>';
+                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id);
                 })
-                ->rawColumns(['mun_nec'])
+                ->rawColumns(['mun_nec', 'estoque'])
                 ->make(true);
         }
     }
@@ -138,8 +157,8 @@ class IrtaexController extends Controller
                     return $o * $nec;
                 })
                 ->addColumn('estoque', function ($municao) use ($ommm, $oiis) {
-                    return $municao->material->oms->filter(function ($iten) use ($ommm) {
-                        return $iten->id == $ommm[0]->id;
+                    return '<div><b>'.$municao->material->oms->filter(function ($iten) use ($ommm) {
+                        return $iten->id == $ommm[0]->id.'</b></div>';
                     })->sum('pivot.qtde');
                 })
                 ->addColumn('saldo', function ($municao) use ($ommm, $oiis, $coll) {
@@ -160,20 +179,32 @@ class IrtaexController extends Controller
                     $coll[$municao->material->nee] = $o * $nec;
                     $mat->retiradaStore($coll[$municao->material->nee], $estoque, $municao->material);
 
-                       $per = $mat->index($municao->material) + $coll[$municao->material->nee];
-                       $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
-                       if ($perr < 0) {$perr='0 %' ;}
-                       if ($perr > 100) {$perr='100 %' ;}
-                    if($perr == '0 %'){
+                    $per = $mat->index($municao->material) + $coll[$municao->material->nee];
+                    $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
+                    if ($perr < 0) {
+                        $perr = '0 %';
+                    }
+                    if ($perr > 100) {
+                        $perr = '100 %';
+                    }
+                    if ($perr == '0 %') {
                         $c = 'class="bg-danger disabled color-palette"';
-                    }elseif($perr == '100 %'){$c = 'class="bg-success disabled color-palette"';}
-                    else{ $c = 'class="bg-warning disabled color-palette"';}
-                    
-                    return '<div '.$c.'>'.$mat->index($municao->material).'  <span class="badge badge-info right ml-2 mb-1">'.$perr.'</span></div>';
+                    } elseif ($perr == '100 %') {
+                        $c = 'class="bg-success disabled color-palette"';
+                    } else {
+                        $c = 'class="bg-warning disabled color-palette"';
+                    }
+
+                    $saldo_atu = $mat->index($municao->material);
+                    $disponibilidade = (- $mat->index($municao->material) - $coll[$municao->material->nee] )* -1;
+
+                    if($disponibilidade < 0){$disponibilidade = 0;}
+
+                    return '<div ' . $c . '>' . $disponibilidade . '  <span class="badge badge-info right ml-2 mb-1">' . $perr . '</span></div>';
                 })
-                
-                ->rawColumns(['efetivo','saldo'])
-                
+
+                ->rawColumns(['efetivo', 'saldo','estoque'])
+
                 ->make(true);
         }
 
@@ -204,15 +235,15 @@ class IrtaexController extends Controller
         $omm = Om::find($om);
         $efe = $oo->irtaexefetivos->map(function ($item) {
             return $item->oms;
-        })->collapse()->filter(function ($val) use ($omm){
+        })->collapse()->filter(function ($val) use ($omm) {
             return $val->id == $omm[0]->id;
         })->sum('pivot.efetivo');
-      return $efe;
+        return $efe;
     }
 
     /**
      * $cat $municao e $om são numeros que servem para fazer os finds nos modelos
-    */
+     */
 
     public function GetSomaMunNecOiiCat($cat, $municao, $om)
     {

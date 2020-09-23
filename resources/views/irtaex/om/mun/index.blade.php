@@ -41,8 +41,11 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     </div>
                                 </div>
                                 Parâmtros de Pesquisa<br />
-                                <small> Selecione abaixo uma OM e clique em buscar para ser mostrada a lista de Munição
-                                    necessária por tipo de tiro de instrução.</small>
+                                <small> Selecione abaixo uma OM e um tipo de categoria de tiro e clique em buscar para ser
+                                    mostrada a lista de munição
+                                    necessária. Após isso, as duas tabelas iniciais mostram o resumo da
+                                    munição com seu respectivo saldo cadastrado no SICOFIS, bem como o efetivo cadastrado no
+                                    sistema. Logo abaixo é mostrada a tabela detalhada por Objetivo de Instrução.</small>
                             </div>
                         </div>
                         <div class="row mb-3 mt-2 ml-1 input-dataranger">
@@ -82,8 +85,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     <thead>
                                         <tr class=" bg-warning" style="text-align: center;">
                                             <th>Munição</th>
-                                            <th>Estoque</th>
                                             <th>Mun Nec</th>
+                                            <th>Estoque</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -106,8 +109,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         </div>
                         <table id="v" class="table table-bordered table-hover">
                             <thead>
-                                <tr style="text-align: center;">
-                                    <th></th>
+                                <tr style="text-align: center; visibility:hidden;">
+                                    <th>e</th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -193,12 +196,12 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             name: 'id'
                         },
                         {
-                            data: 'estoque',
-                            name: 'estoque'
-                        },
-                        {
                             data: 'mun_nec',
                             name: 'mun_nec'
+                        },
+                        {
+                            data: 'estoque',
+                            name: 'estoque'
                         },
                     ],
                 });
@@ -227,7 +230,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             data: 'soma',
                             name: 'soma'
                         },
-                       
+
 
                     ],
 
@@ -321,7 +324,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                 $(rows).eq(i).before(
                                     '<tr class="group  bg-warning" ><td style=" text-align: left;" colspan="7"><h3><b>' +
                                     group +
-                                    '</b></h3></td></tr><tr style=" text-align: center;"><th>Nome</th><th>Modelo</th><th>Qtde</th><th>Efetivo</th><th>Mun Nec</th><th>Saldo </th></tr>'
+                                    '</b></h3></td></tr><tr style=" text-align: center;"><th>Nome</th><th>Modelo</th><th>Qtde</th><th>Efetivo</th><th>Mun Nec</th><th>Disponibilidade </th></tr>'
                                 );
 
                                 last = group;
