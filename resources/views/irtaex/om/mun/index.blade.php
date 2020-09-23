@@ -69,6 +69,16 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                @foreach ($oi as $o)
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="oii"
+                                            value="{{ $o->oii }}" checked>
+                                        <label class="form-check-label" for="inlineCheckbox1">{{ $o->oii }}</label>
+                                    </div>
+                                @endforeach
+
+                            </div>
                             <div class="col-3">
                                 <button type="submit" id="filter" class="btn bg-warning btn-sm">Buscar</button>
                                 <button type="submit" id="refresh" class="btn bg-warning btn-sm">Limpar</button>
@@ -175,7 +185,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             $('#resumo').hide();
             $('#efetivo').hide();
 
-            function load_data(om = '', category = '') {
+            function load_data(om = '', category = '', oii = '') {
 
                 var table = $('#resumo').DataTable({
                     processing: true,
@@ -188,7 +198,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         url: "{{ route('resumo_municao_irtaex') }}",
                         data: {
                             om: om,
-                            category: category
+                            category: category,
+                            oii : oii,
                         }
                     },
                     columns: [{
@@ -217,7 +228,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         url: "{{ route('resumo_efetivo_irtaex') }}",
                         data: {
                             om: om,
-                            category: category
+                            category: category,
+                            oii : oii,
                         }
 
                     },
@@ -249,7 +261,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         url: "{{ route('resumo_irtaex') }}",
                         data: {
                             om: om,
-                            category: category
+                            category: category,
+                            oii : oii,
                         }
 
                     },
@@ -354,7 +367,6 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
             $('#filter').click(function() {
 
-
                 $('#v').DataTable().destroy();
                 $('#resumo').DataTable().destroy();
                 $('#efetivo').DataTable().destroy();
@@ -363,14 +375,17 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                 $('#efetivo').hide();
                 var om = $('#oms').val();
                 var category = $('#category').val();
+                var oii = $('input[name="oii"]:checked').toArray().map(function(check) {
+                    return $(check).val();
+                });
 
-                if (om != '' && category != '') {
+                if (om != '' && category != '' && oii != '') {
                     $('#v').show();
                     $('#resumo').show();
                     $('#efetivo').show();
-                    load_data(om, category);
+                    load_data(om, category,oii);
                 } else {
-                    alert('Selecione uma OM e uma Categoria');
+                    alert('Selecione uma OM, Categoria e OII');
                 }
             });
 

@@ -24,13 +24,13 @@ class IrtaexController extends Controller
 
             if (!isset($request->oii)) {
                 $o = $oiis->map(function ($value) {
-                    return $value->id;
+                    return $value->oii;
                 })->all();
             } else {
                 $o = $request->oii;
             }
 
-            $oo = $oiis->first()->whereIn('id', $o)->get(); // retorna um objeto da Classe Irtaexoii
+            $oo = $oiis->first()->where('irtaexcategory_id', $request->category)->whereIn('oii', $o)->get(); // retorna um objeto da Classe Irtaexoii
             return DataTables::of($oo)
                 ->editColumn('id', function ($oo) {
                     return $oo->oii;
@@ -49,8 +49,18 @@ class IrtaexController extends Controller
 
         if ($request->ajax()) {
 
-            $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->select('oii', 'id')->get();
-            $municao = $oiis->map(function ($value) {
+            $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->get();
+
+            if (!isset($request->oii)) {
+                $o = $oiis->map(function ($value) {
+                    return $value->oii;
+                })->all();
+            } else {
+                $o = $request->oii;
+            }
+
+            $oo = $oiis->first()->where('irtaexcategory_id', $request->category)->whereIn('oii', $o)->get(); // retorna um objeto da Classe Irtaexoii
+            $municao = $oo->map(function ($value) {
                 return $value->vs;
             })->collapse()->groupBy('nee');
             $ommm = Om::where('id', $request->om)->get();
@@ -58,13 +68,13 @@ class IrtaexController extends Controller
                 ->editColumn('id', function ($municao) {
                     return $municao->first()->material->nome . " " . $municao->first()->modelo;
                 })
-                ->editColumn('estoque', function ($municao) use ($ommm, $request) {
+                ->editColumn('estoque', function ($municao) use ($ommm, $request, $o) {
 
                      $estoque = $municao->first()->material->oms->filter(function ($iten) use ($ommm) {
                         return $iten->id == $ommm[0]->id;
                     })->sum('pivot.qtde');
                      
-                     $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id);
+                     $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o);
                      if($necc > 0){
 
                          $perr = number_format($estoque * 100 / $necc, 0, '', '') . " %";
@@ -86,7 +96,7 @@ class IrtaexController extends Controller
 
                     return '<div ' . $c . '>' .$estoque  . '  <span class="badge badge-info right ml-2 mb-1">' . $perr . '</span></div>';
                 })
-                ->editColumn('mun_nec', function ($municao) use ($ommm, $request) {
+                ->editColumn('mun_nec', function ($municao) use ($ommm, $request, $o) {
 
 
                     //     $per = $mat->index($municao->material) + $coll[$municao->material->nee];
@@ -99,7 +109,7 @@ class IrtaexController extends Controller
                     //  else{ $c = 'class="bg-warning disabled color-palette"';}
 
 
-                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id);
+                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o);
                 })
                 ->rawColumns(['mun_nec', 'estoque'])
                 ->make(true);
@@ -110,12 +120,23 @@ class IrtaexController extends Controller
     {
         $omg = Om::all();                     // envia todas as OM para view
         $categories = irtaexCategory::all();  // envia todas as categorias para view
+        $oi = IrtaexOii::where('id',">", 0)->select('oii')->distinct()->get();
 
         if ($request->ajax()) {
             $matt = new MaterialOmTotalController;
             $matt->destroyaall();
-            $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->select('oii', 'id')->get();
-            $municao = $oiis->map(function ($value) {
+            $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->get();
+
+            if (!isset($request->oii)) {
+                $o = $oiis->map(function ($value) {
+                    return $value->oii;
+                })->all();
+            } else {
+                $o = $request->oii;
+            }
+
+            $oo = $oiis->first()->where('irtaexcategory_id', $request->category)->whereIn('oii', $o)->get(); // retorna um objeto da Classe Irtaexoii
+            $municao = $oo->map(function ($value) {
                 return $value->vs;
             })->collapse();
             $ommm = Om::where('id', $request->om)->get();
@@ -127,8 +148,8 @@ class IrtaexController extends Controller
                 ->editColumn('id', function ($municao) {
                     return $municao->pivot->irtaexoii_id;
                 })
-                ->addColumn('tipo', function ($municao) use ($oiis) {
-                    return $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->oii;
+                ->addColumn('tipo', function ($municao) use ($oo) {
+                    return $oo[0]->where('id', $municao->pivot->irtaexoii_id)->get()->first()->oii;
                 })
                 ->addColumn('nome', function ($municao) {
                     return $municao->material->nome;
@@ -136,21 +157,21 @@ class IrtaexController extends Controller
                 ->addColumn('modelo', function ($municao) {
                     return $municao->modelo;
                 })
-                ->addColumn('quantidade', function ($municao) use ($ommm, $oiis) {
+                ->addColumn('quantidade', function ($municao) use ($ommm, $oo) {
                     return $municao->pivot->quantidade;
                 })
-                ->addColumn('efetivo', function ($municao) use ($ommm, $oiis) {
+                ->addColumn('efetivo', function ($municao) use ($ommm, $oo) {
 
-                    $o = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
+                    $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
                         return $item->oms;
                     })->collapse()->filter(function ($val) use ($ommm) {
                         return $val->id == $ommm[0]->id;
                     })->sum('pivot.efetivo');
                     return $o;
                 })
-                ->addColumn('mun_nec', function ($municao) use ($ommm, $oiis) {
+                ->addColumn('mun_nec', function ($municao) use ($ommm, $oo) {
 
-                    $o = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
+                    $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
                         return $item->oms;
                     })->collapse()->filter(function ($val) use ($ommm) {
                         return $val->id == $ommm[0]->id;
@@ -160,15 +181,15 @@ class IrtaexController extends Controller
 
                     return $o * $nec;
                 })
-                ->addColumn('estoque', function ($municao) use ($ommm, $oiis) {
+                ->addColumn('estoque', function ($municao) use ($ommm, $oo) {
                     return '<div><b>'.$municao->material->oms->filter(function ($iten) use ($ommm) {
                         return $iten->id == $ommm[0]->id.'</b></div>';
                     })->sum('pivot.qtde');
                 })
-                ->addColumn('saldo', function ($municao) use ($ommm, $oiis, $coll) {
+                ->addColumn('saldo', function ($municao) use ($ommm, $oo, $coll) {
                     $mat = new MaterialOmTotalController;
 
-                    $o = $oiis[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
+                    $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
                         return $item->oms;
                     })->collapse()->filter(function ($val) use ($ommm) {
                         return $val->id == $ommm[0]->id;
@@ -214,7 +235,7 @@ class IrtaexController extends Controller
                 ->make(true);
         }
 
-        return view('irtaex.om.mun.index', compact('omg', 'categories'));
+        return view('irtaex.om.mun.index', compact('omg', 'categories','oi'));
     }
 
     /**
@@ -251,13 +272,13 @@ class IrtaexController extends Controller
      * $cat $municao e $om são numeros que servem para fazer os finds nos modelos
      */
 
-    public function GetSomaMunNecOiiCat($cat, $municao, $om)
+    public function GetSomaMunNecOiiCat($cat, $municao, $om, $o)
     {
 
         $municao = V::find($municao);
         $om = Om::find($om);
 
-        $oiis = IrtaexOii::where('irtaexcategory_id', $cat)->get();
+        $oiis = IrtaexOii::where('irtaexcategory_id', $cat)->whereIn('oii', $o)->get();
 
         $mun = $oiis->map(function ($value) {
             return $value->vs;
