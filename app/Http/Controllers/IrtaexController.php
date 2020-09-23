@@ -65,8 +65,12 @@ class IrtaexController extends Controller
                     })->sum('pivot.qtde');
                      
                      $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id);
-                     
-                     $perr = number_format($estoque * 100 / $necc, 0, '', '') . " %";
+                     if($necc > 0){
+
+                         $perr = number_format($estoque * 100 / $necc, 0, '', '') . " %";
+                     }else{
+                         $perr = -1;
+                     }
                     if ($perr < 0) {
                         $perr = '0 %';
                     }
@@ -180,7 +184,9 @@ class IrtaexController extends Controller
                     $mat->retiradaStore($coll[$municao->material->nee], $estoque, $municao->material);
 
                     $per = $mat->index($municao->material) + $coll[$municao->material->nee];
-                    $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
+                    if($coll[$municao->material->nee] > 0){
+                        $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
+                    }else{$perr = -1;}
                     if ($perr < 0) {
                         $perr = '0 %';
                     }
