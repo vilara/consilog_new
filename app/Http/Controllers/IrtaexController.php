@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\MaterialOmTotalController;
-use PhpParser\Node\Expr\Cast\Int_;
 
 class IrtaexController extends Controller
 {
@@ -36,10 +35,12 @@ class IrtaexController extends Controller
                     return $oo->oii;
                 })
                 ->editColumn('soma', function ($oo) use ($request) {
-                    return $this->SomaEfetivoOiiOm($oo, $request->om); // $oo é um objeto da Classe Irtaexoii
+                    if(!isset($request->efetivo)){
+                        return $this->SomaEfetivoOiiOm($oo, $request->om); // $oo é um objeto da Classe Irtaexoii
+                    }else{
+                        return $request->efetivo; // $oo é um objeto da Classe Irtaexoii
+                    }
                 })
-
-
                 ->make(true);
         }
     }
@@ -74,7 +75,7 @@ class IrtaexController extends Controller
                         return $iten->id == $ommm[0]->id;
                     })->sum('pivot.qtde');
                      
-                     $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o);
+                     $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o,$request->efetivo);
                      if($necc > 0){
 
                          $perr = number_format($estoque * 100 / $necc, 0, '', '') . " %";
@@ -109,7 +110,7 @@ class IrtaexController extends Controller
                     //  else{ $c = 'class="bg-warning disabled color-palette"';}
 
 
-                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o);
+                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o,$request->efetivo);
                 })
                 ->rawColumns(['mun_nec', 'estoque'])
                 ->make(true);
@@ -160,22 +161,32 @@ class IrtaexController extends Controller
                 ->addColumn('quantidade', function ($municao) use ($ommm, $oo) {
                     return $municao->pivot->quantidade;
                 })
-                ->addColumn('efetivo', function ($municao) use ($ommm, $oo) {
-
+                ->addColumn('efetivo', function ($municao) use ($ommm, $oo, $request) {
+                    if(!isset($request->efetivo)){
                     $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
                         return $item->oms;
                     })->collapse()->filter(function ($val) use ($ommm) {
                         return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');
+                    })->sum('pivot.efetivo');}
+                    else{
+                        $o = $request->efetivo;
+                    }
+
+
+
                     return $o;
                 })
-                ->addColumn('mun_nec', function ($municao) use ($ommm, $oo) {
+                ->addColumn('mun_nec', function ($municao) use ($ommm, $oo, $request) {
 
-                    $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
-                        return $item->oms;
-                    })->collapse()->filter(function ($val) use ($ommm) {
-                        return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');
+                    if(!isset($request->efetivo)){
+                        $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
+                            return $item->oms;
+                        })->collapse()->filter(function ($val) use ($ommm) {
+                            return $val->id == $ommm[0]->id;
+                        })->sum('pivot.efetivo');}
+                        else{
+                            $o = $request->efetivo;
+                        }
 
                     $nec = $municao->pivot->quantidade;
 
@@ -186,14 +197,18 @@ class IrtaexController extends Controller
                         return $iten->id == $ommm[0]->id.'</b></div>';
                     })->sum('pivot.qtde');
                 })
-                ->addColumn('saldo', function ($municao) use ($ommm, $oo, $coll) {
+                ->addColumn('saldo', function ($municao) use ($ommm, $oo, $coll, $request) {
                     $mat = new MaterialOmTotalController;
 
-                    $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
-                        return $item->oms;
-                    })->collapse()->filter(function ($val) use ($ommm) {
-                        return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');
+                    if(!isset($request->efetivo)){
+                        $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
+                            return $item->oms;
+                        })->collapse()->filter(function ($val) use ($ommm) {
+                            return $val->id == $ommm[0]->id;
+                        })->sum('pivot.efetivo');}
+                        else{
+                            $o = $request->efetivo;
+                        }
 
                     $nec = $municao->pivot->quantidade;
 
@@ -272,7 +287,7 @@ class IrtaexController extends Controller
      * $cat $municao e $om são numeros que servem para fazer os finds nos modelos
      */
 
-    public function GetSomaMunNecOiiCat($cat, $municao, $om, $o)
+    public function GetSomaMunNecOiiCat($cat, $municao, $om, $o, $efetivo)
     {
 
         $municao = V::find($municao);
@@ -299,13 +314,20 @@ class IrtaexController extends Controller
         $i = 0;
         foreach ($v as $qtde) {
 
-            $efe = $oiis->where('id', $col[$i])->first()->irtaexefetivos->map(function ($item) {
-                return $item->oms;
-            })->collapse()->filter(function ($val) use ($om) {
-                return $val->id == $om->id;
-            })->sum('pivot.efetivo');
+            
+            if(!isset($efetivo)){
+                
+                $efe = $oiis->where('id', $col[$i])->first()->irtaexefetivos->map(function ($item) {
+                    return $item->oms;
+                })->collapse()->filter(function ($val) use ($om) {
+                    return $val->id == $om->id;
+                })->sum('pivot.efetivo');
+                $res->push($efe * $qtde->pivot->quantidade);
+            }else{
+                $efe = $efetivo;
+                $res->push($efe * $qtde->pivot->quantidade);
+            }
 
-            $res->push($efe * $qtde->pivot->quantidade);
             $i++;
         }
         return $res->sum();

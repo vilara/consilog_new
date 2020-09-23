@@ -49,6 +49,13 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             </div>
                         </div>
                         <div class="row mb-3 mt-2 ml-1 input-dataranger">
+                            <div class="col-md-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="ef" name="ef" checked>
+                                    <input class="form-control form-control-sm" type="text" id="calc" name="calc" width="5" placeholder="qual efetivo?">
+                                    <label class="form-check-label" id="label" for="ef">Efetivo existente</label>
+                                </div>
+                            </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="om"
@@ -69,7 +76,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 @foreach ($oi as $o)
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="oii"
@@ -184,8 +191,14 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             $('#v').hide();
             $('#resumo').hide();
             $('#efetivo').hide();
+            $('#calc').hide();
 
-            function load_data(om = '', category = '', oii = '') {
+
+
+
+
+
+            function load_data(om = '', category = '', oii = '', efetivo = '') {
 
                 var table = $('#resumo').DataTable({
                     processing: true,
@@ -199,7 +212,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         data: {
                             om: om,
                             category: category,
-                            oii : oii,
+                            oii: oii,
+                            efetivo : efetivo
                         }
                     },
                     columns: [{
@@ -229,7 +243,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         data: {
                             om: om,
                             category: category,
-                            oii : oii,
+                            oii: oii,
+                            efetivo : efetivo
                         }
 
                     },
@@ -262,7 +277,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         data: {
                             om: om,
                             category: category,
-                            oii : oii,
+                            oii: oii,
+                            efetivo : efetivo
                         }
 
                     },
@@ -378,12 +394,20 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                 var oii = $('input[name="oii"]:checked').toArray().map(function(check) {
                     return $(check).val();
                 });
+                var efetivo = $('#calc').val();
 
                 if (om != '' && category != '' && oii != '') {
-                    $('#v').show();
+                    if($('#calc').is(':visible') && efetivo == '') {
+                        alert('Preencha o efetivo ou clique na checkbox à esquerda!');
+                    }else{
+                      
+                        $('#v').show();
                     $('#resumo').show();
                     $('#efetivo').show();
-                    load_data(om, category,oii);
+                    load_data(om, category, oii, efetivo);
+                    }
+                    
+
                 } else {
                     alert('Selecione uma OM, Categoria e OII');
                 }
@@ -392,12 +416,31 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             $('#refresh').click(function() {
                 $("#oms").val([]).change();
                 $("#category").val([]).change();
+                $("#calc").val(['']);
                 $('#v').DataTable().destroy();
                 $('#resumo').DataTable().destroy();
                 $('#efetivo').DataTable().destroy();
                 $('#v').hide();
                 $('#efetivo').hide();
                 $('#resumo').hide();
+            });
+
+            $('input[name="ef"]').on('click', function() { // event do checkbox da última coluna de cada linha
+
+                var chk = $(this).is(":checked"); // checa se o box está selecionado ou não
+
+                if (chk == false) {
+
+                    $('#label').hide();
+                    $('#calc').show();
+
+                } else {
+                    $('#label').show();
+                    $('#calc').hide();
+                    $("#calc").val(['']);
+
+                }
+
             });
 
 
