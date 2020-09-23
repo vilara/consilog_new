@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function(){
     // IRTAEx
     Route::get('irtaex/municoes/om', 'IrtaexController@ResumoMunOiiOm')->name('resumo_irtaex'); 
     Route::get('irtaex/municoes/tot', 'IrtaexController@ResumoMunTotOm')->name('resumo_municao_irtaex'); 
+    Route::get('irtaex/efetivos/tot', 'IrtaexController@ResumoEfeTotOm')->name('resumo_efetivo_irtaex'); 
         // category
     Route::resource('categories', 'IrtaexCategoryController')->except(['destroy']);
     Route::get('category/delete/{category}', 'IrtaexCategoryController@destroy')->name('category_delete');

@@ -76,16 +76,33 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-7">
 
-                            <table id="resumo" width="600"  class="table table-bordered table-hover widht-50 ml-2">
-                                <thead>
-                                    <tr class=" bg-warning" style="text-align: center;">
-                                        <th>Munição</th>
-                                        <th>Estoque</th>
-                                        <th>Mun Nec</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                                <table id="resumo" width="100%" class="table table-bordered table-hover ml-2">
+                                    <thead>
+                                        <tr class=" bg-warning" style="text-align: center;">
+                                            <th>Munição</th>
+                                            <th>Estoque</th>
+                                            <th>Mun Nec</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+
+                            </div>
+
+                            <div class="col-5">
+
+                                <table id="efetivo" width="100%" class="table table-bordered table-hover ml-2">
+                                    <thead>
+                                        <tr class=" bg-warning" style="text-align: center;">
+                                            <th></th>
+                                            <th>Efetivo</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+
+                            </div>
+
                         </div>
                         <table id="v" class="table table-bordered table-hover">
                             <thead>
@@ -99,13 +116,6 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     <th></th>
                                     <th></th>
                                     <th></th>
-                                    {{-- <th>Cat</th> --}}
-                                    {{-- <th>Efetivo</th>
-                                    <th>Mun</th>
-                                    <th>Tipo</th>
-                                    <th>Qtde</th>
-                                    <th> Nec Mun</th>
-                                    <th> Saldo Estoque</th> --}}
                                 </tr>
                             </thead>
                         </table><!-- /table -->
@@ -132,20 +142,23 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
         tr.shown td.details-control {
             background: url('../../images/details_close.png') no-repeat center center;
         }
+
         td {
-      text-align: center; /* center checkbox horizontally */
-      vertical-align: middle; /* center checkbox vertically */
-    }
+            text-align: center;
+            /* center checkbox horizontally */
+            vertical-align: middle;
+            /* center checkbox vertically */
+        }
 
     </style>
 @stop
 
 @section('js')
-         <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
+    <script src="//cdn.rawgit.com/ashl1/datatables-rowsgroup/v1.0.0/dataTables.rowsGroup.js"></script>
     <script>
         $(document).ready(function() {
 
-           
+
             $('#oms').select2({
                 placeholder: "Selecione uma OM..."
             });
@@ -157,9 +170,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
             $('#v').hide();
             $('#resumo').hide();
-
-            /* Formatting function for row details - modify as you need */
-
+            $('#efetivo').hide();
 
             function load_data(om = '', category = '') {
 
@@ -176,9 +187,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             om: om,
                             category: category
                         }
-
                     },
-
                     columns: [{
                             data: 'id',
                             name: 'id'
@@ -191,20 +200,48 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             data: 'mun_nec',
                             name: 'mun_nec'
                         },
-                        
-                        ],
-                       
-                        
+                    ],
                 });
-              
+
+                var table = $('#efetivo').DataTable({
+                    processing: true,
+                    serverSide: false,
+                    "paging": false,
+                    "ordering": false,
+                    "info": false,
+                    "filter": false,
+                    ajax: {
+                        url: "{{ route('resumo_efetivo_irtaex') }}",
+                        data: {
+                            om: om,
+                            category: category
+                        }
+
+                    },
+
+                    columns: [{
+                            data: 'oii',
+                            name: 'oii'
+                        },
+                        {
+                            data: 'soma',
+                            name: 'soma'
+                        },
+                       
+
+                    ],
+
+
+                });
+
                 var groupColumn = 1;
                 var table = $('#v').DataTable({
                     processing: true,
                     serverSide: false,
                     "paging": false,
-                "ordering": false,
-                "info": false,
-                "filter": false,
+                    "ordering": false,
+                    "info": false,
+                    "filter": false,
                     ajax: {
                         url: "{{ route('resumo_irtaex') }}",
                         data: {
@@ -253,20 +290,21 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
 
                     ],
-                   // rowsGroup: [5],
-                   
+                    // rowsGroup: [5],
+
                     "columnDefs": [{
-                        "visible": false,
-                        "targets": groupColumn
-                    },
-                    {
-                        "visible": false,
-                        "targets": 0
-                    },
-                    {
-                        "visible": false,
-                        "targets": 7
-                    }],
+                            "visible": false,
+                            "targets": groupColumn
+                        },
+                        {
+                            "visible": false,
+                            "targets": 0
+                        },
+                        {
+                            "visible": false,
+                            "targets": 7
+                        }
+                    ],
                     "displayLength": 25,
 
                     "drawCallback": function(settings) {
@@ -281,7 +319,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         }).data().each(function(group, i) {
                             if (last !== group) {
                                 $(rows).eq(i).before(
-                                    '<tr class="group  bg-warning" ><td style=" text-align: left;" colspan="7"><h3><b>' + group + 
+                                    '<tr class="group  bg-warning" ><td style=" text-align: left;" colspan="7"><h3><b>' +
+                                    group +
                                     '</b></h3></td></tr><tr style=" text-align: center;"><th>Nome</th><th>Modelo</th><th>Qtde</th><th>Efetivo</th><th>Mun Nec</th><th>Saldo </th></tr>'
                                 );
 
@@ -308,28 +347,24 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     },
                 });
 
-
-
-
-
             }
 
             $('#filter').click(function() {
 
-                
+
                 $('#v').DataTable().destroy();
-                 $('#resumo').DataTable().destroy();
-                 $('#v').hide();
-                 $('#resumo').hide();
+                $('#resumo').DataTable().destroy();
+                $('#efetivo').DataTable().destroy();
+                $('#v').hide();
+                $('#resumo').hide();
+                $('#efetivo').hide();
                 var om = $('#oms').val();
                 var category = $('#category').val();
-                // alert(category);
 
                 if (om != '' && category != '') {
-                    //  alert(category);
-                    // $('#municao').DataTable().destroy();
-                $('#v').show();
-                $('#resumo').show();
+                    $('#v').show();
+                    $('#resumo').show();
+                    $('#efetivo').show();
                     load_data(om, category);
                 } else {
                     alert('Selecione uma OM e uma Categoria');
@@ -337,12 +372,14 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             });
 
             $('#refresh').click(function() {
-                 $("#oms").val([]).change();
-                 $("#category").val([]).change();
-                 $('#v').DataTable().destroy();
-                 $('#resumo').DataTable().destroy();
-                 $('#v').hide();
-                 $('#resumo').hide();
+                $("#oms").val([]).change();
+                $("#category").val([]).change();
+                $('#v').DataTable().destroy();
+                $('#resumo').DataTable().destroy();
+                $('#efetivo').DataTable().destroy();
+                $('#v').hide();
+                $('#efetivo').hide();
+                $('#resumo').hide();
             });
 
 
