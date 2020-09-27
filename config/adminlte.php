@@ -311,6 +311,10 @@ return [
                             'text' => 'Ctrl Mun das OM',
                             'url'  => 'oms/materials/index',
                         ],
+                        [
+                            'text' => 'Gráficos',
+                            'url'  => 'oms/materials/index/chart',
+                        ],
                     ],
                 ],
             ],

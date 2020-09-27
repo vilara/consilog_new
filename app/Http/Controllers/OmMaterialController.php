@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\MaterialOmChart;
 use App\IrtaexOii;
 use App\Material;
 use App\Om;
 use App\V;
+use App\Comando;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -19,44 +21,48 @@ class OmMaterialController extends Controller
      * @param  \App\Om  $om
      * @return \Illuminate\Http\Response
      */
+
+
+
     public function index(Request $request)
     {
-        //$t =  array(0);
-
-       
 
         $omg = Om::all()->sortBy('siglaOM');
         foreach ($omg as $rr) {
             $t[] = $rr->id;
         }
        
-       // $oms = Om::where('id', 15)->get();
-
-
-        // dd($om) ;
-
-        // $om = Om::all()->filter(function ($om) {
-        //     return $om->id == 15 ;
-        // })->first()->materials->filter(function ($value) {
-        //     return $value->materialable_type == 'v';
-        // });
-
-
+        $gcmdos = Comando::all()->sortBy('siglaCmdo');
+        foreach ($gcmdos as $gcmdo) {
+            $g[] = $gcmdo->id;
+        }
 
         if ($request->ajax()) {
-            if (!empty($request->om)) {
-                $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
+
+
+         
+               if(isset($request->om)){
+                    $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
                     return $item->materials->filter(function ($value) {
                         return $value->materialable_type == 'v';
                     });;
                 })->collapse();
-            }else{
-                $om = Om::whereIn('id', $t)->get()->map(function ($item) {
+               }else{
+
+                $cmdo = Comando::whereIn('id', $request->cmdo)->get();
+                 $c = $cmdo->first()->getOmdsId();
+
+                $om = Om::whereIn('id', $c)->get()->map(function ($item) {
                     return $item->materials->filter(function ($value) {
                         return $value->materialable_type == 'v';
                     });;
                 })->collapse();
-            }
+
+               }
+
+
+               
+          
             
             $material = $om->groupBy('nee');
 
@@ -91,7 +97,28 @@ class OmMaterialController extends Controller
                 ->rawColumns(['validade'])
                 ->make();
         }
-        return view('oms.material.v.index', compact('omg'));
+        return view('oms.material.v.index', compact('omg','gcmdos'));
+    }
+
+
+    public function indexChart(Request $request)
+    {
+
+        $omg = Om::all()->sortBy('siglaOM');
+        foreach ($omg as $rr) {
+            $t[] = $rr->id;
+        }
+       
+        $gcmdos = Comando::all()->sortBy('siglaCmdo');
+        foreach ($gcmdos as $gcmdo) {
+            $g[] = $gcmdo->id;
+        }
+
+       
+      
+
+    
+        return view('oms.material.v.chartindex', compact('omg','gcmdos'));
     }
 
     /**

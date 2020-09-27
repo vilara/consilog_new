@@ -119,7 +119,7 @@ class IrtaexController extends Controller
 
     public function ResumoMunOiiOm(Request $request)
     {
-        $omg = Om::all();                     // envia todas as OM para view
+        $omg = Om::all()->sortBy('siglaOM');                     // envia todas as OM para view
         $categories = irtaexCategory::all();  // envia todas as categorias para view
         $oi = IrtaexOii::where('id',">", 0)->select('oii')->distinct()->get();
 

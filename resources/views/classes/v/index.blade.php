@@ -106,7 +106,8 @@
                 return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                     '<tr>' +
                     '<td>Descrição:</td>' +
-                    '<td>' + d.descricao + '</td>' +
+                    '<td>' + d.descricao + '</td>' +  
+                    '<td>' + d.nee + '</td>' +    
                     '</tr>' +
                     '</table>';
             }

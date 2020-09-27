@@ -17,6 +17,19 @@ class Comando extends Model
     {
     	return $this->belongsToMany('App\Om', 'comando_om', 'comando_id', 'om_id' )->orderBy('om_id')->wherePivot('omds', 1);
     }
+    
+    public function getOmdsId(){
 
+   $omds = $this->oms;
+   foreach ($omds as $om) {
+    $t[] = $om->id;
+}
+
+       return   $t;
+    }
+
+
+
+    
     public $timestamps = false;
 }

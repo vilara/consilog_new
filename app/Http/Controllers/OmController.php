@@ -18,14 +18,17 @@ class OmController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index(Request $request)
     {
-        $om = Om::all()->filter(function($om) {
-            if(Auth::user()->can('view', $om)){
-                return $om;
-            }
-          });
-
+        $om = Om::all();
+        // $om = Om::all()->filter(function($om) {
+        //     if(Auth::user()->can('view', $om)){
+        //         return $om;
+        //     }
+        // });
+        
+        //dd($om);
         if ($request->ajax()) {
             return DataTables::of($om)
             ->addColumn('action', function (Om $om) {

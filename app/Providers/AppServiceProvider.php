@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Providers;
+use ConsoleTVs\Charts\Registrar as Charts;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -21,8 +22,8 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot( )
     {
-        //
+       
     }
 }

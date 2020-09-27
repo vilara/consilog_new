@@ -14,7 +14,7 @@ $u = new App\Http\Controllers\OmMaterialController;
 
                 <div class="info-box-content">
                     <span class="info-box-text">
-                        <h1>Estoque de Munições por OM</h1>
+                        <h1>Gráfico de Estoque de Munições por OM</h1>
                     </span>
                 </div>
                 <!-- /.info-box-content -->
@@ -80,28 +80,10 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 <button type="submit" id="refresh" class="btn  bg-gray  btn-sm">Limpar</button>
                             </div>
                         </div>
-                        <table id="municao" class="table table-bordered table-hover">
-                            <thead>
-                                <tr style="text-align: center;">
-                                    <th>ID</th>
-                                    <th>Nome</th>
-                                    <th>Modelo</th>
-                                    <th>Estoque</th>
-                                    <th>Validade</th>
-                                </tr>
-                            </thead>
-
-                            <tfoot>
-                                <tr style="text-align: center;">
-                                    <th>ID</th>
-                                    <th>Nome</th>
-                                    <th>Modelo</th>
-                                    <th>Estoque</th>
-                                    <th>Validade</th>
-                                </tr>
-                                </tr>
-                            </tfoot>
-                        </table><!-- /table -->
+                        
+<div style="width: 50%">
+ 
+</div>
                     </div><!-- /.card-body -->
                 </div><!-- /.card -->
             </div><!-- /.col 12-->
@@ -123,6 +105,22 @@ $u = new App\Http\Controllers\OmMaterialController;
 @section('js')
     <script>
         $(document).ready(function() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             $('#om').hide();
             $('#cmdo').hide();
