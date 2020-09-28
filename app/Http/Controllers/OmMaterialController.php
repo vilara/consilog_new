@@ -50,7 +50,7 @@ class OmMaterialController extends Controller
                }else{
 
                 $cmdo = Comando::whereIn('id', $request->cmdo)->get();
-                 $c = $cmdo->first()->getOmdsId();
+                $c = $cmdo->first()->getOmdsId();
 
                 $om = Om::whereIn('id', $c)->get()->map(function ($item) {
                     return $item->materials->filter(function ($value) {
@@ -104,18 +104,50 @@ class OmMaterialController extends Controller
     public function indexChart(Request $request)
     {
 
+
+        // $om = Om::whereIn('id', [2,11])->with('materials')->get();
+
+        // $o = $om->groupBy(function($t){
+        //          return $t->materials->groupBy('pivot.nee');
+        //     });
+        
+        
+        // // $m = $om->filter(function ($value) {
+        // //     return $value->materials->filter(function ($item){
+        // //           return $item->materialable_type == "v";
+        // //     });
+        // // });
+        // // $mm = $m->map(function($t){
+        // //     return $t->materials->groupBy('nee');
+        // // });
+
+        // dd($o);
+
+
        return $this->GetOmTotal($request);
     }
 
 
     public function GetOmTotal(Request $request){
-
         if ($request->ajax()) {
-
-            return $omg = Om::all()->sortBy('siglaOM');
-             foreach ($omg as $rr) {
-                 $t[] = $rr->id;
+            $nomeOM = collect([]);
+            $materiais = collect([]);
+             for ($i=0; $i < count($request->om); $i++) { 
+                $nomeOm = Om::where('id', $request->om[$i])->get()->first();
+                $om = Om::where('id', $request->om[$i])->get()->map(function ($item) {
+                return $item->materials->filter(function ($value) {
+                    return $value->materialable_type == 'v';
+                });
+            })->collapse();
+            $nomeOM->push($nomeOm->siglaOM);
+            $materiais->put($nomeOm->siglaOM,$om);
              }
+
+             $r[] = [$nomeOM,$materiais];
+                
+
+            return $r;
+         
          }
              
          $omg = Om::all()->sortBy('siglaOM');

@@ -7,21 +7,7 @@ $u = new App\Http\Controllers\OmMaterialController;
 @section('title', 'Admin Cmdos')
 
 @section('content_header')
-    <div class="row mb-2">
-        <div class="col-12">
-            <div class="info-box ">
-                <span class="info-box-icon bg-gray disabled"><i class="fas fa-prescription-bottle"></i></span>
 
-                <div class="info-box-content">
-                    <span class="info-box-text">
-                        <h1>Gráfico de Estoque de Munições por OM</h1>
-                    </span>
-                </div>
-                <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-        </div>
-    </div><!-- /.container-fluid -->
 @stop
 
 @section('content')
@@ -37,7 +23,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                                         <b>Manual</b>
                                     </div>
                                 </div>
-                                Parâmtros de Pesquisa<br />
+                                Gráficos de estoque de Munições<br />
                                 <small> Selecione abaixo uma OM e clique em buscar para ser mostrada a lista de Munição
                                     total da OM extraída do SISCOFIS.</small>
                             </div>
@@ -47,7 +33,8 @@ $u = new App\Http\Controllers\OmMaterialController;
                         <div class="row mb-3 input-dataranger">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select class="js-example-placeholder-single js-states form-control" id="selection">
+                                    <select class="js-example-placeholder-single js-states form-control form-control-sm "
+                                        id="selection">
                                         <option></option>
                                         <option>G Cmdo</option>
                                         <option>OM</option>
@@ -81,8 +68,8 @@ $u = new App\Http\Controllers\OmMaterialController;
                             </div>
                         </div>
 
-                        <div style="width: 50%" class="row border">
-                            <canvas id="myChart" width="400" height="400"></canvas>
+                        <div style="width: 100%" class="row border">
+                            <canvas id="myChart" width="400" height="200"></canvas>
                         </div>
                     </div><!-- /.card-body -->
                 </div><!-- /.card -->
@@ -151,23 +138,57 @@ $u = new App\Http\Controllers\OmMaterialController;
             $('#filter').click(function() {
                 var om = $('#oms').val();
                 var cmdo = $('#gcmdos').val();
+                myChart.data.datasets = [];
+                var idarray = [];
+                var nomearry = [];
                 if ($("#om").is(":visible")) {
                     if (om != '') {
                         $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
                             type: "POST",
                             url: "{{ route('oms_materials_total') }}",
                             dataType: "json",
+                            data: {
+                                om: om
+                            },
                             success: function(result) {
 
                                 var idarray = [];
                                 var nomearry = [];
 
-                                $.each(result, function(index, value) {
-                                    idarray.push(value.id);
-                                    nomearry.push(value.nomeOm);
+                                alert(result.length);
+
+                                // for(var i = 0; i < result.length; i++){
+                                //     $.each(result[i], function(index, value) {
+                                //     idarray.push(value.pivot.qtde);
+                                //     nomearry.push(value.nome);
+                                
+
+
+                                //     console.log(index + '-' + value.pivot.om_id)
+                                // });
+
+                              
+
+                                // }
+
+                                
+
+                                myChart.data.labels = ['7,62 Comum','7,62 traçante','7,62 Festim'];
+                                myChart.data.datasets.push({
+                                    label: '11 Bda',
+                                    backgroundColor: '#ff0000',
+                                    data: [25, 50, 55],
+                                    fill: false,
+                                });
+                                myChart.data.datasets.push({
+                                    label: '12 Bda',
+                                    backgroundColor: '#ff2342',
+                                    data: [32,70,34],
+                                    fill: false,
                                 });
 
-                                load_chart(idarray,nomearry);
+
+                                myChart.update();
 
                                 // alert(result[0].nomeOm);
 
@@ -175,7 +196,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                             }
                         });
 
-                        load_chart(om, cmdo = '');
+                        // load_chart(om, cmdo = '');
                     } else {
                         alert('Selecione uma OM');
                     }
@@ -183,7 +204,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                 if ($("#cmdo").is(":visible")) {
 
                     if (cmdo != '') {
-                        load_chart(om = '', cmdo);
+                        //  load_chart(om = '', cmdo);
                     } else {
                         $('#municao').hide();
                         alert('Selecione um  G Comando');
@@ -204,38 +225,27 @@ $u = new App\Http\Controllers\OmMaterialController;
 
 
             // Início da função para ativar o gráfico Mychart com framework Chart.js
-            function load_chart(id,nome) {
 
-                var ctx = document.getElementById('myChart').getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: nome,
-                        datasets: [{
-                            label: '# of Votes',
-                            data: id,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-
-                            ],
-                            borderWidth: 1
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [],
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
                         }]
                     },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
-            }
+
+                }
+            });
+
+
 
 
 
