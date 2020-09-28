@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth']], function(){
     Route::resource('oms.materials', 'OmMaterialController')->except(['index']); 
     Route::get('oms/materials/index', 'OmMaterialController@index')->name('oms_materials');
     Route::get('oms/materials/index/chart', 'OmMaterialController@indexChart')->name('oms_materials_chart');
+    Route::post('oms/materials/index/total', 'OmMaterialController@GetOmTotal')->name('oms_materials_total');
 
     // IRTAEx
     Route::get('irtaex/municoes/om', 'IrtaexController@ResumoMunOiiOm')->name('resumo_irtaex'); 

@@ -54,7 +54,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3"  id="om">
+                            <div class="col-md-3" id="om">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="oms"
                                         id="oms" multiple="multiple">
@@ -80,10 +80,10 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 <button type="submit" id="refresh" class="btn  bg-gray  btn-sm">Limpar</button>
                             </div>
                         </div>
-                        
-<div style="width: 50%">
- 
-</div>
+
+                        <div style="width: 50%" class="row border">
+                            <canvas id="myChart" width="400" height="400"></canvas>
+                        </div>
                     </div><!-- /.card-body -->
                 </div><!-- /.card -->
             </div><!-- /.col 12-->
@@ -106,161 +106,138 @@ $u = new App\Http\Controllers\OmMaterialController;
     <script>
         $(document).ready(function() {
 
+            // Start do plugin select 2 para os selects de OM e G Cmdos
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            $('#om').hide();
-            $('#cmdo').hide();
-            $('#bottons').hide();
-
-            $("#selection").val([]).change();
-
+            $(".js-example-placeholder-single").select2({ // select do tipo de escolha de filtro OM ou g Cmdo
+                placeholder: "Tipo de pesquisa",
+                allowClear: true
+            });
 
             $('#oms').select2({
                 placeholder: "Selecione uma OM..."
-            });
-
-            $(".js-example-placeholder-single").select2({
-                placeholder: "Tipo de pesquisa",
-                allowClear: true
             });
 
             $('#gcmdos').select2({
                 placeholder: "Selecione um G Cmdo..."
             });
 
+            // esconde os selects de OM e GCmdos para poder ser selecionado o tipo de seleção
 
-            $('#municao').hide();
+            $('#om').hide();
+            $('#cmdo').hide();
+            $('#bottons').hide();
 
+            // limpa o select de escolha do tipo de filtro
+            $("#selection").val([]).change();
 
-            // load_data();
-
-            function load_data(om = '', cmdo = '') {
-
-                $('#municao').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        url: "{{ route('oms_materials') }}",
-                        data: {
-                            om: om,
-                            cmdo: cmdo
-                        }
-
-                    },
-
-                    columns: [{
-                            data: 'id',
-                            name: 'id'
-                        },
-                        {
-                            data: 'nome',
-                            name: 'nome'
-                        },
-                        {
-                            data: 'modelo',
-                            name: 'modelo'
-                        },
-                        {
-                            data: 'qtde',
-                            name: 'qtde'
-                        },
-                        {
-                            data: 'validade',
-                            name: 'validade'
-                        },
-                    ],
-                    language: {
-                        processing: "Carregando dados...",
-                        search: "Procurar&nbsp;:",
-                        loadingRecords: "Carregando dados...",
-                        info: "Mostrando _START_ a _END_ de _TOTAL_ totais de dados",
-                        infoEmpty: "Mostrando 0 a 0 de 0 totais de dados",
-                        zeroRecords: "Nenhum resultado encontrado",
-                        emptyTable: "Nenhum resultado encontrado",
-                        infoFiltered: "(filtrado de _MAX_ totais de dados)",
-                        paginate: {
-                            first: "Primeira",
-                            previous: "Anterior",
-                            next: "Pr&oacute;xima",
-                            last: "&Uacuteltima"
-                        },
-                    },
-                });
-            }
-
+            // Ação para mudar o tipo de escolha e OM para G Cmdo e vice-versa
             $('#selection').change(function() {
                 if ($('#selection').val() == "G Cmdo") {
-                   $('#cmdo').show();
-                   $('#om').hide();
-                   $('#bottons').show();
-                   $("#oms").val([]).change();
+                    $('#cmdo').show();
+                    $('#om').hide();
+                    $('#bottons').show();
+                    $("#oms").val([]).change();
 
                 } else {
-                   $('#cmdo').hide();
-                   $('#om').show();
-                   $('#bottons').show();
-                   $("#gcmdos").val([]).change();
+                    $('#cmdo').hide();
+                    $('#om').show();
+                    $('#bottons').show();
+                    $("#gcmdos").val([]).change();
                 }
 
             });
 
+            // Ações para o click do botão filtrar
             $('#filter').click(function() {
-                $('#municao').show();
                 var om = $('#oms').val();
                 var cmdo = $('#gcmdos').val();
-
-                if($("#om").is(":visible")){
+                if ($("#om").is(":visible")) {
                     if (om != '') {
-                    $('#municao').DataTable().destroy();
-                    load_data(om, cmdo = '');
-                } else {
-                    $('#municao').hide();
-                    alert('Selecione uma OM');
-                }
-                }
+                        $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
+                            type: "POST",
+                            url: "{{ route('oms_materials_total') }}",
+                            dataType: "json",
+                            success: function(result) {
 
-                if($("#cmdo").is(":visible")){
+                                var idarray = [];
+                                var nomearry = [];
+
+                                $.each(result, function(index, value) {
+                                    idarray.push(value.id);
+                                    nomearry.push(value.nomeOm);
+                                });
+
+                                load_chart(idarray,nomearry);
+
+                                // alert(result[0].nomeOm);
+
+                                // alert(result); // mostra o resultado do return da route especificada na url
+                            }
+                        });
+
+                        load_chart(om, cmdo = '');
+                    } else {
+                        alert('Selecione uma OM');
+                    }
+                }
+                if ($("#cmdo").is(":visible")) {
 
                     if (cmdo != '') {
-                        
-                    $('#municao').DataTable().destroy();
-                    load_data(om = '', cmdo);
-                } else {
-                    $('#municao').hide();
-                    alert('Selecione um  G Comando');
+                        load_chart(om = '', cmdo);
+                    } else {
+                        $('#municao').hide();
+                        alert('Selecione um  G Comando');
+                    }
                 }
-
-                }
-
-              
-                
             });
+
+            // Ações para o botão refresh
 
             $('#refresh').click(function() {
                 $("#oms").val([]).change();
                 $("#gcmdos").val([]).change();
                 $("#selection").val([]).change();
-                $('#municao').DataTable().destroy();
-                $('#municao').hide();
                 $('#bottons').hide();
                 $('#om').hide();
                 $('#cmdo').hide();
-                // load_data();
             });
+
+
+            // Início da função para ativar o gráfico Mychart com framework Chart.js
+            function load_chart(id,nome) {
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: nome,
+                        datasets: [{
+                            label: '# of Votes',
+                            data: id,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+
 
 
 

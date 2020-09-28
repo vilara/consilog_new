@@ -104,21 +104,33 @@ class OmMaterialController extends Controller
     public function indexChart(Request $request)
     {
 
-        $omg = Om::all()->sortBy('siglaOM');
-        foreach ($omg as $rr) {
-            $t[] = $rr->id;
-        }
-       
-        $gcmdos = Comando::all()->sortBy('siglaCmdo');
-        foreach ($gcmdos as $gcmdo) {
-            $g[] = $gcmdo->id;
-        }
+       return $this->GetOmTotal($request);
+    }
 
-       
-      
 
-    
-        return view('oms.material.v.chartindex', compact('omg','gcmdos'));
+    public function GetOmTotal(Request $request){
+
+        if ($request->ajax()) {
+
+            return $omg = Om::all()->sortBy('siglaOM');
+             foreach ($omg as $rr) {
+                 $t[] = $rr->id;
+             }
+         }
+             
+         $omg = Om::all()->sortBy('siglaOM');
+             foreach ($omg as $rr) {
+                 $t[] = $rr->id;
+             }
+         
+             $gcmdos = Comando::all()->sortBy('siglaCmdo');
+             foreach ($gcmdos as $gcmdo) {
+                 $g[] = $gcmdo->id;
+             }
+     
+         
+             return view('oms.material.v.chartindex', compact('omg','gcmdos'));
+
     }
 
     /**
