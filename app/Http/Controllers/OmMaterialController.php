@@ -132,21 +132,23 @@ class OmMaterialController extends Controller
         if ($request->ajax()) {
             $nomeOM = collect([]);
             $materiais = collect([]);
-             for ($i=0; $i < count($request->om); $i++) { 
-                $nomeOm = Om::where('id', $request->om[$i])->get()->first();
-                $om = Om::where('id', $request->om[$i])->get()->map(function ($item) {
+
+            $matcalibre = V::where('calibre', '7,62')->with('material')->get();
+             
+            $matot = Om::whereIn('id', $request->om)->get()->map(function ($item) {
                 return $item->materials->filter(function ($value) {
                     return $value->materialable_type == 'v';
-                });
-            })->collapse();
-            $nomeOM->push($nomeOm->siglaOM);
-            $materiais->put($nomeOm->siglaOM,$om);
+                }); })->collapse()->groupBy('nee');
+
+             for ($i=0; $i < count($request->om); $i++) { 
+                $nomeOm = Om::where('id', $request->om[$i])->get()->first();
+                 $nomeOM->push($nomeOm->siglaOM);
              }
 
-             $r[] = [$nomeOM,$materiais];
+             $r[] = [$matcalibre,$nomeOM];
                 
 
-            return $r;
+            return $nomeOM;
          
          }
              

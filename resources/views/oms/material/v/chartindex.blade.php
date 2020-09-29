@@ -152,43 +152,98 @@ $u = new App\Http\Controllers\OmMaterialController;
                             },
                             success: function(result) {
 
-                                var idarray = [];
-                                var nomearry = [];
-
-                                alert(result.length);
-
-                                // for(var i = 0; i < result.length; i++){
-                                //     $.each(result[i], function(index, value) {
-                                //     idarray.push(value.pivot.qtde);
-                                //     nomearry.push(value.nome);
-                                
+                                var labels = [];
+                                var label = '';
+                                var data = [];
 
 
-                                //     console.log(index + '-' + value.pivot.om_id)
-                                // });
 
-                              
+                                for (var i = 0; i < result[0].length; i++) {
 
-                                // }
+                                    if (i == 0) {
+                                        $.each(result[0][0], function(index, value) {
+                                            labels.push(value.tipo + ' ' + value
+                                            .modelo);
+                                        });
+                                    }
+                                    if (i == 1) {
 
-                                
+                                        for (var ii = 0; ii < result[0][1].length; ii++) {
 
-                                myChart.data.labels = ['7,62 Comum','7,62 traçante','7,62 Festim'];
-                                myChart.data.datasets.push({
-                                    label: '11 Bda',
-                                    backgroundColor: '#ff0000',
-                                    data: [25, 50, 55],
-                                    fill: false,
-                                });
-                                myChart.data.datasets.push({
-                                    label: '12 Bda',
-                                    backgroundColor: '#ff2342',
-                                    data: [32,70,34],
-                                    fill: false,
-                                });
+                                            myChart.data.datasets.push({
+                                                label: result[0][1][ii],
+                                                backgroundColor: '#ff0000',
+                                                data: [25, 50, 55, 50, 55, 44],
+                                                fill: false,
+                                            });
+
+                                            //  console.log(result[0][1][ii]);
+                                        }
+                                    }
+
+                                }
+
+                                myChart.data.labels = labels;
 
 
                                 myChart.update();
+
+
+
+                                //    $.each(result[0][0], function(index, value) {
+                                //                  labels.push(value.tipo+' '+value.modelo);
+                                //  console.log(value.tipo+'  '+value.modelo);
+                                //             });
+
+                                // for (var i = 0; i < result[0].length; i++) {
+                                //     if (i == 0) { // primeiro indice do array refere-se aos tipos de munições selecionadas
+                                //         $.each(result[0][0], function(index, value) {
+                                //             labels.push(value[0][0]);
+                                //         });
+                                //     } // fim do primeiro indice
+                                // }
+
+
+
+
+                                // $.each(result[0], function(index, value) {
+
+                                //    console.log(value[0].modelo)
+                                //  });
+
+
+                                // for (let index = 0; index < result.length; index++) {
+
+                                //    if(index == 0){
+                                //     $.each(result[0], function(inde, value) {
+                                //     labels.push(value[0].modelo);
+                                //     });
+
+                                //    }
+
+                                // }
+
+
+
+                                // alert(encontraMaior(result).length);
+
+                                //  for(var i = 0; i < result.length; i++){
+                                //    $.each(result, function(index, value) {
+                                //     labels.push(value.modelo);
+                                // nomearry.push(value.nome);
+
+
+
+                                //     console.log(value.modelo)
+                                //    });
+
+
+
+                                //   }
+
+
+
+
 
                                 // alert(result[0].nomeOm);
 
