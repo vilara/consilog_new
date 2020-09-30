@@ -47,7 +47,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                         <div class="row mb-3 input-dataranger">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select class="js-example-placeholder-single js-states form-control" id="selection">
+                                    <select class="js-example-placeholder-single js-states form-control  form-control-sm select2bs4" id="selection">
                                         <option></option>
                                         <option>G Cmdo</option>
                                         <option>OM</option>

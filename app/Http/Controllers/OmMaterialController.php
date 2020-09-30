@@ -31,7 +31,7 @@ class OmMaterialController extends Controller
         foreach ($omg as $rr) {
             $t[] = $rr->id;
         }
-       
+
         $gcmdos = Comando::all()->sortBy('siglaCmdo');
         foreach ($gcmdos as $gcmdo) {
             $g[] = $gcmdo->id;
@@ -40,14 +40,14 @@ class OmMaterialController extends Controller
         if ($request->ajax()) {
 
 
-         
-               if(isset($request->om)){
-                    $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
+
+            if (isset($request->om)) {
+                $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
                     return $item->materials->filter(function ($value) {
                         return $value->materialable_type == 'v';
                     });;
                 })->collapse();
-               }else{
+            } else {
 
                 $cmdo = Comando::whereIn('id', $request->cmdo)->get();
                 $c = $cmdo->first()->getOmdsId();
@@ -57,13 +57,12 @@ class OmMaterialController extends Controller
                         return $value->materialable_type == 'v';
                     });;
                 })->collapse();
+            }
 
-               }
 
 
-               
-          
-            
+
+
             $material = $om->groupBy('nee');
 
             return DataTables::of($material)
@@ -97,92 +96,101 @@ class OmMaterialController extends Controller
                 ->rawColumns(['validade'])
                 ->make();
         }
-        return view('oms.material.v.index', compact('omg','gcmdos'));
+        return view('oms.material.v.index', compact('omg', 'gcmdos'));
     }
 
 
     public function indexChart(Request $request)
     {
-
-
-        // $om = Om::whereIn('id', [2,11])->with('materials')->get();
-
-        // $o = $om->groupBy(function($t){
-        //          return $t->materials->groupBy('pivot.nee');
-        //     });
-        
-        
-        // // $m = $om->filter(function ($value) {
-        // //     return $value->materials->filter(function ($item){
-        // //           return $item->materialable_type == "v";
-        // //     });
-        // // });
-        // // $mm = $m->map(function($t){
-        // //     return $t->materials->groupBy('nee');
-        // // });
-
-        // dd($o);
-
-
-       return $this->GetOmTotal($request);
+        return $this->GetOmTotal($request);
     }
 
 
-    public function GetOmTotal(Request $request){
+    public function GetOmTotal(Request $request)
+    {
+
+
+      //  $c = Comando::where('id', 3)->get()->first();
+    //dd($c);
+
         if ($request->ajax()) {
+
             $nomeOM = collect([]);
             $dados = collect([]);
             $om = collect([]);
-            if(isset($request->om)){
-               
+            $m[] = '';
+            $matcalibre = V::whereIn('id', $request->mun)->with('material')->get();
 
-                    $om = $request->om;
-             
-                
-            }else{
+
+            if (isset($request->om)) {
+                $om = $request->om;
+                for ($i = 0; $i < count($om); $i++) {
+
+                    $nomeOm = Om::where('id', $om[$i])->get()->first();
+                    $nomeOM->push($nomeOm->siglaOM);
+                    unset($m);
+                    for ($ii = 0; $ii < $matcalibre->count(); $ii++) {
+                        $q =  $matcalibre[$ii]->material->oms->filter(function ($iten) use ($nomeOm) {
+                            return $iten->id == $nomeOm->id;
+                        })->sum('pivot.qtde');
+                        $m[] = $q;
+                    }
+
+                    $dados->push($m);
+                }
+            } else {
+                $cmdo = $request->cmdo;
+
+              
+
+                    // $c = $nomeOm->first()->getOmdsId();
+
+                   
+
+              
+                for ($i = 0; $i < count($cmdo); $i++) {
+
+                    $nomeOm = Comando::where('id', $cmdo[$i])->get()->first();
+                    $nomeOM->push($nomeOm->siglaCmdo);
+
+                    $c = $nomeOm->getOmdsId();
+                    unset($m);
+                     for ($ii = 0; $ii < $matcalibre->count(); $ii++) {
+
+                        $q =  $matcalibre[$ii]->material->oms->whereIn('id',$c)->sum('pivot.qtde');
+                        $m[] = $q;
+
+                    }
+                    $dados->push($m);
+
+                    
+
+                }
+
 
             }
-            $m[]='';
-            $matcalibre = V::whereIn('id', $request->mun)->with('material')->get();
-             
-          
-             for ($i=0; $i < count($om); $i++) { 
-               
-                $nomeOm = Om::where('id', $om[$i])->get()->first();
-                 $nomeOM->push($nomeOm->siglaOM);
-                 unset($m); 
-                 for ($ii=0; $ii < $matcalibre->count(); $ii++) { 
-                   $q =  $matcalibre[$ii]->material->oms->filter(function ($iten) use ($nomeOm) {
-                        return $iten->id == $nomeOm->id;
-                    })->sum('pivot.qtde');
-                    $m[] = $q;
-                 }
 
-                 $dados->push($m);
 
-             }
-             $r[] = [$matcalibre,$nomeOM,$dados];
-                
+            $r[] = [$matcalibre, $nomeOM, $dados];
+
 
             return $r;
-         
-         }
-             
-         $omg = Om::all()->sortBy('siglaOM');
-             foreach ($omg as $rr) {
-                 $t[] = $rr->id;
-             }
-         
-             $gcmdos = Comando::all()->sortBy('siglaCmdo');
-             foreach ($gcmdos as $gcmdo) {
-                 $g[] = $gcmdo->id;
-             }
+        }
 
-             $mun = V::all();
-     
-         
-             return view('oms.material.v.chartindex', compact('omg','gcmdos','mun'));
+        $omg = Om::all()->sortBy('siglaOM');
+        foreach ($omg as $rr) {
+            $t[] = $rr->id;
+        }
 
+        $gcmdos = Comando::all()->sortBy('siglaCmdo');
+        foreach ($gcmdos as $gcmdo) {
+            $g[] = $gcmdo->id;
+        }
+
+        $mun = V::all();
+
+
+        return view('oms.material.v.chartindex', compact('omg', 'gcmdos', 'mun'));
     }
 
     /**

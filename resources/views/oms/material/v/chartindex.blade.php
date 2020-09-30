@@ -179,23 +179,16 @@ $u = new App\Http\Controllers\OmMaterialController;
                 return cor;
             }
 
-            // Ações para o click do botão filtrar
-            $('#filter').on("click", function() {
 
-                var om = $('#oms').val();
-                var cmdo = $('#gcmdos').val();
-                var mun = $('#mun').val();
-                if ($("#om").is(":visible")) {
-                    $('#myChart').show();
-                    if (om != '' && mun != '') {
-                        //  myChart.render(); 
-                        $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
+           function load_ajax(om = '',cmdo = '',mun =''){
+                $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
                             type: "POST",
                             url: "{{ route('oms_materials_total') }}",
                             dataType: "json",
                             data: {
                                 om: om,
-                                mun: mun
+                                mun: mun,
+                                cmdo: cmdo
                             },
                             success: function(result) {
 
@@ -242,18 +235,29 @@ $u = new App\Http\Controllers\OmMaterialController;
                             }
                         });
 
-                        // load_chart(om, cmdo = '');
+            }
+
+            // Ações para o click do botão filtrar
+            $('#filter').on("click", function() {
+
+                var om = $('#oms').val();
+                var cmdo = $('#gcmdos').val();
+                var mun = $('#mun').val();
+                if ($("#om").is(":visible")) {
+                    $('#myChart').show();
+                    if (om != '' && mun != '') {
+                        load_ajax(om,cmdo = '',mun);
                     } else {
-                        alert('Selecione uma OM e um munição');
+                        alert('Selecione uma OM e um tipo de munição');
                     }
                 }
                 if ($("#cmdo").is(":visible")) {
 
-                    if (cmdo != '') {
-                        //  load_chart(om = '', cmdo);
+                    if (cmdo != ''&& mun != '') {
+                        $('#myChart').show();
+                        load_ajax(om = '',cmdo,mun);
                     } else {
-                        $('#municao').hide();
-                        alert('Selecione um  G Comando');
+                        alert('Selecione um  G Comando e um tipo de munição');
                     }
                 }
             });
