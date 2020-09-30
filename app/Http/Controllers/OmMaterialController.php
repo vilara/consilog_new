@@ -131,24 +131,30 @@ class OmMaterialController extends Controller
     public function GetOmTotal(Request $request){
         if ($request->ajax()) {
             $nomeOM = collect([]);
-            $materiais = collect([]);
-
+            $dados = collect([]);
+            $m[]='';
             $matcalibre = V::where('calibre', '7,62')->with('material')->get();
              
-            $matot = Om::whereIn('id', $request->om)->get()->map(function ($item) {
-                return $item->materials->filter(function ($value) {
-                    return $value->materialable_type == 'v';
-                }); })->collapse()->groupBy('nee');
-
+          
              for ($i=0; $i < count($request->om); $i++) { 
+               
                 $nomeOm = Om::where('id', $request->om[$i])->get()->first();
                  $nomeOM->push($nomeOm->siglaOM);
-             }
+                 unset($m); 
+                 for ($ii=0; $ii < $matcalibre->count(); $ii++) { 
+                   $q =  $matcalibre[$ii]->material->oms->filter(function ($iten) use ($nomeOm) {
+                        return $iten->id == $nomeOm->id;
+                    })->sum('pivot.qtde');
+                    $m[] = $q;
+                 }
 
-             $r[] = [$matcalibre,$nomeOM];
+                 $dados->push($m);
+
+             }
+             $r[] = [$matcalibre,$nomeOM,$dados];
                 
 
-            return $nomeOM;
+            return $r;
          
          }
              

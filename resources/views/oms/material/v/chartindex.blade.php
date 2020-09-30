@@ -138,9 +138,6 @@ $u = new App\Http\Controllers\OmMaterialController;
             $('#filter').click(function() {
                 var om = $('#oms').val();
                 var cmdo = $('#gcmdos').val();
-                myChart.data.datasets = [];
-                var idarray = [];
-                var nomearry = [];
                 if ($("#om").is(":visible")) {
                     if (om != '') {
                         $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
@@ -152,11 +149,12 @@ $u = new App\Http\Controllers\OmMaterialController;
                             },
                             success: function(result) {
 
+                                var cores = ['#B22222','#0000EE','#D8BFD8','#6E7B8B','#9BCD9B','#EE9A00']
+                                myChart.data.datasets = [];
                                 var labels = [];
                                 var label = '';
-                                var data = [];
-
-
+                                var datas = result[0][2];
+                                
 
                                 for (var i = 0; i < result[0].length; i++) {
 
@@ -164,16 +162,17 @@ $u = new App\Http\Controllers\OmMaterialController;
                                         $.each(result[0][0], function(index, value) {
                                             labels.push(value.tipo + ' ' + value
                                             .modelo);
+                                          
                                         });
                                     }
                                     if (i == 1) {
 
                                         for (var ii = 0; ii < result[0][1].length; ii++) {
-
+                                            
                                             myChart.data.datasets.push({
                                                 label: result[0][1][ii],
-                                                backgroundColor: '#ff0000',
-                                                data: [25, 50, 55, 50, 55, 44],
+                                                backgroundColor: cores[ii],
+                                                data: datas[ii],
                                                 fill: false,
                                             });
 
@@ -189,65 +188,6 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 myChart.update();
 
 
-
-                                //    $.each(result[0][0], function(index, value) {
-                                //                  labels.push(value.tipo+' '+value.modelo);
-                                //  console.log(value.tipo+'  '+value.modelo);
-                                //             });
-
-                                // for (var i = 0; i < result[0].length; i++) {
-                                //     if (i == 0) { // primeiro indice do array refere-se aos tipos de munições selecionadas
-                                //         $.each(result[0][0], function(index, value) {
-                                //             labels.push(value[0][0]);
-                                //         });
-                                //     } // fim do primeiro indice
-                                // }
-
-
-
-
-                                // $.each(result[0], function(index, value) {
-
-                                //    console.log(value[0].modelo)
-                                //  });
-
-
-                                // for (let index = 0; index < result.length; index++) {
-
-                                //    if(index == 0){
-                                //     $.each(result[0], function(inde, value) {
-                                //     labels.push(value[0].modelo);
-                                //     });
-
-                                //    }
-
-                                // }
-
-
-
-                                // alert(encontraMaior(result).length);
-
-                                //  for(var i = 0; i < result.length; i++){
-                                //    $.each(result, function(index, value) {
-                                //     labels.push(value.modelo);
-                                // nomearry.push(value.nome);
-
-
-
-                                //     console.log(value.modelo)
-                                //    });
-
-
-
-                                //   }
-
-
-
-
-
-                                // alert(result[0].nomeOm);
-
-                                // alert(result); // mostra o resultado do return da route especificada na url
                             }
                         });
 
