@@ -1,5 +1,6 @@
 @php
 $u = new App\Http\Controllers\OmMaterialController;
+//dd($mun[0]);
 @endphp
 
 @extends('adminlte::page')
@@ -45,11 +46,11 @@ $u = new App\Http\Controllers\OmMaterialController;
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="oms"
                                         id="oms" multiple="multiple">
-                                        <option>Todas</option>
                                         @foreach ($omg as $omg)
                                             <option value="{{ $omg->id }}">{{ $omg->siglaOM }}</option>
                                         @endforeach
                                     </select>
+                                    <input type="checkbox" id="checkbox">Select All
                                 </div>
                             </div>
                             <div class="col-md-3" id="cmdo">
@@ -62,6 +63,19 @@ $u = new App\Http\Controllers\OmMaterialController;
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-md-3" id="mu">
+                                <div class="form-group">
+                                    <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="mun"
+                                        id="mun" multiple="multiple">
+                                        @foreach ($mun as $mu)
+                                            <option value="{{ $mu->id }}">
+                                                {{ $mu->tipo . ' ' . $mu->calibre . ' ' . $mu->modelo }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="col-3" id="bottons">
                                 <button type="submit" id="filter" class="btn  bg-gray  btn-sm">Buscar</button>
                                 <button type="submit" id="refresh" class="btn  bg-gray  btn-sm">Limpar</button>
@@ -104,15 +118,32 @@ $u = new App\Http\Controllers\OmMaterialController;
                 placeholder: "Selecione uma OM..."
             });
 
+            $("#checkbox").click(function() {
+                if ($("#checkbox").is(':checked')) {
+                    $("#oms > option").prop("selected", "selected"); // Select All Options
+                    $("#oms").trigger("change"); // Trigger change to select 2
+                } else {
+                    $("#oms > option").removeAttr("selected");
+                    $("#oms").trigger("change"); // Trigger change to select 2
+                }
+            });
+
             $('#gcmdos').select2({
                 placeholder: "Selecione um G Cmdo..."
             });
+
+            $('#mun').select2({
+                placeholder: "Selecione uma munição..."
+            });
+
 
             // esconde os selects de OM e GCmdos para poder ser selecionado o tipo de seleção
 
             $('#om').hide();
             $('#cmdo').hide();
+            $('#mu').hide();
             $('#bottons').hide();
+            $('#myChart').hide();
 
             // limpa o select de escolha do tipo de filtro
             $("#selection").val([]).change();
@@ -123,55 +154,75 @@ $u = new App\Http\Controllers\OmMaterialController;
                     $('#cmdo').show();
                     $('#om').hide();
                     $('#bottons').show();
+                    $('#mu').show();
                     $("#oms").val([]).change();
 
                 } else {
                     $('#cmdo').hide();
                     $('#om').show();
+                    $('#mu').show();
                     $('#bottons').show();
                     $("#gcmdos").val([]).change();
                 }
 
             });
 
+            // gera uma cor aleatória em hexadecimal
+            function gera_cor() {
+                var hexadecimais = '0123456789ABCDEF';
+                var cor = '#';
+                // Pega um número aleatório no array acima
+                for (var i = 0; i < 6; i++) {
+                    //E concatena à variável cor
+                    cor += hexadecimais[Math.floor(Math.random() * 16)];
+                }
+                return cor;
+            }
+
             // Ações para o click do botão filtrar
-            $('#filter').click(function() {
+            $('#filter').on("click", function() {
+
                 var om = $('#oms').val();
                 var cmdo = $('#gcmdos').val();
+                var mun = $('#mun').val();
                 if ($("#om").is(":visible")) {
-                    if (om != '') {
+                    $('#myChart').show();
+                    if (om != '' && mun != '') {
+                        //  myChart.render(); 
                         $.ajax({ // vincula a cetegoria de id no data id com o respectivo OII
                             type: "POST",
                             url: "{{ route('oms_materials_total') }}",
                             dataType: "json",
                             data: {
-                                om: om
+                                om: om,
+                                mun: mun
                             },
                             success: function(result) {
 
-                                var cores = ['#B22222','#0000EE','#D8BFD8','#6E7B8B','#9BCD9B','#EE9A00']
+                               
                                 myChart.data.datasets = [];
                                 var labels = [];
                                 var label = '';
                                 var datas = result[0][2];
-                                
+
 
                                 for (var i = 0; i < result[0].length; i++) {
 
                                     if (i == 0) {
                                         $.each(result[0][0], function(index, value) {
                                             labels.push(value.tipo + ' ' + value
-                                            .modelo);
-                                          
+                                                .calibre + ' ' + value
+                                                .modelo);
+
                                         });
                                     }
                                     if (i == 1) {
 
                                         for (var ii = 0; ii < result[0][1].length; ii++) {
-                                            
+
                                             myChart.data.datasets.push({
                                                 label: result[0][1][ii],
-                                                backgroundColor: cores[ii],
+                                                backgroundColor: gera_cor(),
                                                 data: datas[ii],
                                                 fill: false,
                                             });
@@ -193,7 +244,7 @@ $u = new App\Http\Controllers\OmMaterialController;
 
                         // load_chart(om, cmdo = '');
                     } else {
-                        alert('Selecione uma OM');
+                        alert('Selecione uma OM e um munição');
                     }
                 }
                 if ($("#cmdo").is(":visible")) {
@@ -210,10 +261,15 @@ $u = new App\Http\Controllers\OmMaterialController;
             // Ações para o botão refresh
 
             $('#refresh').click(function() {
+
+                $('#checkbox').prop("checked", false);
                 $("#oms").val([]).change();
                 $("#gcmdos").val([]).change();
                 $("#selection").val([]).change();
+                $("#mun").val([]).change();
                 $('#bottons').hide();
+                $('#myChart').hide();
+                $('#mu').hide();
                 $('#om').hide();
                 $('#cmdo').hide();
             });

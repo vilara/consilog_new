@@ -132,13 +132,23 @@ class OmMaterialController extends Controller
         if ($request->ajax()) {
             $nomeOM = collect([]);
             $dados = collect([]);
+            $om = collect([]);
+            if(isset($request->om)){
+               
+
+                    $om = $request->om;
+             
+                
+            }else{
+
+            }
             $m[]='';
-            $matcalibre = V::where('calibre', '7,62')->with('material')->get();
+            $matcalibre = V::whereIn('id', $request->mun)->with('material')->get();
              
           
-             for ($i=0; $i < count($request->om); $i++) { 
+             for ($i=0; $i < count($om); $i++) { 
                
-                $nomeOm = Om::where('id', $request->om[$i])->get()->first();
+                $nomeOm = Om::where('id', $om[$i])->get()->first();
                  $nomeOM->push($nomeOm->siglaOM);
                  unset($m); 
                  for ($ii=0; $ii < $matcalibre->count(); $ii++) { 
@@ -167,9 +177,11 @@ class OmMaterialController extends Controller
              foreach ($gcmdos as $gcmdo) {
                  $g[] = $gcmdo->id;
              }
+
+             $mun = V::all();
      
          
-             return view('oms.material.v.chartindex', compact('omg','gcmdos'));
+             return view('oms.material.v.chartindex', compact('omg','gcmdos','mun'));
 
     }
 
