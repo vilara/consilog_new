@@ -140,13 +140,6 @@ class OmMaterialController extends Controller
                 }
             } else {
                 $cmdo = $request->cmdo;
-
-              
-
-                    // $c = $nomeOm->first()->getOmdsId();
-
-                   
-
               
                 for ($i = 0; $i < count($cmdo); $i++) {
 
@@ -162,12 +155,7 @@ class OmMaterialController extends Controller
 
                     }
                     $dados->push($m);
-
-                    
-
                 }
-
-
             }
 
 

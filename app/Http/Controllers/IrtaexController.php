@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Comando;
 use App\irtaexCategory;
 use App\IrtaexEfetivo;
 use App\IrtaexOii;
@@ -251,6 +252,101 @@ class IrtaexController extends Controller
         }
 
         return view('irtaex.om.mun.index', compact('omg', 'categories','oi'));
+    }
+
+    public function indexChart(Request $request)
+    {
+        return $this->ResumoMunTotOmChart($request);
+    }
+
+    public function ResumoMunTotOmChart(Request $request)
+    {
+
+        $omg = Om::all()->sortBy('siglaOM');                     // envia todas as OM para view
+        $categories = irtaexCategory::all();  // envia todas as categorias para view
+        $oi = IrtaexOii::where('id',">", 0)->select('oii')->distinct()->get();
+
+        $gcmdos = Comando::all()->sortBy('siglaCmdo');
+        foreach ($gcmdos as $gcmdo) {
+            $g[] = $gcmdo->id;
+        }
+
+        // $matcalibre = IrtaexOii::where('irtaexcategory_id', 1)->whereIn('oii', ['TIA','TCB'])->get();
+         
+        // $mm = $matcalibre->map(function ($value) {
+        //     return $value->vs;
+        // })->collapse()->groupBy('nee');
+        // dd($mm);
+        
+
+         if ($request->ajax()) {
+
+            
+
+            // $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->get();
+            $matcalibre = IrtaexOii::where('irtaexcategory_id', $request->category)->whereIn('oii', $request->oii)->get();
+
+            // if (!isset($request->oii)) {
+            //     $o = $matcalibre->map(function ($value) {
+            //         return $value->oii;
+            //     })->all();
+            // } else {
+            //     $o = $request->oii;
+            // }
+
+            // $matcalibre = $matcalibre->whereIn('oii', $o)->get();
+
+            $nomeOM = collect([]);
+            $dados = collect([[0,67,0,35,77],[0,67,65,35,77],[0,67,65,35,0],[0,67,65,35,77],[0,67,65,35,77]]);
+            $om = collect([]);
+            $category = collect([]);
+            $m[] = '';
+
+
+           // $matcalibre = V::whereIn('id', [3])->with('material')->get();
+                  $municao = $matcalibre->map(function ($value) {
+                        return $value->vs;
+                    })->collapse()->groupBy('nee');
+
+            if (isset($request->om)) {
+                $om = $request->om;
+
+                    $nomeOm = Om::where('id', $om)->get()->first();
+                   
+
+                    unset($m);
+
+                    foreach ($municao as $mun) {
+                        
+                        $nomeOM->push($mun[0]->tipo." ".$mun[0]->modelo." ".$mun[0]->calibre); 
+                        $m[] = 35;
+                   
+                    }
+                    
+                   // $nomeOM->push("teste"); 
+                    
+                    
+                   // for ($ii = 0; $ii < $matcalibre->count(); $ii++) {
+                        // $q =  $matcalibre[$ii]->material->oms->filter(function ($iten) use ($nomeOm) {
+                        //     return $iten->id == $nomeOm->id;
+                        // })->sum('pivot.qtde');
+                       // $m[] = 35;
+                  //  }
+                //    $dados->push($m);
+            } 
+
+            $teste = collect([]);
+            $teste->put('TIP',['Cartucho 9mm'=>12,'Cartucho 7,62 comum'=>25,'Cartucho 7,62 festim'=>50]);
+            $teste->put('TIB',['Cartucho 9mm'=>27,'Cartucho 7,62 comum'=>41,'Cartucho 7,62 festim'=>44]);
+            $teste->put('TIA',['Cartucho 9mm'=>3,'Cartucho 7,62 comum'=>15,'Cartucho 7,62 festim'=>20]);
+
+            $r[] = [$matcalibre, $nomeOM, $dados];
+
+
+            return $teste;
+         
+        }
+        return view('irtaex.om.mun.indexChart', compact('omg', 'categories','oi','gcmdos'));
     }
 
     /**

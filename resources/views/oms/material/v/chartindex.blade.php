@@ -117,7 +117,7 @@ $u = new App\Http\Controllers\OmMaterialController;
             $('#oms').select2({
                 placeholder: "Selecione uma OM..."
             });
-
+             // seleção de todos os itens da select oms
             $("#checkbox").click(function() {
                 if ($("#checkbox").is(':checked')) {
                     $("#oms > option").prop("selected", "selected"); // Select All Options

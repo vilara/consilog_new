@@ -372,6 +372,10 @@ return [
                     'url'     => 'irtaex/municoes/om',
                     'can'     => 'read',
                 ],
+                [
+                    'text' => 'Gráficos',
+                    'url'  => 'irtaex/municoes/tot/chart',
+                ],
             ],
         ],
     ],
