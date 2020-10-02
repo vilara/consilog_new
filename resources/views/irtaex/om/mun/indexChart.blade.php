@@ -94,7 +94,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     <input class="form-check-input" type="checkbox" id="ef" name="ef" checked>
                                     <input class="form-control form-control-sm" type="text" id="calc" name="calc" width="5"
                                         placeholder="qual efetivo?">
-                                    <label class="form-check-label" id="label" for="ef">Efetivo existente</label>
+                                    <label class="form-check-label" id="label" for="ef">Efetivo previsto</label>
                                 </div>
                             </div>
                             <div class="col-3" id="bottons">
@@ -308,16 +308,20 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     },
                     success: function(result) {
 
+                      console.log(result);
+                        // $.each(result, function(index, value) {
+
+                        // });
+
                         var labels = [];
-                        $.each(result, function(index, value) {
+                        $.each(result[0][0], function(index, value) {
                             labels.push(index);
 
                         });
 
-                        var mun = Object.values(result); // transforma num array de values o objeto result
+                        var mun = Object.values(result[0][0]); // transforma num array de values o objeto result
                         var mun1 = Object.values(mun)[0]; // transforma num array de values o primeito item do array mun
                         var mun2 = Object.keys(mun1); // transforma num array de keys ou seja as muniçẽs do objeto mun1
-                    //    console.log(Object.values(mun));
 
                         
                         myChart.data.datasets = [];
@@ -335,45 +339,82 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         dd.push(datas);
                         }
 
+                       // console.log(dd);
+
                        var df = [];
                        var dat = [];
-                       for(var l = 0; l < dd.length; l++){
+                      for(var u = 0; u <  mun.length; u++){
                        dat.push([]);
+
+                      }
+                                             
+                       
+                       for(var l = 0; l < dd.length; l++){
+                       
                        }
+                     //  console.log(dd)
                               var d = [];
-                         for(var y = 0; y < dd.length; y++){
-                                     for(var yy = 0; yy < dd[y].length; yy++){
+                              var e = 0;
+                              var g = [];
+                         for(var y = 0; y < mun.length; y++){
+                            
+                                     for(var yy = 0; yy < mun2.length; yy++){  
+                                         e++;
                                       //  dat[y] = dd[y][yy];
-                                        dat[yy][y] = dd[y][yy];
-                                        // dat[0][1] = 4;
-                                        // dat[0][2] = 5;
+                                       //dat[yy][y] = dd[y][yy];
+                                       g[e]=dd[y][yy];
+                                      
+                                     //  console.log(dd[y][yy])
+                                        // dat[0][0] = 25;
+                                        // dat[0][1] = 50;
+                                        // dat[0][2] = 10;
+                                        // dat[0][3] = 19; 
+                                        // dat[0][4] = 18;
 
                                         // dat[1][0] = 5;
                                         // dat[1][1] = 7;
                                         // dat[1][2] = 9;
+                                        // dat[1][3] = 5;
+                                        // dat[1][4] = 5;
 
                                         // dat[2][0] = 2;
                                         // dat[2][1] = 4;
                                         // dat[2][2] = 9;
-                                       // console.log(dd[y][yy])
+                                        // dat[2][3] = 5;
+                                        // dat[2][4] = 5;
+
+                                        // dat[3][0] = 2;
+                                        // dat[3][1] = 4;
+                                        // dat[3][2] = 9;
+                                        // dat[3][3] = 5;
+                                        // dat[3][4] = 5;
+
+                                        // dat[4][0] = 8;
+                                        // dat[4][1] = 20;
+                                        // dat[4][2] = 3;
+                                        // dat[4][3] = 10;
+                                        // dat[4][4] = 11;
+
+                                       d[yy] = dat[yy];
+                                     // console.log(dat[y][yy])
+                                     // console.log(g[e])
                                      }
 
-                              d[y] = dat[y];    
+                                 
 
                        
                          }
-                         console.log(d);
+                         
 
-
-                       
-
+                         
+                     
 
                         for (var ii = 0; ii < mun2.length; ii++) {
 
                             myChart.data.datasets.push({
                             label: mun2[ii], // tipos de munição 
                             backgroundColor: gera_cor(),
-                            data: d[ii],
+                            data: result[0][1][ii],
                             fill: false,
                         });
 

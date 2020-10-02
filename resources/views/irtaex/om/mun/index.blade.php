@@ -53,7 +53,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="checkbox" id="ef" name="ef" checked>
                                     <input class="form-control form-control-sm" type="text" id="calc" name="calc" width="5" placeholder="qual efetivo?">
-                                    <label class="form-check-label" id="label" for="ef">Efetivo existente</label>
+                                    <label class="form-check-label" id="label" for="ef">Efetivo previsto</label>
                                 </div>
                             </div>
                             <div class="col-md-3">

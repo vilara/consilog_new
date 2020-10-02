@@ -36,9 +36,9 @@ class IrtaexController extends Controller
                     return $oo->oii;
                 })
                 ->editColumn('soma', function ($oo) use ($request) {
-                    if(!isset($request->efetivo)){
+                    if (!isset($request->efetivo)) {
                         return $this->SomaEfetivoOiiOm($oo, $request->om); // $oo é um objeto da Classe Irtaexoii
-                    }else{
+                    } else {
                         return $request->efetivo; // $oo é um objeto da Classe Irtaexoii
                     }
                 })
@@ -72,17 +72,17 @@ class IrtaexController extends Controller
                 })
                 ->editColumn('estoque', function ($municao) use ($ommm, $request, $o) {
 
-                     $estoque = $municao->first()->material->oms->filter(function ($iten) use ($ommm) {
+                    $estoque = $municao->first()->material->oms->filter(function ($iten) use ($ommm) {
                         return $iten->id == $ommm[0]->id;
                     })->sum('pivot.qtde');
-                     
-                     $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o,$request->efetivo);
-                     if($necc > 0){
 
-                         $perr = number_format($estoque * 100 / $necc, 0, '', '') . " %";
-                     }else{
-                         $perr = -1;
-                     }
+                    $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o, $request->efetivo);
+                    if ($necc > 0) {
+
+                        $perr = number_format($estoque * 100 / $necc, 0, '', '') . " %";
+                    } else {
+                        $perr = -1;
+                    }
                     if ($perr < 0) {
                         $perr = '0 %';
                     }
@@ -94,9 +94,10 @@ class IrtaexController extends Controller
                     } elseif ($perr == '100 %') {
                         $c = 'class="bg-success disabled color-palette"';
                     } else {
-                        $c = 'class="bg-warning disabled color-palette"';}
+                        $c = 'class="bg-warning disabled color-palette"';
+                    }
 
-                    return '<div ' . $c . '>' .$estoque  . '  <span class="badge badge-info right ml-2 mb-1">' . $perr . '</span></div>';
+                    return '<div ' . $c . '>' . $estoque  . '  <span class="badge badge-info right ml-2 mb-1">' . $perr . '</span></div>';
                 })
                 ->editColumn('mun_nec', function ($municao) use ($ommm, $request, $o) {
 
@@ -111,7 +112,7 @@ class IrtaexController extends Controller
                     //  else{ $c = 'class="bg-warning disabled color-palette"';}
 
 
-                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o,$request->efetivo);
+                    return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o, $request->efetivo);
                 })
                 ->rawColumns(['mun_nec', 'estoque'])
                 ->make(true);
@@ -122,7 +123,7 @@ class IrtaexController extends Controller
     {
         $omg = Om::all()->sortBy('siglaOM');                     // envia todas as OM para view
         $categories = irtaexCategory::all();  // envia todas as categorias para view
-        $oi = IrtaexOii::where('id',">", 0)->select('oii')->distinct()->get();
+        $oi = IrtaexOii::where('id', ">", 0)->select('oii')->distinct()->get();
 
         if ($request->ajax()) {
             $matt = new MaterialOmTotalController;
@@ -163,13 +164,13 @@ class IrtaexController extends Controller
                     return $municao->pivot->quantidade;
                 })
                 ->addColumn('efetivo', function ($municao) use ($ommm, $oo, $request) {
-                    if(!isset($request->efetivo)){
-                    $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
-                        return $item->oms;
-                    })->collapse()->filter(function ($val) use ($ommm) {
-                        return $val->id == $ommm[0]->id;
-                    })->sum('pivot.efetivo');}
-                    else{
+                    if (!isset($request->efetivo)) {
+                        $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
+                            return $item->oms;
+                        })->collapse()->filter(function ($val) use ($ommm) {
+                            return $val->id == $ommm[0]->id;
+                        })->sum('pivot.efetivo');
+                    } else {
                         $o = $request->efetivo;
                     }
 
@@ -179,37 +180,37 @@ class IrtaexController extends Controller
                 })
                 ->addColumn('mun_nec', function ($municao) use ($ommm, $oo, $request) {
 
-                    if(!isset($request->efetivo)){
+                    if (!isset($request->efetivo)) {
                         $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
                             return $item->oms;
                         })->collapse()->filter(function ($val) use ($ommm) {
                             return $val->id == $ommm[0]->id;
-                        })->sum('pivot.efetivo');}
-                        else{
-                            $o = $request->efetivo;
-                        }
+                        })->sum('pivot.efetivo');
+                    } else {
+                        $o = $request->efetivo;
+                    }
 
                     $nec = $municao->pivot->quantidade;
 
                     return $o * $nec;
                 })
                 ->addColumn('estoque', function ($municao) use ($ommm, $oo) {
-                    return '<div><b>'.$municao->material->oms->filter(function ($iten) use ($ommm) {
-                        return $iten->id == $ommm[0]->id.'</b></div>';
+                    return '<div><b>' . $municao->material->oms->filter(function ($iten) use ($ommm) {
+                        return $iten->id == $ommm[0]->id . '</b></div>';
                     })->sum('pivot.qtde');
                 })
                 ->addColumn('saldo', function ($municao) use ($ommm, $oo, $coll, $request) {
                     $mat = new MaterialOmTotalController;
 
-                    if(!isset($request->efetivo)){
+                    if (!isset($request->efetivo)) {
                         $o = $oo[0]->where('id', $municao->pivot->irtaexoii_id)->first()->irtaexefetivos->map(function ($item) {
                             return $item->oms;
                         })->collapse()->filter(function ($val) use ($ommm) {
                             return $val->id == $ommm[0]->id;
-                        })->sum('pivot.efetivo');}
-                        else{
-                            $o = $request->efetivo;
-                        }
+                        })->sum('pivot.efetivo');
+                    } else {
+                        $o = $request->efetivo;
+                    }
 
                     $nec = $municao->pivot->quantidade;
 
@@ -221,9 +222,11 @@ class IrtaexController extends Controller
                     $mat->retiradaStore($coll[$municao->material->nee], $estoque, $municao->material);
 
                     $per = $mat->index($municao->material) + $coll[$municao->material->nee];
-                    if($coll[$municao->material->nee] > 0){
+                    if ($coll[$municao->material->nee] > 0) {
                         $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
-                    }else{$perr = -1;}
+                    } else {
+                        $perr = -1;
+                    }
                     if ($perr < 0) {
                         $perr = '0 %';
                     }
@@ -239,19 +242,21 @@ class IrtaexController extends Controller
                     }
 
                     $saldo_atu = $mat->index($municao->material);
-                    $disponibilidade = (- $mat->index($municao->material) - $coll[$municao->material->nee] )* -1;
+                    $disponibilidade = (-$mat->index($municao->material) - $coll[$municao->material->nee]) * -1;
 
-                    if($disponibilidade < 0){$disponibilidade = 0;}
+                    if ($disponibilidade < 0) {
+                        $disponibilidade = 0;
+                    }
 
                     return '<div ' . $c . '>' . $disponibilidade . '  <span class="badge badge-info right ml-2 mb-1">' . $perr . '</span></div>';
                 })
 
-                ->rawColumns(['efetivo', 'saldo','estoque'])
+                ->rawColumns(['efetivo', 'saldo', 'estoque'])
 
                 ->make(true);
         }
 
-        return view('irtaex.om.mun.index', compact('omg', 'categories','oi'));
+        return view('irtaex.om.mun.index', compact('omg', 'categories', 'oi'));
     }
 
     public function indexChart(Request $request)
@@ -264,89 +269,108 @@ class IrtaexController extends Controller
 
         $omg = Om::all()->sortBy('siglaOM');                     // envia todas as OM para view
         $categories = irtaexCategory::all();  // envia todas as categorias para view
-        $oi = IrtaexOii::where('id',">", 0)->select('oii')->distinct()->get();
+        $oi = IrtaexOii::where('id', ">", 0)->select('oii')->distinct()->get();
 
         $gcmdos = Comando::all()->sortBy('siglaCmdo');
         foreach ($gcmdos as $gcmdo) {
             $g[] = $gcmdo->id;
         }
 
-        // $matcalibre = IrtaexOii::where('irtaexcategory_id', 1)->whereIn('oii', ['TIA','TCB'])->get();
-         
-        // $mm = $matcalibre->map(function ($value) {
-        //     return $value->vs;
-        // })->collapse()->groupBy('nee');
-        // dd($mm);
-        
 
-         if ($request->ajax()) {
+        // $matcalibre = IrtaexOii::where('irtaexcategory_id', 1)->whereIn('id', [3,4,5])->get();
+        // dd($matcalibre);
+        if ($request->ajax()) {
 
-            
+            $ma = new MaterialOmTotalController;
+            $ma->destroyaall();
+
+
 
             // $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->get();
-            $matcalibre = IrtaexOii::where('irtaexcategory_id', $request->category)->whereIn('oii', $request->oii)->get();
-
-            // if (!isset($request->oii)) {
-            //     $o = $matcalibre->map(function ($value) {
-            //         return $value->oii;
-            //     })->all();
-            // } else {
-            //     $o = $request->oii;
-            // }
-
-            // $matcalibre = $matcalibre->whereIn('oii', $o)->get();
-
-            $nomeOM = collect([]);
-            $dados = collect([[0,67,0,35,77],[0,67,65,35,77],[0,67,65,35,0],[0,67,65,35,77],[0,67,65,35,77]]);
-            $om = collect([]);
-            $category = collect([]);
-            $m[] = '';
-
-
-           // $matcalibre = V::whereIn('id', [3])->with('material')->get();
-                  $municao = $matcalibre->map(function ($value) {
-                        return $value->vs;
-                    })->collapse()->groupBy('nee');
-
-            if (isset($request->om)) {
-                $om = $request->om;
-
-                    $nomeOm = Om::where('id', $om)->get()->first();
-                   
-
-                    unset($m);
-
-                    foreach ($municao as $mun) {
-                        
-                        $nomeOM->push($mun[0]->tipo." ".$mun[0]->modelo." ".$mun[0]->calibre); 
-                        $m[] = 35;
-                   
-                    }
-                    
-                   // $nomeOM->push("teste"); 
-                    
-                    
-                   // for ($ii = 0; $ii < $matcalibre->count(); $ii++) {
-                        // $q =  $matcalibre[$ii]->material->oms->filter(function ($iten) use ($nomeOm) {
-                        //     return $iten->id == $nomeOm->id;
-                        // })->sum('pivot.qtde');
-                       // $m[] = 35;
-                  //  }
-                //    $dados->push($m);
-            } 
-
+            $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->whereIn('oii', $request->oii)->get();
+            $municao = $oiis->map(function ($value) {
+                return $value->vs;
+            })->collapse()->groupBy('nee');
+            $ommm = Om::where('id', $request->om)->get();
             $teste = collect([]);
-            $teste->put('TIP',['Cartucho 9mm'=>12,'Cartucho 7,62 comum'=>25,'Cartucho 7,62 festim'=>50]);
-            $teste->put('TIB',['Cartucho 9mm'=>27,'Cartucho 7,62 comum'=>41,'Cartucho 7,62 festim'=>44]);
-            $teste->put('TIA',['Cartucho 9mm'=>3,'Cartucho 7,62 comum'=>15,'Cartucho 7,62 festim'=>20]);
+            $p = collect([]);
+            $mm = collect([]);
+            $coll = collect([]);
+            $j[] = '';
+            // $mm->put('Cartucho 7,62 comum', 8);
+            $fill = new MaterialOmTotalController;
+            foreach ($municao as $mun) {
+                $mm->put($mun->first()->tipo . " " . $mun->first()->modelo . " " . $mun->first()->calibre, 1);
+                unset($j);
 
-            $r[] = [$matcalibre, $nomeOM, $dados];
+                $estoque =   $mun->first()->material->oms->filter(function ($iten) use ($ommm) {
+                    return $iten->id == $ommm[0]->id;
+                })->sum('pivot.qtde');
+
+                $kil = $estoque;
+                foreach ($oiis as $m) {
+
+                    if (!isset($request->efetivo)) {
+                        $o = $m->irtaexefetivos->map(function ($item) {
+                            return $item->oms;
+                        })->collapse()->filter(function ($val) use ($ommm) {
+                            return $val->id == $ommm[0]->id;
+                        })->sum('pivot.efetivo');
+                    } else {
+                        $o = $request->efetivo;
+                    }
 
 
-            return $teste;
-         
+                    $necc = $this->GetSomaMunNecOiiCat($request->category, $mun->first()->id, $ommm[0]->id, $m, $request->efetivo);
+
+
+                    $coll[$mun->first()->material->nee] = $necc;
+
+                    $per =  $fill->index($mun->first()->material);
+                    // if ($coll[$mun->first()->material->nee] > 0) {
+                    //     $perr = number_format($per * 100 / $coll[$mun->first()->material->nee], 0, '', '');
+                    // } else {
+                    //     $perr = -1;
+                    // }
+                    // if ($perr < 0) {
+                    //     $perr = 0;
+                    // }
+                    // if ($perr > 100) {
+                    //     $perr = 100;
+                    // }
+
+                    if ($necc == 0) {
+                        $sald = 0;
+                    } else {
+                        if ($kil <= 0) {
+                            $sald = -5;
+                        }else{
+                            if($kil > $necc){
+                                $sald = 100;
+                            }else{
+
+                                $sald = number_format(($kil*100)/$necc, 0, '', '') ;
+                            }
+
+                        }
+
+                    }
+
+
+                    $j[] = $sald;
+                    $kil = $kil - $necc;
+                }
+
+                $p->push($j);
+            }
+            foreach ($oiis as $mmat) {
+                $teste->put($mmat->oii, $mm);
+            }
+
+            $h[] = [$teste, $p];
+            return $h;
         }
-        return view('irtaex.om.mun.indexChart', compact('omg', 'categories','oi','gcmdos'));
+        return view('irtaex.om.mun.indexChart', compact('omg', 'categories', 'oi', 'gcmdos'));
     }
 
     /**
@@ -410,16 +434,16 @@ class IrtaexController extends Controller
         $i = 0;
         foreach ($v as $qtde) {
 
-            
-            if(!isset($efetivo)){
-                
+
+            if (!isset($efetivo)) {
+
                 $efe = $oiis->where('id', $col[$i])->first()->irtaexefetivos->map(function ($item) {
                     return $item->oms;
                 })->collapse()->filter(function ($val) use ($om) {
                     return $val->id == $om->id;
                 })->sum('pivot.efetivo');
                 $res->push($efe * $qtde->pivot->quantidade);
-            }else{
+            } else {
                 $efe = $efetivo;
                 $res->push($efe * $qtde->pivot->quantidade);
             }
