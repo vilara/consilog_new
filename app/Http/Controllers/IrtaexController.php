@@ -15,7 +15,6 @@ use App\Http\Controllers\MaterialOmTotalController;
 
 class IrtaexController extends Controller
 {
-
     public function ResumoEfeTotOm(Request $request)
     {
         if ($request->ajax()) {
@@ -100,18 +99,6 @@ class IrtaexController extends Controller
                     return '<div ' . $c . '>' . $estoque  . '  <span class="badge badge-info right ml-2 mb-1">' . $perr . '</span></div>';
                 })
                 ->editColumn('mun_nec', function ($municao) use ($ommm, $request, $o) {
-
-
-                    //     $per = $mat->index($municao->material) + $coll[$municao->material->nee];
-                    //     $perr = number_format($per * 100 / $coll[$municao->material->nee], 0, '', '') . " %";
-                    //     if ($perr < 0) {$perr='0 %' ;}
-                    //     if ($perr > 100) {$perr='100 %' ;}
-                    //  if($perr == '0 %'){
-                    //      $c = 'class="bg-danger disabled color-palette"';
-                    //  }elseif($perr == '100 %'){$c = 'class="bg-success disabled color-palette"';}
-                    //  else{ $c = 'class="bg-warning disabled color-palette"';}
-
-
                     return $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $ommm[0]->id, $o, $request->efetivo);
                 })
                 ->rawColumns(['mun_nec', 'estoque'])
@@ -173,9 +160,6 @@ class IrtaexController extends Controller
                     } else {
                         $o = $request->efetivo;
                     }
-
-
-
                     return $o;
                 })
                 ->addColumn('mun_nec', function ($municao) use ($ommm, $oo, $request) {
@@ -275,18 +259,8 @@ class IrtaexController extends Controller
         foreach ($gcmdos as $gcmdo) {
             $g[] = $gcmdo->id;
         }
-
-
-        // $matcalibre = IrtaexOii::where('irtaexcategory_id', 1)->whereIn('id', [3,4,5])->get();
-        // dd($matcalibre);
         if ($request->ajax()) {
 
-            $ma = new MaterialOmTotalController;
-            $ma->destroyaall();
-
-
-
-            // $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->get();
             $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->whereIn('oii', $request->oii)->get();
             $municao = $oiis->map(function ($value) {
                 return $value->vs;
@@ -297,7 +271,6 @@ class IrtaexController extends Controller
             $mm = collect([]);
             $coll = collect([]);
             $j[] = '';
-            // $mm->put('Cartucho 7,62 comum', 8);
             $fill = new MaterialOmTotalController;
             foreach ($municao as $mun) {
                 $mm->put($mun->first()->tipo . " " . $mun->first()->modelo . " " . $mun->first()->calibre, 1);
@@ -319,26 +292,9 @@ class IrtaexController extends Controller
                     } else {
                         $o = $request->efetivo;
                     }
-
-
                     $necc = $this->GetSomaMunNecOiiCat($request->category, $mun->first()->id, $ommm[0]->id, $m, $request->efetivo);
-
-
                     $coll[$mun->first()->material->nee] = $necc;
-
                     $per =  $fill->index($mun->first()->material);
-                    // if ($coll[$mun->first()->material->nee] > 0) {
-                    //     $perr = number_format($per * 100 / $coll[$mun->first()->material->nee], 0, '', '');
-                    // } else {
-                    //     $perr = -1;
-                    // }
-                    // if ($perr < 0) {
-                    //     $perr = 0;
-                    // }
-                    // if ($perr > 100) {
-                    //     $perr = 100;
-                    // }
-
                     if ($necc == 0) {
                         $sald = 0;
                     } else {
@@ -348,25 +304,18 @@ class IrtaexController extends Controller
                             if($kil > $necc){
                                 $sald = 100;
                             }else{
-
                                 $sald = number_format(($kil*100)/$necc, 0, '', '') ;
                             }
-
                         }
-
                     }
-
-
                     $j[] = $sald;
                     $kil = $kil - $necc;
                 }
-
                 $p->push($j);
             }
             foreach ($oiis as $mmat) {
                 $teste->put($mmat->oii, $mm);
             }
-
             $h[] = [$teste, $p];
             return $h;
         }

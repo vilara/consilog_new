@@ -109,10 +109,6 @@ class OmMaterialController extends Controller
     public function GetOmTotal(Request $request)
     {
 
-
-      //  $c = Comando::where('id', 3)->get()->first();
-    //dd($c);
-
         if ($request->ajax()) {
 
             $nomeOM = collect([]);

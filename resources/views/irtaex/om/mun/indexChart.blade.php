@@ -1,7 +1,3 @@
-@php
-$matomcontrole = new App\Http\Controllers\OmMaterialController;
-$mat = new App\Http\Controllers\MaterialOmTotalController;
-@endphp
 
 @extends('adminlte::page')
 
@@ -32,10 +28,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     sistema. Logo abaixo é mostrada a tabela detalhada por Objetivo de Instrução.</small>
                             </div>
                         </div>
-
                     </div><!-- /.card-header -->
-
-
                     <div class="card-body">
                         <div class="row mb-3 mt-2 ml-1 input-dataranger">
                             <div class="col-md-4">
@@ -182,10 +175,6 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     $('#efe').show();
                     $('#categoria').show();
                     $('#oiis').show();
-
-
-
-
                 } else {
                     $("#oms").val([]).change();
                     $("#category").val([]).change();
@@ -195,19 +184,9 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     $('#efe').show();
                     $('#categoria').show();
                     $('#oiis').show();
-
-
                     $("#gcmdos").val([]).change();
                 }
-
             });
-
-
-
-
-
-
-
 
             $('#filter').click(function() {
 
@@ -228,8 +207,6 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         $('#myChart').show();
                         load_ajax(om, cmdo = '', category, oii, efetivo)
                     }
-
-
                 } else {
                     alert('Selecione uma OM, Categoria e OII');
                 }
@@ -238,6 +215,8 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
             $('#refresh').click(function() {
                 // limpa o select de escolha do tipo de filtro
                 $("#selection").val([]).change();
+                $('#myChart').hide();
+
 
                 // Ação para mudar o tipo de escolha e OM para G Cmdo e vice-versa
                 $('#selection').change(function() {
@@ -277,10 +256,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                 }
 
             });
-
-
             // inicio das ações do gráfico
-
             // gera uma cor aleatória em hexadecimal
             function gera_cor() {
                 var hexadecimais = '0123456789ABCDEF';
@@ -308,11 +284,6 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     },
                     success: function(result) {
 
-                      console.log(result);
-                        // $.each(result, function(index, value) {
-
-                        // });
-
                         var labels = [];
                         $.each(result[0][0], function(index, value) {
                             labels.push(index);
@@ -323,116 +294,20 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                         var mun1 = Object.values(mun)[0]; // transforma num array de values o primeito item do array mun
                         var mun2 = Object.keys(mun1); // transforma num array de keys ou seja as muniçẽs do objeto mun1
 
-                        
+
                         myChart.data.datasets = [];
                         var label = '';
-                        var dd = [];
-
-                        for(var iii = 0; iii < Object.values(mun).length; iii++){
-                          // console.log(Object.values(mun)[iii]);
-                          var datas = [];
-                            $.each(Object.values(mun)[iii], function(index, value) {
-                          datas.push(value);
-                        });
-                          // console.log(datas);
-
-                        dd.push(datas);
-                        }
-
-                       // console.log(dd);
-
-                       var df = [];
-                       var dat = [];
-                      for(var u = 0; u <  mun.length; u++){
-                       dat.push([]);
-
-                      }
-                                             
-                       
-                       for(var l = 0; l < dd.length; l++){
-                       
-                       }
-                     //  console.log(dd)
-                              var d = [];
-                              var e = 0;
-                              var g = [];
-                         for(var y = 0; y < mun.length; y++){
-                            
-                                     for(var yy = 0; yy < mun2.length; yy++){  
-                                         e++;
-                                      //  dat[y] = dd[y][yy];
-                                       //dat[yy][y] = dd[y][yy];
-                                       g[e]=dd[y][yy];
-                                      
-                                     //  console.log(dd[y][yy])
-                                        // dat[0][0] = 25;
-                                        // dat[0][1] = 50;
-                                        // dat[0][2] = 10;
-                                        // dat[0][3] = 19; 
-                                        // dat[0][4] = 18;
-
-                                        // dat[1][0] = 5;
-                                        // dat[1][1] = 7;
-                                        // dat[1][2] = 9;
-                                        // dat[1][3] = 5;
-                                        // dat[1][4] = 5;
-
-                                        // dat[2][0] = 2;
-                                        // dat[2][1] = 4;
-                                        // dat[2][2] = 9;
-                                        // dat[2][3] = 5;
-                                        // dat[2][4] = 5;
-
-                                        // dat[3][0] = 2;
-                                        // dat[3][1] = 4;
-                                        // dat[3][2] = 9;
-                                        // dat[3][3] = 5;
-                                        // dat[3][4] = 5;
-
-                                        // dat[4][0] = 8;
-                                        // dat[4][1] = 20;
-                                        // dat[4][2] = 3;
-                                        // dat[4][3] = 10;
-                                        // dat[4][4] = 11;
-
-                                       d[yy] = dat[yy];
-                                     // console.log(dat[y][yy])
-                                     // console.log(g[e])
-                                     }
-
-                                 
-
-                       
-                         }
-                         
-
-                         
-                     
 
                         for (var ii = 0; ii < mun2.length; ii++) {
-
                             myChart.data.datasets.push({
-                            label: mun2[ii], // tipos de munição 
-                            backgroundColor: gera_cor(),
-                            data: result[0][1][ii],
-                            fill: false,
-                        });
-
-
+                                label: mun2[ii], // tipos de munição 
+                                backgroundColor: gera_cor(),
+                                data: result[0][1][ii],
+                                fill: true,
+                            });
                         }
-                          
-                        
-                        
-
                         myChart.data.labels = labels;
-
-
                         myChart.update();
-
-
-
-
-
                     }
                 });
 
@@ -458,10 +333,6 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
                 }
             });
-
-
-
-
         });
 
     </script>
