@@ -1,6 +1,24 @@
 @php
 $matomcontrole = new App\Http\Controllers\OmMaterialController;
 $mat = new App\Http\Controllers\MaterialOmTotalController;
+
+// $oo = App\IrtaexOii::find(3);
+// $omm = App\Om::whereIn('id',[21,13])->get();
+// $efe = $oo->irtaexefetivos->map(function ($item) {
+
+// return $item->oms;
+// })->collapse()->whereIn('id', [21,13])->sum('pivot.efetivo');
+// $ef = $efe->filter(function ($val) {
+// if($val->has([13])){
+
+// return $val;
+// }
+// });
+//dd($efe);
+
+// $efe->filter(function ($val) use ($omm) {
+// return $val->id == $omm[0]->id;
+// })->sum('pivot.efetivo');
 @endphp
 
 @extends('adminlte::page')
@@ -40,7 +58,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                         <b>Manual</b>
                                     </div>
                                 </div>
-                                Parâmtros de Pesquisa<br />
+                                Parâmetros de Pesquisa<br />
                                 <small> Selecione abaixo uma OM e um tipo de categoria de tiro e clique em buscar para ser
                                     mostrada a lista de munição
                                     necessária. Após isso, as duas tabelas iniciais mostram o resumo da
@@ -49,14 +67,28 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             </div>
                         </div>
                         <div class="row mb-3 mt-2 ml-1 input-dataranger">
-                            <div class="col-md-2">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ef" name="ef" checked>
-                                    <input class="form-control form-control-sm" type="text" id="calc" name="calc" width="5" placeholder="qual efetivo?">
-                                    <label class="form-check-label" id="label" for="ef">Efetivo previsto</label>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <select
+                                        class="js-example-placeholder-single js-states form-control  form-control-sm select2bs4"
+                                        id="selection">
+                                        <option></option>
+                                        <option>G Cmdo</option>
+                                        <option>OM</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3" id="cmdo">
+                                <div class="form-group">
+                                    <select style="width: 100%;" class="form-control form-control-sm select2bs4"
+                                        name="gcmdos" id="gcmdos" multiple="multiple">
+                                        @foreach ($gcmdos as $gcmdo)
+                                            <option value="{{ $gcmdo->id }}">{{ $gcmdo->siglaCmdo }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="om">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="om"
                                         id="oms" multiple="multiple">
@@ -66,7 +98,15 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2" id="efe">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="ef" name="ef" checked>
+                                    <input class="form-control form-control-sm" type="text" id="calc" name="calc" width="5"
+                                        placeholder="qual efetivo?">
+                                    <label class="form-check-label" id="label" for="ef">Efetivo previsto</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3" id="categoria">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4"
                                         name="category" id="category" multiple="multiple">
@@ -76,7 +116,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" id="oi">
                                 @foreach ($oi as $o)
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="oii"
@@ -86,7 +126,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                 @endforeach
 
                             </div>
-                            <div class="col-3">
+                            <div class="col-3" id="bottons">
                                 <button type="submit" id="filter" class="btn bg-warning btn-sm">Buscar</button>
                                 <button type="submit" id="refresh" class="btn bg-warning btn-sm">Limpar</button>
                             </div>
@@ -178,14 +218,33 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
     <script>
         $(document).ready(function() {
 
+            $('#om').hide();
+            $('#cmdo').hide();
+            $('#efe').hide();
+            $('#categoria').hide();
+            $('#oi').hide();
+            $('#bottons').hide();
+
+            $("#selection").val([]).change();
+
 
             $('#oms').select2({
                 placeholder: "Selecione uma OM..."
             });
 
+            $('#gcmdos').select2({
+                placeholder: "Selecione um G Cmdo..."
+            });
+
             $('#category').select2({
                 placeholder: "Selecione uma categoria..."
             });
+
+            $(".js-example-placeholder-single").select2({
+                placeholder: "Tipo de pesquisa",
+                allowClear: true
+            });
+
 
 
             $('#v').hide();
@@ -198,7 +257,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
 
 
-            function load_data(om = '', category = '', oii = '', efetivo = '') {
+            function load_data(cmdo = '', om = '', category = '', oii = '', efetivo = '') {
 
                 var table = $('#resumo').DataTable({
                     processing: true,
@@ -210,10 +269,11 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     ajax: {
                         url: "{{ route('resumo_municao_irtaex') }}",
                         data: {
+                            cmdo: cmdo,
                             om: om,
                             category: category,
                             oii: oii,
-                            efetivo : efetivo
+                            efetivo: efetivo
                         }
                     },
                     columns: [{
@@ -241,10 +301,11 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     ajax: {
                         url: "{{ route('resumo_efetivo_irtaex') }}",
                         data: {
+                            cmdo: cmdo,
                             om: om,
                             category: category,
                             oii: oii,
-                            efetivo : efetivo
+                            efetivo: efetivo
                         }
 
                     },
@@ -275,10 +336,11 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                     ajax: {
                         url: "{{ route('resumo_irtaex') }}",
                         data: {
+                            cmdo: cmdo,
                             om: om,
                             category: category,
                             oii: oii,
-                            efetivo : efetivo
+                            efetivo: efetivo
                         }
 
                     },
@@ -381,6 +443,28 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
 
             }
 
+            $('#selection').change(function() {
+                if ($('#selection').val() == "G Cmdo") {
+                    $('#cmdo').show();
+                    $('#om').hide();
+                    $('#bottons').show();
+                    $('#efe').show();
+                    $('#oi').show();
+                    $('#categoria').show();
+                    $("#oms").val([]).change();
+
+                } else {
+                    $('#cmdo').hide();
+                    $('#om').show();
+                    $('#bottons').show();
+                    $('#efe').show();
+                    $('#oi').show();
+                    $('#categoria').show();
+                    $("#gcmdos").val([]).change();
+                }
+
+            });
+
             $('#filter').click(function() {
 
                 $('#v').DataTable().destroy();
@@ -390,24 +474,46 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                 $('#resumo').hide();
                 $('#efetivo').hide();
                 var om = $('#oms').val();
+                var cmdo = $('#gcmdos').val();
                 var category = $('#category').val();
                 var oii = $('input[name="oii"]:checked').toArray().map(function(check) {
                     return $(check).val();
                 });
                 var efetivo = $('#calc').val();
 
-                if (om != '' && category != '' && oii != '') {
-                    if($('#calc').is(':visible') && efetivo == '') {
+                if (category != '' && oii != '') {
+                    if ($('#calc').is(':visible') && efetivo == '') {
                         alert('Preencha o efetivo ou clique na checkbox à esquerda!');
-                    }else{
-                      
-                        $('#v').show();
-                    $('#resumo').show();
-                    $('#efetivo').show();
-                    load_data(om, category, oii, efetivo);
-                    }
-                    
+                    } else {
 
+                        if ($("#om").is(":visible")) {
+                            if (om != '') {
+
+                                $('#v').show();
+                                $('#resumo').show();
+                                $('#efetivo').show();
+                                load_data(cmdo = '', om, category, oii, efetivo);
+                            } else {
+                                alert('Selecione uma OM');
+                            }
+                        }
+
+                        if ($("#cmdo").is(":visible")) {
+
+                            if (cmdo != '') {
+
+                                $('#v').show();
+                                $('#resumo').show();
+                                $('#efetivo').show();
+                                load_data(cmdo, om = '', category, oii, efetivo);
+                            } else {
+                                alert('Selecione um  G Comando');
+                            }
+
+
+
+                        }
+                    }
                 } else {
                     alert('Selecione uma OM, Categoria e OII');
                 }
@@ -417,31 +523,38 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                 $("#oms").val([]).change();
                 $("#category").val([]).change();
                 $("#calc").val(['']);
+                $("#selection").val([]).change();
                 $('#v').DataTable().destroy();
                 $('#resumo').DataTable().destroy();
                 $('#efetivo').DataTable().destroy();
                 $('#v').hide();
                 $('#efetivo').hide();
                 $('#resumo').hide();
+                $('#om').hide();
+                $('#bottons').hide();
+                $('#efe').hide();
+                $('#oi').hide();
+                $('#categoria').hide();
             });
 
-            $('input[name="ef"]').on('click', function() { // event do checkbox da última coluna de cada linha
+            $('input[name="ef"]').on('click',
+                function() { // event do checkbox da última coluna de cada linha
 
-                var chk = $(this).is(":checked"); // checa se o box está selecionado ou não
+                    var chk = $(this).is(":checked"); // checa se o box está selecionado ou não
 
-                if (chk == false) {
+                    if (chk == false) {
 
-                    $('#label').hide();
-                    $('#calc').show();
+                        $('#label').hide();
+                        $('#calc').show();
 
-                } else {
-                    $('#label').show();
-                    $('#calc').hide();
-                    $("#calc").val(['']);
+                    } else {
+                        $('#label').show();
+                        $('#calc').hide();
+                        $("#calc").val(['']);
 
-                }
+                    }
 
-            });
+                });
 
 
 

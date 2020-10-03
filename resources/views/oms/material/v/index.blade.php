@@ -37,7 +37,7 @@ $u = new App\Http\Controllers\OmMaterialController;
                                         <b>Manual</b>
                                     </div>
                                 </div>
-                                Parâmtros de Pesquisa<br />
+                                Parâmetros de Pesquisa<br />
                                 <small> Selecione abaixo uma OM e clique em buscar para ser mostrada a lista de Munição
                                     total da OM extraída do SISCOFIS.</small>
                             </div>
