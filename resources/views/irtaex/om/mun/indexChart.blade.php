@@ -1,4 +1,3 @@
-
 @extends('adminlte::page')
 
 @section('title', 'IRTAEx')
@@ -20,7 +19,7 @@
                                         <b>Manual</b>
                                     </div>
                                 </div>
-                                Parâmtros de Pesquisa<br />
+                                Parâmetros de Pesquisa<br />
                                 <small> Selecione abaixo uma OM e um tipo de categoria de tiro e clique em buscar para ser
                                     mostrada a lista de munição
                                     necessária. Após isso, as duas tabelas iniciais mostram o resumo da
@@ -28,8 +27,6 @@
                                     sistema. Logo abaixo é mostrada a tabela detalhada por Objetivo de Instrução.</small>
                             </div>
                         </div>
-                    </div><!-- /.card-header -->
-                    <div class="card-body">
                         <div class="row mb-3 mt-2 ml-1 input-dataranger">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -95,6 +92,8 @@
                                 <button type="submit" id="refresh" class="btn bg-warning btn-sm">Limpar</button>
                             </div>
                         </div>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
                         <div style="width: 100%" class="row border">
                             <canvas id="myChart" width="400" height="200"></canvas>
                         </div>
@@ -192,20 +191,42 @@
 
                 $('#efetivo').hide();
                 var om = $('#oms').val();
+                var cmdo = $('#gcmdos').val();
                 var category = $('#category').val();
                 var oii = $('input[name="oii"]:checked').toArray().map(function(check) {
                     return $(check).val();
                 });
                 var efetivo = $('#calc').val();
 
-                if (om != '' && category != '' && oii != '') {
+                if (category != '' && oii != '') {
                     if ($('#calc').is(':visible') && efetivo == '') {
                         alert('Preencha o efetivo ou clique na checkbox à esquerda!');
                     } else {
 
-                        $('#efetivo').show();
-                        $('#myChart').show();
-                        load_ajax(om, cmdo = '', category, oii, efetivo)
+
+                        if ($("#om").is(":visible")) {
+                            if (om != '') {
+                                $('#efetivo').show();
+                                $('#myChart').show();
+                                load_ajax(om, cmdo = '', category, oii, efetivo)
+                            } else {
+                                alert('Selecione uma OM');
+                            }
+                        }
+
+                        if ($("#cmdo").is(":visible")) {
+                            if (cmdo != '') {
+                                $('#efetivo').show();
+                                $('#myChart').show();
+                                load_ajax(om = '', cmdo, category, oii, efetivo)
+                            } else {
+                                alert('Selecione um  G Comando');
+                            }
+
+
+
+                        }
+
                     }
                 } else {
                     alert('Selecione uma OM, Categoria e OII');
@@ -290,9 +311,13 @@
 
                         });
 
-                        var mun = Object.values(result[0][0]); // transforma num array de values o objeto result
-                        var mun1 = Object.values(mun)[0]; // transforma num array de values o primeito item do array mun
-                        var mun2 = Object.keys(mun1); // transforma num array de keys ou seja as muniçẽs do objeto mun1
+                        var mun = Object.values(result[0][
+                            0
+                        ]); // transforma num array de values o objeto result
+                        var mun1 = Object.values(mun)[
+                            0]; // transforma num array de values o primeito item do array mun
+                        var mun2 = Object.keys(
+                            mun1); // transforma num array de keys ou seja as muniçẽs do objeto mun1
 
 
                         myChart.data.datasets = [];
@@ -302,6 +327,7 @@
                             myChart.data.datasets.push({
                                 label: mun2[ii], // tipos de munição 
                                 backgroundColor: gera_cor(),
+                                borderColor: gera_cor(),
                                 data: result[0][1][ii],
                                 fill: true,
                             });
@@ -326,6 +352,8 @@
                     scales: {
                         yAxes: [{
                             ticks: {
+                                min: 0,
+                                max: 100,
                                 beginAtZero: true
                             }
                         }]

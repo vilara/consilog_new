@@ -281,7 +281,17 @@ class IrtaexController extends Controller
             $municao = $oiis->map(function ($value) {
                 return $value->vs;
             })->collapse()->groupBy('nee');
-            $ommm = Om::where('id', $request->om)->get();
+
+            if (!isset($request->om)) {
+                $c = Comando::find($request->cmdo);
+                $cc = $c[0]->getOmdsId();
+            }else{
+                $cc = $request->om;
+            }
+
+
+
+            $ommm = Om::whereIn('id', $cc)->get();
             $teste = collect([]);
             $p = collect([]);
             $mm = collect([]);
@@ -292,9 +302,7 @@ class IrtaexController extends Controller
                 $mm->put($mun->first()->tipo . " " . $mun->first()->modelo . " " . $mun->first()->calibre, 1);
                 unset($j);
 
-                $estoque =   $mun->first()->material->oms->filter(function ($iten) use ($ommm) {
-                    return $iten->id == $ommm[0]->id;
-                })->sum('pivot.qtde');
+                $estoque =   $mun->first()->material->oms->whereIn('id', $cc)->sum('pivot.qtde');
 
                 $kil = $estoque;
                 foreach ($oiis as $m) {
@@ -302,20 +310,18 @@ class IrtaexController extends Controller
                     if (!isset($request->efetivo)) {
                         $o = $m->irtaexefetivos->map(function ($item) {
                             return $item->oms;
-                        })->collapse()->filter(function ($val) use ($ommm) {
-                            return $val->id == $ommm[0]->id;
-                        })->sum('pivot.efetivo');
+                        })->collapse()->whereIn('id', $cc)->sum('pivot.efetivo');
                     } else {
                         $o = $request->efetivo;
                     }
-                    $necc = $this->GetSomaMunNecOiiCat($request->category, $mun->first()->id, $ommm[0]->id, $m, $request->efetivo);
+                    $necc = $this->GetSomaMunNecOiiCat($request->category, $mun->first()->id, $cc, $m, $request->efetivo);
                     $coll[$mun->first()->material->nee] = $necc;
                     $per =  $fill->index($mun->first()->material);
                     if ($necc == 0) {
                         $sald = 0;
                     } else {
-                        if ($kil <= 0) {
-                            $sald = -5;
+                        if ($kil <= 3) {
+                            $sald = 1;
                         }else{
                             if($kil > $necc){
                                 $sald = 100;

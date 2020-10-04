@@ -67,18 +67,16 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                             </div>
                         </div>
                         <div class="row mb-3 mt-2 ml-1 input-dataranger">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <select
-                                        class="js-example-placeholder-single js-states form-control  form-control-sm select2bs4"
-                                        id="selection">
+                                    <select  class="js-example-placeholder-single js-states form-control  form-control-sm select2bs4" id="selection">
                                         <option></option>
                                         <option>G Cmdo</option>
                                         <option>OM</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3" id="cmdo">
+                            <div class="col-md-4" id="cmdo">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4"
                                         name="gcmdos" id="gcmdos" multiple="multiple">
@@ -88,7 +86,7 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3" id="om">
+                            <div class="col-md-4" id="om">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="om"
                                         id="oms" multiple="multiple">
@@ -96,14 +94,6 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                             <option value="{{ $omg->id }}">{{ $omg->siglaOM }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2" id="efe">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="ef" name="ef" checked>
-                                    <input class="form-control form-control-sm" type="text" id="calc" name="calc" width="5"
-                                        placeholder="qual efetivo?">
-                                    <label class="form-check-label" id="label" for="ef">Efetivo previsto</label>
                                 </div>
                             </div>
                             <div class="col-md-3" id="categoria">
@@ -125,6 +115,14 @@ $mat = new App\Http\Controllers\MaterialOmTotalController;
                                     </div>
                                 @endforeach
 
+                            </div>
+                            <div class="col-md-2" id="efe">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="ef" name="ef" checked>
+                                    <input class="form-control form-control-sm" type="text" id="calc" name="calc" width="5"
+                                        placeholder="qual efetivo?">
+                                    <label class="form-check-label" id="label" for="ef">Efetivo previsto</label>
+                                </div>
                             </div>
                             <div class="col-3" id="bottons">
                                 <button type="submit" id="filter" class="btn bg-warning btn-sm">Buscar</button>
