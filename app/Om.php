@@ -110,6 +110,14 @@ class Om extends Model
         return $this->morphMany('App\Endereco', 'enderecoable');
     }
 
+    /**
+     * Get the user that owns the phone.
+     */
+    public function location()
+    {
+        return $this->belongsTo('App\Location','id');
+    }
+
 
  
     

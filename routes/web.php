@@ -31,6 +31,9 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/oms/subordinacao/create/{id}','OmController@CreateSubordinacaoOm');
     Route::post('/oms/subordinacao/store','OmController@StoreSubordinacaoOm');
 
+        // location
+        Route::resource('locations', 'LocationController');
+
     // endereco
     Route::resource('enderecos', 'EnderecoController')->except(['destroy']);
     Route::resource('oms.enderecos', 'OmEnderecoController'); // php artisan make:controller OmEnderecoController -r --model=Endereco --parent=Om

@@ -261,6 +261,7 @@ return [
                     'submenu' => [
                         [
                             'text' => 'Usuários cadastrados',
+                            'icon'    => 'fas fa-user',
                             'url'  => 'usuarios',
                         ],
                     ],
@@ -272,6 +273,7 @@ return [
                     'submenu' => [
                         [
                             'text' => 'OM cadastrados',
+                            'icon'    => 'fas fa-file-signature',
                             'url'  => 'oms',
                         ],
                     ],
@@ -283,6 +285,7 @@ return [
                     'submenu' => [
                         [
                             'text' => 'G Cmdo cadastrados',
+                            'icon'    => 'fas fa-file-signature',
                             'url'  => 'comandos',
                         ],
                     ],
@@ -304,15 +307,18 @@ return [
                     'url'     => '#',
                     'submenu' => [
                         [
-                            'text' => 'Munições cadastrads',
+                            'text' => 'Munições cadastros',
+                            'icon'    => 'fas fa-file-signature',
                             'url'  => 'v',
                         ],
                         [
-                            'text' => 'Ctrl Mun das OM',
+                            'text' => 'Distribuição das Mun',
+                            'icon'    => 'fas fa-search-location',
                             'url'  => 'oms/materials/index',
                         ],
                         [
                             'text' => 'Gráficos',
+                            'icon'    => 'fas fa-chart-bar',
                             'url'  => 'oms/materials/index/chart',
                         ],
                     ],
@@ -320,7 +326,7 @@ return [
             ],
         ],
         [
-            'text'    => 'IRTAEx',
+            'text'    => 'Instrução de Tiro',
             'icon'    => 'fas fa-file',
             'can'     => 'read',
             'submenu' => [
@@ -363,19 +369,21 @@ return [
                             'url'     => 'om/efetivo',
                             'can'     => 'delete',
                         ],
-                    ],
-                ],
-
-                [
-                    'text'    => 'Quantitativos de Cl V',
+                        [
+                    'text'    => 'Resumo de Tiro',
                     'icon'    => 'fas fa-bomb',
                     'url'     => 'irtaex/municoes/om',
                     'can'     => 'read',
                 ],
                 [
                     'text' => 'Gráficos',
+                    'icon'    => 'fas fa-chart-bar',
                     'url'  => 'irtaex/municoes/tot/chart',
                 ],
+                    ],
+                ],
+
+                
             ],
         ],
     ],

@@ -57,7 +57,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Calibre</th>
-                                    <th>Loc</th>
+                                    <th>NEE</th>
                                 </tr>
                             </thead>
 
@@ -69,7 +69,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Calibre</th>
-                                    <th>Loc</th>
+                                    <th>NEE</th>
                                 </tr>
                             </tfoot>
                         </table><!-- /table -->
