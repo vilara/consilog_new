@@ -37,9 +37,9 @@ class OmMaterialController extends Controller
             $g[] = $gcmdo->id;
         }
 
+       
+
         if ($request->ajax()) {
-
-
 
             if (isset($request->om)) {
                 $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
@@ -57,6 +57,12 @@ class OmMaterialController extends Controller
                         return $value->materialable_type == 'v';
                     });;
                 })->collapse();
+            }
+
+            if(isset($request->val)){
+                $om = $om->filter(function($item) use ($request){
+                    return $item->pivot->validade < Carbon::now()->addYears($request->val)->toDateString();
+                });
             }
 
 
@@ -85,6 +91,9 @@ class OmMaterialController extends Controller
                         $date .= '<span class="badge badge-info right ml-2">' . ($material->where('pivot.validade', $material->min('pivot.validade')))->sum('pivot.qtde')  . '</span>';
                     }
                     return  $date;
+                })
+                ->addColumn('nee', function ($material) {
+                    return $material->sum('pivot.qtde');
                 })
                 ->setRowClass(function ($material) {
                     if (strtotime($material->min('pivot.validade')) < strtotime(Carbon::now())) {

@@ -41,6 +41,8 @@
                             </div>
                         </div>
 
+                      
+
                         {{-- <div class="card-tools float-left ml-2 mt-2">
                             <a href="{{ route('v.create') }}" type="submit" class="btn  bg-gray "> {{ __('Incluir') }}</a>
                         </div> --}}
@@ -55,6 +57,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Calibre</th>
+                                    <th>Loc</th>
                                 </tr>
                             </thead>
 
@@ -66,6 +69,7 @@
                                     <th>Tipo</th>
                                     <th>Modelo</th>
                                     <th>Calibre</th>
+                                    <th>Loc</th>
                                 </tr>
                             </tfoot>
                         </table><!-- /table -->
@@ -103,11 +107,11 @@
             /* Formatting function for row details - modify as you need */
             function format(d) {
                 // `d` is the original data object for the row
-                return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                return '<table cellpadding="6" cellspacing="0" border="0" style="padding-left:50px;">' +
                     '<tr>' +
                     '<td>Descrição:</td>' +
-                    '<td>' + d.descricao + '</td>' +  
-                    '<td>' + d.nee + '</td>' +    
+                    '<td>' + d.descricao + '</td>' +
+                    '<td>' + d.nee + '</td>' +
                     '</tr>' +
                     '</table>';
             }
@@ -137,17 +141,21 @@
                         data: 'modelo',
                         name: 'modelo'
                     },
+                    
                     {
                         data: 'calibre',
                         name: 'calibre'
                     },
 
+                    {
+                        data: 'nee',
+                        name: 'nee'
+                    }
+
+                    
+
                 ],
-                // columnDefs: [{
-                //     "targets": 4,
-                //     "orderable": false,
-                //     "searchable": false
-                // }, ],
+               
                 language: {
                     processing: "Carregando dados...",
                     search: "Procurar&nbsp;:",

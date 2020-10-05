@@ -47,14 +47,16 @@ $u = new App\Http\Controllers\OmMaterialController;
                         <div class="row mb-3 input-dataranger">
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <select class="js-example-placeholder-single js-states form-control  form-control-sm select2bs4" id="selection">
+                                    <select
+                                        class="js-example-placeholder-single js-states form-control  form-control-sm select2bs4"
+                                        id="selection">
                                         <option></option>
                                         <option>G Cmdo</option>
                                         <option>OM</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-3"  id="om">
+                            <div class="col-md-3" id="om">
                                 <div class="form-group">
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="oms"
                                         id="oms" multiple="multiple">
@@ -72,6 +74,24 @@ $u = new App\Http\Controllers\OmMaterialController;
                                         @foreach ($gcmdos as $gcmdo)
                                             <option value="{{ $gcmdo->id }}">{{ $gcmdo->siglaCmdo }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                           
+
+
+
+                            <div class="col-md-3" id="val">
+                                <div class="form-group">
+                                    <select style="width: 100%;" class="form-control form-control-sm" id="validade">
+                                        <option></option>
+                                        <option value="1">Validade até 1 ano</option>
+                                        <option value="2">Validade até 2 anos</option>
+                                        <option value="3">Validade até 3 anos</option>
+                                        <option value="4">Validade até 4 anos</option>
+                                        <option value="5">Validade até 5 anos</option>
+                                        <option value="6">Validade até 6 anos</option>
                                     </select>
                                 </div>
                             </div>
@@ -127,12 +147,18 @@ $u = new App\Http\Controllers\OmMaterialController;
             $('#om').hide();
             $('#cmdo').hide();
             $('#bottons').hide();
+            $('#val').hide();
 
             $("#selection").val([]).change();
 
 
             $('#oms').select2({
                 placeholder: "Selecione uma OM..."
+            });
+
+            $('#validade').select2({
+                placeholder: "Filtro por data de validade",
+                allowClear: true
             });
 
             $(".js-example-placeholder-single").select2({
@@ -150,7 +176,7 @@ $u = new App\Http\Controllers\OmMaterialController;
 
             // load_data();
 
-            function load_data(om = '', cmdo = '') {
+            function load_data(om = '', cmdo = '', val = '') {
 
                 $('#municao').DataTable({
                     processing: true,
@@ -159,7 +185,8 @@ $u = new App\Http\Controllers\OmMaterialController;
                         url: "{{ route('oms_materials') }}",
                         data: {
                             om: om,
-                            cmdo: cmdo
+                            cmdo: cmdo,
+                            val: val
                         }
 
                     },
@@ -206,16 +233,19 @@ $u = new App\Http\Controllers\OmMaterialController;
 
             $('#selection').change(function() {
                 if ($('#selection').val() == "G Cmdo") {
-                   $('#cmdo').show();
-                   $('#om').hide();
-                   $('#bottons').show();
-                   $("#oms").val([]).change();
+                    $('#cmdo').show();
+                    $('#om').hide();
+                    $('#bottons').show();
+                    $('#val').show();
+
+                    $("#oms").val([]).change();
 
                 } else {
-                   $('#cmdo').hide();
-                   $('#om').show();
-                   $('#bottons').show();
-                   $("#gcmdos").val([]).change();
+                    $('#cmdo').hide();
+                    $('#om').show();
+                    $('#bottons').show();
+                    $('#val').show();
+                    $("#gcmdos").val([]).change();
                 }
 
             });
@@ -224,41 +254,44 @@ $u = new App\Http\Controllers\OmMaterialController;
                 $('#municao').show();
                 var om = $('#oms').val();
                 var cmdo = $('#gcmdos').val();
+                var val = $('#validade').val();
 
-                if($("#om").is(":visible")){
+                if ($("#om").is(":visible")) {
                     if (om != '') {
-                    $('#municao').DataTable().destroy();
-                    load_data(om, cmdo = '');
-                } else {
-                    $('#municao').hide();
-                    alert('Selecione uma OM');
-                }
+                        $('#municao').DataTable().destroy();
+                        load_data(om, cmdo = '', val);
+                    } else {
+                        $('#municao').hide();
+                        alert('Selecione uma OM');
+                    }
                 }
 
-                if($("#cmdo").is(":visible")){
+                if ($("#cmdo").is(":visible")) {
 
                     if (cmdo != '') {
-                        
-                    $('#municao').DataTable().destroy();
-                    load_data(om = '', cmdo);
-                } else {
-                    $('#municao').hide();
-                    alert('Selecione um  G Comando');
-                }
+
+                        $('#municao').DataTable().destroy();
+                        load_data(om = '', cmdo, val);
+                    } else {
+                        $('#municao').hide();
+                        alert('Selecione um  G Comando');
+                    }
 
                 }
 
-              
-                
+
+
             });
 
             $('#refresh').click(function() {
                 $("#oms").val([]).change();
                 $("#gcmdos").val([]).change();
                 $("#selection").val([]).change();
+                $("#validade").val([]).change();
                 $('#municao').DataTable().destroy();
                 $('#municao').hide();
                 $('#bottons').hide();
+                $('#val').hide();
                 $('#om').hide();
                 $('#cmdo').hide();
                 // load_data();
