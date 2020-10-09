@@ -180,7 +180,7 @@ $u = new App\Http\Controllers\OmMaterialController;
 
                 $('#municao').DataTable({
                     processing: true,
-                    serverSide: true,
+                    serverSide: false,
                     ajax: {
                         url: "{{ route('oms_materials') }}",
                         data: {

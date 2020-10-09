@@ -22,8 +22,6 @@ class OmMaterialController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-
-
     public function index(Request $request)
     {
 
@@ -37,70 +35,57 @@ class OmMaterialController extends Controller
             $g[] = $gcmdo->id;
         }
 
-       
-
         if ($request->ajax()) {
 
             if (isset($request->om)) {
-                $om = Om::whereIn('id', $request->om)->get()->map(function ($item) {
-                    return $item->materials->filter(function ($value) {
-                        return $value->materialable_type == 'v';
-                    });;
-                })->collapse();
+                $c = $request->om;
             } else {
-
                 $cmdo = Comando::whereIn('id', $request->cmdo)->get();
                 $c = $cmdo->first()->getOmdsId();
-
-                $om = Om::whereIn('id', $c)->get()->map(function ($item) {
-                    return $item->materials->filter(function ($value) {
-                        return $value->materialable_type == 'v';
-                    });;
-                })->collapse();
             }
 
+            $municao = $this->getMaterialVByOm(collect($c), "v", "");
+            
             if(isset($request->val)){
-                $om = $om->filter(function($item) use ($request){
-                    return $item->pivot->validade < Carbon::now()->addYears($request->val)->toDateString();
-                });
+                $municao = $this->getMaterialVByOm(collect($c), "v", Carbon::now()->addYears($request->val)->toDateString());
             }
 
 
-
-
-
-            $material = $om->groupBy('nee');
-
-            return DataTables::of($material)
-                ->addColumn('id', function ($material) {
-                    return $material->first()->id;
+            return DataTables::of($municao)
+                ->addColumn('id', function ($municao) {
+                    return $municao->first()->id;
                 })
-                ->addColumn('nome', function ($material) {
-                    return $material->first()->nome;
+                ->addColumn('nome', function ($municao) {
+                  return $municao->first()->material->nome;
                 })
-                ->addColumn('modelo', function ($material) {
-                    return $material->first()->materialable->modelo;
+                ->addColumn('modelo', function ($municao) {
+                    return $municao->first()->modelo;
                 })
-                ->addColumn('qtde', function ($material) {
-                    return $material->sum('pivot.qtde');
-                })
-                ->addColumn('validade', function ($material) {
-                    $date = date('d/m/Y', strtotime($material->min('pivot.validade')));
-                    if (strtotime($material->min('pivot.validade')) < strtotime(Carbon::now())) {
+                ->addColumn('qtde', function ($municao) use ($c,$request){
+                    if(isset($request->val)){
+                        return $municao->first()->material->GetTotOmCodValidateMenorQue(collect($c), Carbon::now()->addYears($request->val)->toDateString());
+                    }else{
 
-                        $date .= '<span class="badge badge-info right ml-2">' . ($material->where('pivot.validade', $material->min('pivot.validade')))->sum('pivot.qtde')  . '</span>';
+                        return $municao->first()->material->GetTotOmCod(collect($c));
                     }
-                    return  $date;
+
+                })
+                ->addColumn('validade', function ($municao) use ($c) {
+                     $date = date('d/m/Y', strtotime($municao->first()->material->GetMinValCod(collect($c))));
+                    if (strtotime($municao->first()->material->GetMinValCod(collect($c))) < strtotime(Carbon::now())) {
+                        $date .= '<span class="badge badge-info right ml-2">' . $municao->first()->material->GetTotOmCodValidate(collect($c), $municao->first()->material->GetMinValCod(collect($c)))   . '</span>';
+                    }
+                    return $date;
                 })
                 ->addColumn('nee', function ($material) {
-                    return $material->sum('pivot.qtde');
+                   // return $material->sum('pivot.qtde');
                 })
-                ->setRowClass(function ($material) {
-                    if (strtotime($material->min('pivot.validade')) < strtotime(Carbon::now())) {
-                        return 'text-center table-danger';
-                    } else {
+                ->setRowClass(function ($municao)  use ($c) {
+                    if (strtotime($municao->first()->material->GetMinValCod(collect($c))) < strtotime(Carbon::now())) {
+                         return 'text-center table-danger';
+                     } else {
                         return 'text-center';
-                    }
+                     }
                 })
                 ->rawColumns(['validade'])
                 ->make();
@@ -180,7 +165,7 @@ class OmMaterialController extends Controller
             $g[] = $gcmdo->id;
         }
 
-        $mun = V::all();
+        $mun =  V::all();
 
 
         return view('oms.material.v.chartindex', compact('omg', 'gcmdos', 'mun'));
@@ -257,6 +242,44 @@ class OmMaterialController extends Controller
     {
         //
     }
+
+    public function getMaterialVByOm(Collection $om, $classe, $validade){
+
+          if(count($om) > 0){
+              $material = Om::whereIn('id', $om)->get()->map(function ($item)  use($validade,$classe) {
+                return $item->materials->filter(function ($value) use($validade,$classe) {
+                    if($validade != ''){
+                        return $value->materialable_type ==  $classe AND $value->pivot->validade <= $validade;
+                    }else{
+                        return $value->materialable_type ==  $classe;
+                    }
+                });
+            })->collapse(); 
+          }else{
+            $material = Om::all()->map(function ($item)  use($validade,$classe) {
+                return $item->materials->filter(function ($value) use($validade,$classe) {
+                    if($validade != ''){
+                        return $value->materialable_type ==  $classe AND $value->pivot->validade <= $validade;
+                    }else{
+                        return $value->materialable_type ==  $classe;
+                    }
+                });
+            })->collapse(); 
+          }
+         
+
+            $municao = $material->map(function($item){
+                return $item->materialable;
+            });
+
+            $mun = $municao->groupBy('codigo');
+
+        return $mun;
+        
+    }
+
+
+ 
 
 
     public function SomaMunicaoOm(Om $om)

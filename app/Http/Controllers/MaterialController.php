@@ -3,10 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Material;
+use App\Om;
 use Illuminate\Http\Request;
 
 class MaterialController extends Controller
 {
+
+     
+    /**
+     * Retorna o total por om por codigo.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function GetTotalByCodigoOm(Om $om, $nee)
+    {
+        //
+    }
+
+
+
     /**
      * Display a listing of the resource.
      *

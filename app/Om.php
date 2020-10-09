@@ -25,18 +25,6 @@ class Om extends Model
         return $this->hasMany('App\detail', 'om_id');
     }
 
-    // public function user()
-    // {
-    //     return $this->hasManyThrough(
-    //         'App\User',
-    //         'App\Detail',
-    //         'om_id', // Foreign key on User table...
-    //         'user_id', // Foreign key on details table...
-    //         'id', // Local key on details table...
-    //         'id' // Local key on users table...
-    //     );
-    // }
-
        /**
      * Many to Many
      * retorna todds os comandos 
@@ -68,7 +56,6 @@ class Om extends Model
         return $this->belongsToMany('App\Material','material_om', 'om_id', 'material_id')->withPivot('patrimonio','inclusao','validade','qtde','sit');
     }
 
-
      /**
      * Many to Many
      * retorna todds os comandos 
@@ -77,10 +64,6 @@ class Om extends Model
     {
     	return $this->belongsToMany('App\IrtaexEfetivo', 'irtaexefetivo_om', 'om_id', 'irtaexefetivo_id' )->withPivot('efetivo')->withTimestamps();
     }
-
-
-
-   
 
     /**
      * Create a new Eloquent Collection instance.
@@ -118,8 +101,7 @@ class Om extends Model
         return $this->belongsTo('App\Location','id');
     }
 
-
- 
+    
     
    
 
