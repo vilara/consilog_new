@@ -1,6 +1,6 @@
 @php
 $u = new App\Http\Controllers\OmMaterialController;
-//dd($mun[0]);
+//dd($mun->first());
 @endphp
 
 @extends('adminlte::page')
@@ -69,8 +69,8 @@ $u = new App\Http\Controllers\OmMaterialController;
                                     <select style="width: 100%;" class="form-control form-control-sm select2bs4" name="mun"
                                         id="mun" multiple="multiple">
                                         @foreach ($mun as $mu)
-                                            <option value="{{ $mu->id }}">
-                                                {{ $mu->tipo . ' ' . $mu->calibre . ' ' . $mu->modelo }}</option>
+                                            <option value="{{ $mu->first()->id }}">
+                                                {{ $mu->first()->tipo . ' ' . $mu->first()->calibre . ' ' . $mu->first()->modelo }}</option>
                                         @endforeach
                                     </select>
                                 </div>

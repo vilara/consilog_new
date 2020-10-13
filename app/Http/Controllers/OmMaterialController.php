@@ -102,6 +102,7 @@ class OmMaterialController extends Controller
 
     public function GetOmTotal(Request $request)
     {
+        
 
         if ($request->ajax()) {
 
@@ -120,9 +121,7 @@ class OmMaterialController extends Controller
                     $nomeOM->push($nomeOm->siglaOM);
                     unset($m);
                     for ($ii = 0; $ii < $matcalibre->count(); $ii++) {
-                        $q =  $matcalibre[$ii]->material->oms->filter(function ($iten) use ($nomeOm) {
-                            return $iten->id == $nomeOm->id;
-                        })->sum('pivot.qtde');
+                        $q =  $matcalibre[$ii]->material->GetTotOmCod(collect($om[$i]));
                         $m[] = $q;
                     }
 
@@ -140,7 +139,7 @@ class OmMaterialController extends Controller
                     unset($m);
                      for ($ii = 0; $ii < $matcalibre->count(); $ii++) {
 
-                        $q =  $matcalibre[$ii]->material->oms->whereIn('id',$c)->sum('pivot.qtde');
+                        $q =  $matcalibre[$ii]->material->GetTotOmCod(collect($c));
                         $m[] = $q;
 
                     }
@@ -155,17 +154,22 @@ class OmMaterialController extends Controller
             return $r;
         }
 
+
+
+        $c = collect([]);
         $omg = Om::all()->sortBy('siglaOM');
         foreach ($omg as $rr) {
-            $t[] = $rr->id;
+            $c->push($rr->id);
         }
+      
 
         $gcmdos = Comando::all()->sortBy('siglaCmdo');
         foreach ($gcmdos as $gcmdo) {
             $g[] = $gcmdo->id;
         }
 
-        $mun =  V::all();
+        $mun =  $this->getMaterialVByOm($c, "v", "");
+
 
 
         return view('oms.material.v.chartindex', compact('omg', 'gcmdos', 'mun'));
