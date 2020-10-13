@@ -81,7 +81,7 @@ class IrtaexController extends Controller
             $oo = $oiis->first()->where('irtaexcategory_id', $request->category)->whereIn('oii', $o)->get(); // retorna um objeto da Classe Irtaexoii
             $municao = $oo->map(function ($value) {
                 return $value->vs;
-            })->collapse()->groupBy('nee');
+            })->collapse()->groupBy('codigo');
             $ommm = Om::whereIn('id', $cc)->get();
             return DataTables::of($municao)
                 ->editColumn('id', function ($municao) {
@@ -89,7 +89,7 @@ class IrtaexController extends Controller
                 })
                 ->editColumn('estoque', function ($municao) use ($ommm, $request, $o, $cc) {
 
-                    $estoque = $municao->first()->material->oms->whereIn('id', $cc)->sum('pivot.qtde');
+                    $estoque = $municao->first()->material->GetTotOmCod(collect($cc));
 
                     $necc = $this->GetSomaMunNecOiiCat($request->category, $municao->first()->id, $cc, $o, $request->efetivo);
                     if ($necc > 0) {
@@ -201,7 +201,7 @@ class IrtaexController extends Controller
                     return $o * $nec;
                 })
                 ->addColumn('estoque', function ($municao) use ($ommm, $oo, $request, $cc) {
-                    return '<div><b>' . $municao->material->oms->whereIn('id', $cc)->sum('pivot.qtde').'</b></div>';
+                    return '<div><b>' . $municao->material->GetTotOmCod(collect($cc)).'</b></div>';
                 })
                 ->addColumn('saldo', function ($municao) use ($ommm, $oo, $coll, $request, $cc) {
                     $mat = new MaterialOmTotalController;
@@ -216,7 +216,7 @@ class IrtaexController extends Controller
 
                     $nec = $municao->pivot->quantidade;
 
-                    $estoque = $municao->material->oms->whereIn('id', $cc)->sum('pivot.qtde');
+                    $estoque = $municao->material->GetTotOmCod(collect($cc));
 
                     $coll[$municao->material->nee] = $o * $nec;
                     $mat->retiradaStore($coll[$municao->material->nee], $estoque, $municao->material);
@@ -280,7 +280,7 @@ class IrtaexController extends Controller
             $oiis = IrtaexOii::where('irtaexcategory_id', $request->category)->whereIn('oii', $request->oii)->get();
             $municao = $oiis->map(function ($value) {
                 return $value->vs;
-            })->collapse()->groupBy('nee');
+            })->collapse()->groupBy('codigo');
 
             if (!isset($request->om)) {
                 $c = Comando::find($request->cmdo);
@@ -289,7 +289,7 @@ class IrtaexController extends Controller
                 $cc = $request->om;
             }
 
-
+  
 
             $ommm = Om::whereIn('id', $cc)->get();
             $teste = collect([]);
@@ -302,7 +302,7 @@ class IrtaexController extends Controller
                 $mm->put($mun->first()->tipo . " " . $mun->first()->modelo . " " . $mun->first()->calibre, 1);
                 unset($j);
 
-                $estoque =   $mun->first()->material->oms->whereIn('id', $cc)->sum('pivot.qtde');
+                $estoque =   $mun->first()->material->GetTotOmCod(collect($cc));
 
                 $kil = $estoque;
                 foreach ($oiis as $m) {
@@ -315,7 +315,7 @@ class IrtaexController extends Controller
                         $o = $request->efetivo;
                     }
                     $necc = $this->GetSomaMunNecOiiCat($request->category, $mun->first()->id, $cc, $m, $request->efetivo);
-                    $coll[$mun->first()->material->nee] = $necc;
+                  //  $coll[$mun->first()->material->nee] = $necc;
                     $per =  $fill->index($mun->first()->material);
                     if ($necc == 0) {
                         $sald = 0;
